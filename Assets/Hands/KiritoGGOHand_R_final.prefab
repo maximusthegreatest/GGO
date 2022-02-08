@@ -889,7 +889,7 @@ GameObject:
   - component: {fileID: 2581689947121029000}
   - component: {fileID: 1228505939077289281}
   - component: {fileID: 357396604011889032}
-  - component: {fileID: 3839829326511733196}
+  - component: {fileID: 3243735300026314267}
   m_Layer: 21
   m_Name: KiritoGGOHand_R_final
   m_TagString: Untagged
@@ -930,8 +930,8 @@ MonoBehaviour:
   SphereRadius: 0.008
   FingerTipOnly: 0
   Hand: {fileID: 1228505939077289281}
-  OpenPose: {fileID: 0}
-  ClosedPose: {fileID: 0}
+  OpenPose: {fileID: 11400000, guid: 7d8bdabd9cdafd14e8edde96346ac055, type: 2}
+  ClosedPose: {fileID: 11400000, guid: 73be7ade1135c3347b6d11396d20dfaa, type: 2}
   Palm: {fileID: 138165469396512956}
   DrawSpheres: 0
   DrawTips: 0
@@ -1032,9 +1032,9 @@ MonoBehaviour:
   FingerCurlSpeed: 16
   PhysicsPoser: {fileID: 2581689947121029000}
   Hand: {fileID: 1228505939077289281}
-  DefaultPoser: {fileID: 3839829326511733196}
+  DefaultPoser: {fileID: 3243735300026314267}
   CurrentPoser: {fileID: 0}
---- !u!114 &3839829326511733196
+--- !u!114 &3243735300026314267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1053,11 +1053,12 @@ MonoBehaviour:
   PreviewRight: 0
   LeftAutoPose: 0
   RightAutoPose: 0
-  SelectionIndex: 0
+  SelectionIndex: 1
   PoseNames:
-  - Primary Not Set
+  - 'Primary: handOpen'
+  - handClosed
   PrimaryPose:
-    Pose: {fileID: 0}
+    Pose: {fileID: 11400000, guid: 7d8bdabd9cdafd14e8edde96346ac055, type: 2}
     Weight: 1
     Mask: 0
     Disabled: 0
@@ -1066,17 +1067,36 @@ MonoBehaviour:
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
-    ThumbType: 0
-    IndexType: 0
-    MiddleType: 0
-    RingType: 0
-    PinkyType: 0
-    ThumbStart: 0.75
-    IndexStart: 1
+    ThumbType: 1
+    IndexType: 1
+    MiddleType: 1
+    RingType: 1
+    PinkyType: 1
+    ThumbStart: 0
+    IndexStart: 0
     MiddleStart: 0
     RingStart: 0
     PinkyStart: 0
-  Blends: []
+  Blends:
+  - Pose: {fileID: 11400000, guid: 73be7ade1135c3347b6d11396d20dfaa, type: 2}
+    Weight: 1
+    Mask: 0
+    Disabled: 0
+    Type: 0
+    Speed: 16
+    AnimationParameter: None
+    ButtonParameter: 0
+    Button: 0
+    ThumbType: 1
+    IndexType: 1
+    MiddleType: 1
+    RingType: 1
+    PinkyType: 1
+    ThumbStart: 0
+    IndexStart: 0
+    MiddleStart: 0
+    RingStart: 0
+    PinkyStart: 0
   ReferencePose: {fileID: 0}
   MirrorAxis: 0
 --- !u!1 &5758959598168327299

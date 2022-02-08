@@ -386,15 +386,13 @@ namespace HurricaneVR.Framework.Shared.HandPoser
 
         public HVRHandPoseData Mirror(MirrorAxis handMirrorAxis, Transform transformOverride = null)
         {
-            Debug.Log(transform.position);
+            
             var t = transformOverride ?? transform;
             
-
             var clone = new HVRHandPoseData();
             
             clone.Position = t.localPosition;
-            Debug.Log("Clone hand start" + clone.Position);
-            Debug.Log("hand axis" + handMirrorAxis);
+            
 
             Vector3 direction;
 
@@ -488,6 +486,7 @@ namespace HurricaneVR.Framework.Shared.HandPoser
             for (var i = 0; i < finger.Bones.Count; i++)
             {
                 var bone = finger.Bones[i];
+                Debug.Log("bone rot" + bone.Transform.localRotation.eulerAngles);
                 var boneData = new HVRPosableBoneData();
 
 
@@ -507,7 +506,8 @@ namespace HurricaneVR.Framework.Shared.HandPoser
                 if (mirror != null)
                 {
                     var euler = bone.Transform.localRotation.eulerAngles;
-                    Debug.Log(euler);
+                    Debug.Log("bone rot" + bone.Transform.localRotation.eulerAngles);
+//                    Debug.Log(euler);
 
                     var xAngle = euler.x;
                     var yAngle = euler.y;

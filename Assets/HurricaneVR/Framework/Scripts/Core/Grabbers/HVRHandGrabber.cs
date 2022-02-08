@@ -628,9 +628,9 @@ namespace HurricaneVR.Framework.Core.Grabbers
         }
 
         private void UpdatePose()
-        {
+        {            
             if (!IsLineGrab && IsGrabbing && GrabbedTarget.Stationary && !GrabbedTarget.ParentHandModel && _hasHandModelParented)
-            {
+            {                
                 HandModel.rotation = PoseWorldRotation;
                 HandModel.position = PoseWorldPosition;
             }
@@ -1253,8 +1253,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
         private void CheckPoseHand()
         {
             if (!IsGrabbing || _hasHandModelParented || !GrabbedTarget || IsPhysicsPose)
-                return;
-
+                return;            
             var angleDelta = 0f;
             if (GrabbedTarget.GrabType == HVRGrabType.Snap && !IgnoreParentingAngle)
             {
@@ -1292,7 +1291,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
         }
 
         private void PoseHand()
-        {
+        {            
             _hasHandModelParented = true;
 
             if (InverseKinematics)
@@ -1314,11 +1313,11 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
 
             if (IsPhysicsPose)
-            {
+            {                
                 HandAnimator?.SetCurrentPoser(null);
             }
             else
-            {
+            {                
                 HandAnimator?.SetCurrentPoser(PosableGrabPoint ? PosableGrabPoint.HandPoser : FallbackPoser, false);
             }
 

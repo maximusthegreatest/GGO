@@ -833,7 +833,7 @@ namespace HurricaneVR.Framework.Core
 
             IsSocketed = _distinctGrabbers.Any(e => e is HVRSocket); //really should only be one if socketed...
             if (IsSocketed)
-            {
+            {                
                 Socket = Grabbers[0] as HVRSocket;
             }
 

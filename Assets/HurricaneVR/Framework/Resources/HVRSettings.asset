@@ -26,13 +26,13 @@ MonoBehaviour:
   InverseKinematics: 0
   FullBody: {fileID: 0}
   HandPoseHandleOffset: {x: 0, y: 0.08, z: 0}
-  OpenHandPose: {fileID: 0}
+  OpenHandPose: {fileID: 11400000, guid: 7d8bdabd9cdafd14e8edde96346ac055, type: 2}
   PoserShowsOneFinger: 0
-  ThumbCurlType: 0
-  IndexCurlType: 0
-  MiddleCurlType: 0
-  RingCurlType: 0
-  PinkyCurlType: 0
+  ThumbCurlType: 1
+  IndexCurlType: 1
+  MiddleCurlType: 1
+  RingCurlType: 1
+  PinkyCurlType: 1
   ThumbStart: 0.75
   IndexStart: 1
   MiddleStart: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   DefaultJointSettings: {fileID: 11400000, guid: d420bd8890e2c264eb9ec97c4963f6ce,
     type: 2}
   LineGrabSettings: {fileID: 11400000, guid: 203d545f2b6cc724aa3a0d6e4fafd082, type: 2}
-  VerboseGrabbableEvents: 0
+  VerboseGrabbableEvents: 1
   VerboseHandGrabberEvents: 0
   ChosePosesDirectory: Choose Pose Directory
   ChoseReferencePosesDirectory: Choose Reference Poses Directory

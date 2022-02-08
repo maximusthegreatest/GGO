@@ -304,7 +304,7 @@ namespace HurricaneVR.Framework.Shared.HandPoser
             {
                 return;
             }
-
+            
             BlendedPrimary = poser.PrimaryPose.Pose.GetPose(Hand.IsLeft).DeepCopy();
             TargetPrimary = poser.PrimaryPose.Pose.GetPose(Hand.IsLeft).DeepCopy();
             CurrentPrimary = poser.PrimaryPose.Pose.GetPose(Hand.IsLeft);
@@ -319,10 +319,10 @@ namespace HurricaneVR.Framework.Shared.HandPoser
                 }
             }
 
-            //if (poser.PrimaryPose.Type == BlendType.Immediate)
-            //{
-            //    Hand.Pose(poser.PrimaryPose.Pose.GetPose(Hand.Side), _poseHand);
-            //}
+            if (poser.PrimaryPose.Type == BlendType.Immediate)
+            {
+                Hand.Pose(poser.PrimaryPose.Pose.GetPose(Hand.Side), _poseHand);
+            }
         }
     }
 

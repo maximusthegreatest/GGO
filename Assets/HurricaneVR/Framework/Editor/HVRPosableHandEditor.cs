@@ -291,10 +291,9 @@ namespace HurricaneVR.Editor
                 PreviewInstance = existing;
             }
             else
-            {
-                Debug.Log(ThisHand.transform.parent);
+            {                
                 PreviewInstance = Instantiate(source, ThisHand.transform.parent, false);                
-                PreviewInstance.name = previewName;
+                PreviewInstance.name = previewName;                
             }
 
 
@@ -303,8 +302,8 @@ namespace HurricaneVR.Editor
             hand.IsLeft = !ThisHand.IsLeft;
             serializedObject.ApplyModifiedProperties();
             if (hand != null)
-            {
-                var mirror = ThisHand.Mirror(MirrorAxis.X);
+            {                
+                var mirror = ThisHand.Mirror(ThisHand.MirrorAxis);
                 var snapShot = ThisHand.CreateHandPose();
                 //var mirror = snapShot.Mirror(ThisHand.MirrorAxis, ThisHand.transform);
                 //hand.FingerSetup();

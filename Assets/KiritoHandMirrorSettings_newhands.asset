@@ -12,39 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: becb07c7d7e24b889e62802a34e26d48, type: 3}
   m_Name: KiritoHandMirrorSettings_newhands
   m_EditorClassIdentifier: 
-  UseThumbSetting: 1
+  UseThumbSetting: 0
   UseIndexSetting: 0
   UseMiddleSetting: 0
   UseRingSetting: 0
   UsePinkySetting: 0
   AllSetting:
     XRotation: 0
-    YRotation: 0
-    ZRotation: 0
+    YRotation: 1
+    ZRotation: 1
     XPosition: 0
     YPosition: 1
     ZPosition: 1
   ThumbSetting:
     XRotation: 0
     YRotation: 1
-    ZRotation: 0
+    ZRotation: 1
     XPosition: 0
     YPosition: 1
     ZPosition: 1
   IndexSetting:
-    XRotation: 1
-    YRotation: 0
+    XRotation: 0
+    YRotation: 1
     ZRotation: 1
     XPosition: 0
-    YPosition: 0
-    ZPosition: 0
+    YPosition: 1
+    ZPosition: 1
   MiddleSetting:
     XRotation: 0
-    YRotation: 0
+    YRotation: 1
     ZRotation: 1
     XPosition: 0
-    YPosition: 0
-    ZPosition: 0
+    YPosition: 1
+    ZPosition: 1
   RingSetting:
     XRotation: 0
     YRotation: 0
