@@ -27,8 +27,7 @@ public class Cardinal : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Debug.Log("Time Scale: " + Time.timeScale);
+    {        
         //Debug.Log("Current Mode: " + currentMode);
         if (currentMode != GameMode.Dead)
         {

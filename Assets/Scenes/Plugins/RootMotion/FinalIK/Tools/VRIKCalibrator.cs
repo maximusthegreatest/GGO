@@ -231,8 +231,8 @@ namespace RootMotion.FinalIK
             if (rightHandTracker != null)
             {
                 Transform rightHandTarget = ik.solver.rightArm.target == null ? (new GameObject("Right Hand Target")).transform : ik.solver.rightArm.target;
-                rightHandTarget.position = rightHandTracker.position + rightHandTracker.rotation * Quaternion.LookRotation(settings.handTrackerForward, settings.handTrackerUp) * settings.handOffset;
-                Vector3 rightHandUp = -Vector3.Cross(ik.solver.rightArm.wristToPalmAxis, ik.solver.rightArm.palmToThumbAxis);
+                rightHandTarget.position = rightHandTracker.position + rightHandTracker.rotation * Quaternion.LookRotation(settings.handTrackerForward, settings.handTrackerUp) * settings.handOffset;                                                
+                Vector3 rightHandUp = -Vector3.Cross(ik.solver.rightArm.wristToPalmAxis, ik.solver.rightArm.palmToThumbAxis);                
                 rightHandTarget.rotation = QuaTools.MatchRotation(rightHandTracker.rotation * Quaternion.LookRotation(settings.handTrackerForward, settings.handTrackerUp), settings.handTrackerForward, settings.handTrackerUp, ik.solver.rightArm.wristToPalmAxis, rightHandUp);
                 rightHandTarget.parent = rightHandTracker;
                 ik.solver.rightArm.target = rightHandTarget;

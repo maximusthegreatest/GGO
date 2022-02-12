@@ -23,10 +23,11 @@ MonoBehaviour:
     type: 3}
   RightHand: {fileID: 5556361224903991071, guid: 489f8eed2528ee54b85f62a37e528215,
     type: 3}
-  InverseKinematics: 0
-  FullBody: {fileID: 0}
+  InverseKinematics: 1
+  FullBody: {fileID: 8409295368899590559, guid: 2bccd5e497686fe4da93d77a46cdaefb,
+    type: 3}
   HandPoseHandleOffset: {x: 0, y: 0.08, z: 0}
-  OpenHandPose: {fileID: 11400000, guid: 7d8bdabd9cdafd14e8edde96346ac055, type: 2}
+  OpenHandPose: {fileID: 0}
   PoserShowsOneFinger: 0
   ThumbCurlType: 1
   IndexCurlType: 1

@@ -2546,7 +2546,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
         }
 
         private void DynamicGrab()
-        {
+        {            
             var previousLayer = GrabbedTarget.gameObject.layer;
 
             var layer = HandSide == HVRHandSide.Left ? HVRLayers.LeftTarget : HVRLayers.RightTarget;
