@@ -48,8 +48,8 @@ public class SaberTrail : MonoBehaviour
         _previousTipPosition = bladeTip.transform.position;
         _previousBasePosition = bladeBase.transform.position;
 
-        Debug.Log("previous tip position " + _previousTipPosition);
-        Debug.Log("previous base position " + _previousBasePosition);
+        //Debug.Log("previous tip position " + _previousTipPosition);
+        //Debug.Log("previous base position " + _previousBasePosition);
     }
 
     // Update is called once per frame

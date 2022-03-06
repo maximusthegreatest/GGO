@@ -56,12 +56,12 @@ public class PhysicBullet : MonoBehaviour
             var bomb = hit.collider.GetComponent<Bomb>();
             if (bomb)
             {
-                Debug.Log("Has bomb");
+                //Debug.Log("Has bomb");
                 Destroy(bomb.gameObject);
             }
             else
             {
-                Debug.Log("No bomb");
+                //Debug.Log("No bomb");
             }
         }
     }
@@ -84,7 +84,7 @@ public class PhysicBullet : MonoBehaviour
         }
         */
 
-        Debug.Log("Name" + collision.gameObject.name);
+        //Debug.Log("Name" + collision.gameObject.name);
         Destroy(gameObject);
     }
 }

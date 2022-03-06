@@ -39,7 +39,7 @@ public class MadsonD9 : HVRPistol
         
         if(_isFirstLoad)
         {
-            Debug.Log("first load");
+            //Debug.Log("first load");
             //auto slide it
             StartCoroutine(AutoSlide(_isFirstLoad));
             _isFirstLoad = false;

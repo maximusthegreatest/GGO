@@ -56,7 +56,6 @@ public class DebugDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("time:" + Time.time);
-        Debug.Log(gameObject.name);
+        
     }
 }

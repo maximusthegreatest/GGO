@@ -485,8 +485,7 @@ namespace HurricaneVR.Framework.Shared.HandPoser
             
             for (var i = 0; i < finger.Bones.Count; i++)
             {
-                var bone = finger.Bones[i];
-                Debug.Log("bone rot" + bone.Transform.localRotation.eulerAngles);
+                var bone = finger.Bones[i];                
                 var boneData = new HVRPosableBoneData();
 
 
@@ -505,9 +504,8 @@ namespace HurricaneVR.Framework.Shared.HandPoser
 
                 if (mirror != null)
                 {
-                    var euler = bone.Transform.localRotation.eulerAngles;
-                    Debug.Log("bone rot" + bone.Transform.localRotation.eulerAngles);
-//                    Debug.Log(euler);
+                    var euler = bone.Transform.localRotation.eulerAngles;                    
+
 
                     var xAngle = euler.x;
                     var yAngle = euler.y;
@@ -561,7 +559,6 @@ namespace HurricaneVR.Framework.Shared.HandPoser
                 case FingerMirrorRotation.Same:
                     break;
                 case FingerMirrorRotation.Opposite:
-                    Debug.Log("angle" + angle);
                     angle *= -1f;
                     break;
                 case FingerMirrorRotation.Neg180Minus:

@@ -425,6 +425,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
                 }
             }
 
+            
             var closestValid = ClosestValidHover();
             if (closestValid == null)
                 return false;

@@ -296,7 +296,7 @@ namespace HurricaneVR.Framework.Shared.HandPoser
                 _poseHand = false;
             }
 
-            CurrentPoser = poser;
+            CurrentPoser = poser;            
             if (poser == null)
                 return;
 

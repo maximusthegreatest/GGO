@@ -8,6 +8,7 @@ public class GameMenu : MonoBehaviour
 {
 
     public Cardinal cardinal;
+    public CountdownTimer countdownTimer;
 
     public GGOPlayerController playerController;
 
@@ -29,6 +30,7 @@ public class GameMenu : MonoBehaviour
     public void CloseMenu()
     {
         Debug.Log("Closing Menu");
+        
         playerController.isMenuOpen = false;
         //animate the menu upwards, for now just set inactive
         gameObject.SetActive(false);
@@ -38,7 +40,8 @@ public class GameMenu : MonoBehaviour
 
     public void StartGame()
     {
-        cardinal.currentMode = Cardinal.GameMode.GunGame;
+        countdownTimer.StartGunGameCountDown();
+        //cardinal.currentMode = Cardinal.GameMode.GunGame;
         CloseMenu();
     }
 
@@ -57,6 +60,8 @@ public class GameMenu : MonoBehaviour
 
     public void Settings()
     {
-
+        //pause the game
+        Debug.Log("Pausing game");
+        
     }
 }

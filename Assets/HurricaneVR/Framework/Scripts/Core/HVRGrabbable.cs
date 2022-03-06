@@ -397,8 +397,10 @@ namespace HurricaneVR.Framework.Core
                 StartCoroutine(AttachToStartingSocket());
             }
 
+            
+
             if (UseDefaultHighlighter && ForceGrabbable && !ForceGrabberHighlighter)
-            {
+            {                
                 var parent = RightForceGrabberGrabPoint;
                 if (!parent)
                 {
@@ -409,7 +411,7 @@ namespace HurricaneVR.Framework.Core
                 {
                     var obj = HVRManager.Instance?.SetupHighlight(RightForceGrabberGrabPoint);
                     if (obj)
-                    {
+                    {                        
                         ForceGrabberHighlighter = obj.GetComponent<HVRGrabbableHoverBase>();
                     }
                 }
@@ -524,6 +526,8 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         public Transform GetForceGrabPoint(HVRHandSide hand)
         {
+            Debug.Log(this.gameObject.name);
+            Debug.Log("Getting grab point ");
             return hand == HVRHandSide.Left ? LeftForceGrabberGrabPoint : RightForceGrabberGrabPoint;
         }
 

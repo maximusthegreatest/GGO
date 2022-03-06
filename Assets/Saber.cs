@@ -40,10 +40,10 @@ public class Saber : MonoBehaviour
     void Start()
     {
 
-        _laser = transform.Find("Blade").gameObject;
-        fullSize = _laser.transform.localScale;
-        _cc = _laser.GetComponent<CapsuleCollider>();
-        _colliderFullSize = _cc.height;
+        //_laser = transform.Find("Blade").gameObject;
+        //fullSize = _laser.transform.localScale;
+        //_cc = _laser.GetComponent<CapsuleCollider>();
+        //_colliderFullSize = _cc.height;
         //_cc.height = 0;
         //_laser.transform.localScale = new Vector3(fullSize.x, fullSize.y, 0);
         _rb = GetComponent<Rigidbody>();

@@ -183,8 +183,8 @@ namespace RootMotion.FinalIK
             headTarget.parent = headTracker;
             ik.solver.spine.headTarget = headTarget;
 
-            Debug.Log("cal target" + headTarget.position.y);
-            Debug.Log("cal root" + ik.references.root.position.y);
+            //Debug.Log("cal target" + headTarget.position.y);
+            //Debug.Log("cal root" + ik.references.root.position.y);
             // Size
             float sizeF = (headTarget.position.y - ik.references.root.position.y) / (ik.references.head.position.y - ik.references.root.position.y);
             ik.references.root.localScale *= sizeF * settings.scaleMlp;

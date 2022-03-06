@@ -1,5 +1,103 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &689229817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409295368899590559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4513e09e0185b9749bc91a9d562d73ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ik: {fileID: 8298964482614474469}
+  settings:
+    scaleMlp: 1
+    headTrackerForward: {x: 0, y: 0, z: 1}
+    headTrackerUp: {x: 0, y: 1, z: 0}
+    handTrackerForward: {x: 0, y: 0, z: 1}
+    handTrackerUp: {x: 0, y: 1, z: 0}
+    footTrackerForward: {x: 0, y: 0, z: 1}
+    footTrackerUp: {x: 0, y: 1, z: 0}
+    headOffset: {x: 0, y: -0.09, z: -0.15}
+    handOffset: {x: 0.04, y: 0.04, z: -0.09}
+    footForwardOffset: 0
+    footInwardOffset: 0
+    footHeadingOffset: 0
+    pelvisPositionWeight: 1
+    pelvisRotationWeight: 1
+  headTracker: {fileID: 0}
+  bodyTracker: {fileID: 0}
+  leftHandTracker: {fileID: 0}
+  rightHandTracker: {fileID: 0}
+  leftFootTracker: {fileID: 0}
+  rightFootTracker: {fileID: 0}
+  data:
+    scale: 0
+    head:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    leftHand:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    rightHand:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    pelvis:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    leftFoot:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    rightFoot:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    leftLegGoal:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    rightLegGoal:
+      used: 0
+      localPosition: {x: 0, y: 0, z: 0}
+      localRotation: {x: 0, y: 0, z: 0, w: 0}
+    pelvisTargetRight: {x: 0, y: 0, z: 0}
+    pelvisPositionWeight: 0
+    pelvisRotationWeight: 0
+--- !u!114 &1556752424500464614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409295368899590559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffd460586178d849bbf074a86c90639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Targets: {fileID: 1767593571727579137}
+--- !u!114 &1767593571727579137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409295368899590559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed12b369b790db4595777fdcb6e72d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LeftTarget: {fileID: 0}
+  RightTarget: {fileID: 0}
 --- !u!114 &127535426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,104 +228,6 @@ MonoBehaviour:
     PinkyStart: 0
   ReferencePose: {fileID: 0}
   MirrorAxis: 0
---- !u!114 &689229817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8409295368899590559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4513e09e0185b9749bc91a9d562d73ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ik: {fileID: 8298964482614474469}
-  settings:
-    scaleMlp: 1
-    headTrackerForward: {x: 0, y: 0, z: 1}
-    headTrackerUp: {x: 0, y: 1, z: 0}
-    handTrackerForward: {x: 0, y: 0, z: 1}
-    handTrackerUp: {x: 0, y: 1, z: 0}
-    footTrackerForward: {x: 0, y: 0, z: 1}
-    footTrackerUp: {x: 0, y: 1, z: 0}
-    headOffset: {x: 0, y: -0.09, z: -0.15}
-    handOffset: {x: 0.04, y: 0.04, z: -0.09}
-    footForwardOffset: 0
-    footInwardOffset: 0
-    footHeadingOffset: 0
-    pelvisPositionWeight: 1
-    pelvisRotationWeight: 1
-  headTracker: {fileID: 0}
-  bodyTracker: {fileID: 0}
-  leftHandTracker: {fileID: 0}
-  rightHandTracker: {fileID: 0}
-  leftFootTracker: {fileID: 0}
-  rightFootTracker: {fileID: 0}
-  data:
-    scale: 0
-    head:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    leftHand:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    rightHand:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    pelvis:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    leftFoot:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    rightFoot:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    leftLegGoal:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    rightLegGoal:
-      used: 0
-      localPosition: {x: 0, y: 0, z: 0}
-      localRotation: {x: 0, y: 0, z: 0, w: 0}
-    pelvisTargetRight: {x: 0, y: 0, z: 0}
-    pelvisPositionWeight: 0
-    pelvisRotationWeight: 0
---- !u!114 &1556752424500464614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8409295368899590559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ffd460586178d849bbf074a86c90639, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Targets: {fileID: 1767593571727579137}
---- !u!114 &1767593571727579137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8409295368899590559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ed12b369b790db4595777fdcb6e72d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LeftTarget: {fileID: 0}
-  RightTarget: {fileID: 0}
 --- !u!1001 &324615907641324023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -238,12 +238,12 @@ PrefabInstance:
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0002523437
+      value: 0.0002523372
       objectReference: {fileID: 0}
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.001558357
+      value: 0.0015583574
       objectReference: {fileID: 0}
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -253,7 +253,7 @@ PrefabInstance:
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000005960471
+      value: 0.000000074505884
       objectReference: {fileID: 0}
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -263,47 +263,47 @@ PrefabInstance:
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000004768387
+      value: 0.0000006705544
       objectReference: {fileID: 0}
     - target: {fileID: 63631068799796237, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9890281
+      value: 0.98902804
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.00025432644
+      value: -0.0002543246
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0015705746
+      value: 0.0015705449
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.14771956
+      value: 0.14771955
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0000000596047
+      value: 0.00000009685764
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4553561
+      value: 1.4553559
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000020861688
+      value: 0.00000013411085
       objectReference: {fileID: 0}
     - target: {fileID: 784150481078311976, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9890281
+      value: 0.98902804
       objectReference: {fileID: 0}
     - target: {fileID: 1080699491511072121, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -313,7 +313,7 @@ PrefabInstance:
     - target: {fileID: 1080699491511072121, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0629593
+      value: -0.06295927
       objectReference: {fileID: 0}
     - target: {fileID: 1080699491511072121, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -328,32 +328,32 @@ PrefabInstance:
     - target: {fileID: 1378812574916763334, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08558452
+      value: 0.0826242
       objectReference: {fileID: 0}
     - target: {fileID: 1378812574916763334, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.35731825
+      value: -0.39375046
       objectReference: {fileID: 0}
     - target: {fileID: 1378812574916763334, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.07284077
+      value: 0.07616735
       objectReference: {fileID: 0}
     - target: {fileID: 1378812574916763334, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9271964
+      value: 0.91232246
       objectReference: {fileID: 0}
     - target: {fileID: 1680914356845299184, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -7.2759585e-12
+      value: -2.1827875e-11
       objectReference: {fileID: 0}
     - target: {fileID: 1680914356845299184, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 8.4492063e-10
+      value: 8.467396e-10
       objectReference: {fileID: 0}
     - target: {fileID: 1784839971974731738, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -363,112 +363,112 @@ PrefabInstance:
     - target: {fileID: 1784839971974731738, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 6.512617e-11
+      value: 6.782289e-11
       objectReference: {fileID: 0}
     - target: {fileID: 1784839971974731738, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -6.7217937e-10
+      value: -0.0000000011416884
       objectReference: {fileID: 0}
     - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0027192966
+      value: 0.0027192459
       objectReference: {fileID: 0}
     - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.04365913
+      value: -0.04365906
       objectReference: {fileID: 0}
     - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00011972332
+      value: -0.00011981465
       objectReference: {fileID: 0}
     - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9990428
+      value: 0.99904287
       objectReference: {fileID: 0}
     - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
+      value: -0.000000968576
+      objectReference: {fileID: 0}
+    - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.90298015
+      objectReference: {fileID: 0}
+    - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: -0.00000061094795
       objectReference: {fileID: 0}
-    - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.90297973
-      objectReference: {fileID: 0}
-    - target: {fileID: 1821993020891806473, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.00000022351755
-      objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0896962
+      value: 0.089733936
       objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.33431038
+      value: -0.33430964
       objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.032556772
+      value: -0.032574467
       objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9376199
+      value: 0.937616
       objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0000016415469
+      value: -0.000001943484
       objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.90364105
+      value: 0.90364134
       objectReference: {fileID: 0}
     - target: {fileID: 2020125447634409053, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000013411022
+      value: 0.00000033294725
       objectReference: {fileID: 0}
     - target: {fileID: 2392713645087576515, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.086944655
+      value: 0.08395018
       objectReference: {fileID: 0}
     - target: {fileID: 2392713645087576515, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.35767093
+      value: 0.39405853
       objectReference: {fileID: 0}
     - target: {fileID: 2392713645087576515, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.07302166
+      value: -0.07638538
       objectReference: {fileID: 0}
     - target: {fileID: 2392713645087576515, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.92691964
+      value: 0.91205025
       objectReference: {fileID: 0}
     - target: {fileID: 2737972185497429002, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000005338507
+      value: -0.000000053385072
       objectReference: {fileID: 0}
     - target: {fileID: 2737972185497429002, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0000005201098
+      value: 0.00000051987695
       objectReference: {fileID: 0}
     - target: {fileID: 2737972185497429002, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -478,7 +478,7 @@ PrefabInstance:
     - target: {fileID: 2737972185497429002, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.4476154
+      value: -3.4476151
       objectReference: {fileID: 0}
     - target: {fileID: 3285773538022361256, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -488,22 +488,22 @@ PrefabInstance:
     - target: {fileID: 3899396237817870712, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.045852695
+      value: 0.07578015
       objectReference: {fileID: 0}
     - target: {fileID: 3899396237817870712, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.282449
+      value: -0.3054375
       objectReference: {fileID: 0}
     - target: {fileID: 3899396237817870712, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.75751233
+      value: 0.75510496
       objectReference: {fileID: 0}
     - target: {fileID: 3899396237817870712, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5867667
+      value: 0.57513636
       objectReference: {fileID: 0}
     - target: {fileID: 4613917787189664089, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -518,7 +518,7 @@ PrefabInstance:
     - target: {fileID: 4613917787189664089, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0024544813
+      value: 0.0024544816
       objectReference: {fileID: 0}
     - target: {fileID: 6208380374266875169, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -533,32 +533,32 @@ PrefabInstance:
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.36400476
+      value: -0.36400473
       objectReference: {fileID: 0}
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.044702787
+      value: 0.044702794
       objectReference: {fileID: 0}
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.008118359
+      value: -0.008118375
       objectReference: {fileID: 0}
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000021234158
+      value: -0.00000025145712
       objectReference: {fileID: 0}
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.44634235
+      value: 0.44634247
       objectReference: {fileID: 0}
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00000044703478
+      value: -0.00000056624407
       objectReference: {fileID: 0}
     - target: {fileID: 7088862753584719662, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -568,27 +568,27 @@ PrefabInstance:
     - target: {fileID: 7608596747933449587, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.04589775
+      value: 0.07585738
       objectReference: {fileID: 0}
     - target: {fileID: 7608596747933449587, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.2824815
+      value: 0.30548844
       objectReference: {fileID: 0}
     - target: {fileID: 7608596747933449587, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.7575751
+      value: -0.75516343
       objectReference: {fileID: 0}
     - target: {fileID: 7608596747933449587, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5866665
+      value: 0.57502234
       objectReference: {fileID: 0}
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.090919375
+      value: 0.09092825
       objectReference: {fileID: 0}
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -598,42 +598,42 @@ PrefabInstance:
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.03300651
+      value: 0.033011034
       objectReference: {fileID: 0}
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9376936
+      value: 0.9376926
       objectReference: {fileID: 0}
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.000001326999
+      value: -0.0000012434572
       objectReference: {fileID: 0}
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8781473
+      value: 0.87814707
       objectReference: {fileID: 0}
     - target: {fileID: 7796040177332428919, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000001196748
+      value: 0.00000012107178
       objectReference: {fileID: 0}
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0027872024
+      value: 0.0027872596
       objectReference: {fileID: 0}
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.043658223
+      value: 0.043658186
       objectReference: {fileID: 0}
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000120399505
+      value: 0.00012054283
       objectReference: {fileID: 0}
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -643,27 +643,27 @@ PrefabInstance:
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000055134285
+      value: 0.0000008791683
       objectReference: {fileID: 0}
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9029792
+      value: 0.9029793
       objectReference: {fileID: 0}
     - target: {fileID: 7877475812149561948, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000004470349
+      value: -0.00000017881396
       objectReference: {fileID: 0}
     - target: {fileID: 7937990716823205416, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.1436705
+      value: 0.14367053
       objectReference: {fileID: 0}
     - target: {fileID: 7937990716823205416, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.062952936
+      value: -0.062952965
       objectReference: {fileID: 0}
     - target: {fileID: 7937990716823205416, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -678,17 +678,17 @@ PrefabInstance:
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.36400557
+      value: -0.3640057
       objectReference: {fileID: 0}
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0447031
+      value: -0.04470308
       objectReference: {fileID: 0}
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.008118233
+      value: 0.008118239
       objectReference: {fileID: 0}
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -698,17 +698,17 @@ PrefabInstance:
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.000000033527616
+      value: -0.000000011175873
       objectReference: {fileID: 0}
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.44634306
+      value: 0.44634318
       objectReference: {fileID: 0}
     - target: {fileID: 8010931330199452740, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000005364418
+      value: 0.00000044703484
       objectReference: {fileID: 0}
     - target: {fileID: 8084689104177858664, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -723,7 +723,7 @@ PrefabInstance:
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.47622782
+      value: -0.4762278
       objectReference: {fileID: 0}
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -733,22 +733,22 @@ PrefabInstance:
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0000003341121
+      value: 0.0000003310853
       objectReference: {fileID: 0}
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5724894
+      value: 1.5724896
       objectReference: {fileID: 0}
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00000078137975
+      value: -0.0000007613563
       objectReference: {fileID: 0}
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.031687185
+      value: -0.031687163
       objectReference: {fileID: 0}
     - target: {fileID: 8613261347762312384, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -828,537 +828,537 @@ PrefabInstance:
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readPosition.x
-      value: 0.00074914994
+      value: -0.0007491612
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readPosition.y
-      value: 1.9657813
+      value: 0.9657813
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readPosition.z
-      value: -0.013657385
+      value: 0.0136574805
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readRotation.x
-      value: 2.2273851e-14
+      value: -0.00000014901161
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readRotation.y
-      value: 0.99999994
+      value: 3.354801e-16
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readRotation.z
-      value: 0.00000014901161
+      value: 1.9761706e-14
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].readRotation.w
-      value: 2.1766663e-15
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverPosition.x
-      value: 0.00074914994
+      value: -0.0007491612
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverPosition.y
-      value: 1.9657813
+      value: 0.9657813
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverPosition.z
-      value: -0.013657386
+      value: 0.0136574805
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverRotation.x
-      value: 2.2273851e-14
+      value: -0.00000014901161
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverRotation.y
-      value: 0.99999994
+      value: 3.354801e-16
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverRotation.z
-      value: 0.00000014901161
+      value: 1.9761706e-14
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].solverRotation.w
-      value: 2.1766663e-15
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].length
-      value: 0.1604861
+      value: 0.16048628
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].sqrMag
-      value: 0.02575579
+      value: 0.025755847
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].axis.x
-      value: 7.149287e-15
+      value: 6.3429647e-15
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].axis.y
-      value: 0.1604861
+      value: 0.16048628
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[0].axis.z
-      value: 0.000000047828582
+      value: 0.000000047828635
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].readPosition.x
-      value: 0.00074914994
+      value: -0.0007491612
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].readPosition.y
-      value: 2.1262674
+      value: 1.1262676
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].readPosition.z
-      value: -0.013657385
+      value: 0.0136574805
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].readRotation.x
-      value: -0.0024523812
+      value: 0.024735749
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].readRotation.y
-      value: 0.9996909
+      value: -0.0001314471
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].readRotation.z
-      value: -0.024735749
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[1].readRotation.w
-      value: 0.0001314471
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[1].solverPosition.x
-      value: 0.00074914994
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[1].solverPosition.y
-      value: 2.1262674
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[1].solverPosition.z
-      value: -0.013657386
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[1].solverRotation.x
       value: -0.0024523812
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
-      propertyPath: solver.spine.bones.Array.data[1].solverRotation.y
+      propertyPath: solver.spine.bones.Array.data[1].readRotation.w
       value: 0.9996909
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.spine.bones.Array.data[1].solverPosition.x
+      value: -0.0007491612
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[1].solverPosition.y
+      value: 1.1262676
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[1].solverPosition.z
+      value: 0.0136574805
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[1].solverRotation.x
+      value: 0.024735749
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[1].solverRotation.y
+      value: -0.0001314471
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.spine.bones.Array.data[1].solverRotation.z
-      value: -0.024735749
+      value: -0.0024523812
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].solverRotation.w
-      value: 0.0001314471
+      value: 0.9996909
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].length
-      value: 0.15298866
+      value: 0.15298842
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].sqrMag
-      value: 0.02340553
+      value: 0.023405457
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].axis.x
-      value: -0.0000000019320443
+      value: -4.4480794e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].axis.y
-      value: 0.15298866
+      value: 0.15298842
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[1].axis.z
-      value: -0.000000012275081
+      value: 0.000000001785454
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readPosition.x
-      value: 0.000000005355105
+      value: -0.000000016596168
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readPosition.y
-      value: 2.279067
+      value: 1.2790669
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readPosition.z
-      value: -0.021223713
+      value: 0.021223808
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readRotation.x
-      value: -2.650954e-10
+      value: -0.087447256
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readRotation.y
-      value: 0.9961691
+      value: -4.0367015e-15
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readRotation.z
-      value: 0.087447256
+      value: -3.226702e-11
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].readRotation.w
-      value: 6.5780714e-15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[2].solverPosition.x
-      value: 0.000000005355105
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[2].solverPosition.y
-      value: 2.279067
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[2].solverPosition.z
-      value: -0.021223715
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[2].solverRotation.x
-      value: -2.650954e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[2].solverRotation.y
       value: 0.9961691
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.spine.bones.Array.data[2].solverPosition.x
+      value: -0.000000016589183
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[2].solverPosition.y
+      value: 1.2790669
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[2].solverPosition.z
+      value: 0.021223808
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[2].solverRotation.x
+      value: -0.087447256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[2].solverRotation.y
+      value: -4.0367015e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.spine.bones.Array.data[2].solverRotation.z
-      value: 0.087447256
+      value: -3.226702e-11
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].solverRotation.w
-      value: 6.5780714e-15
+      value: 0.9961691
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].length
-      value: 0.23824716
+      value: 0.2382474
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].sqrMag
-      value: 0.056761708
+      value: 0.05676182
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].axis.x
-      value: -6.064054e-11
+      value: -8.050863e-11
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].axis.y
-      value: 0.23824716
+      value: 0.2382474
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[2].axis.z
-      value: 0.000000077632265
+      value: 0.0000001080372
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readPosition.x
-      value: 0.0000000052899125
+      value: -0.00000001666136
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readPosition.y
-      value: 2.5136704
+      value: 1.5136706
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readPosition.z
-      value: 0.020284714
+      value: -0.02028462
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readRotation.x
-      value: 6.441721e-10
+      value: -0.00018882751
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readRotation.y
-      value: 0.99999994
+      value: 7.276235e-11
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readRotation.z
-      value: 0.00018882751
+      value: 8.7790986e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].readRotation.w
-      value: -5.8204358e-11
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[3].solverPosition.x
-      value: 0.000000005296897
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[3].solverPosition.y
-      value: 2.5136704
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[3].solverPosition.z
-      value: 0.020284714
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[3].solverRotation.x
-      value: 6.441721e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[3].solverRotation.y
       value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.spine.bones.Array.data[3].solverPosition.x
+      value: -0.000000016647391
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[3].solverPosition.y
+      value: 1.5136706
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[3].solverPosition.z
+      value: -0.02028462
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[3].solverRotation.x
+      value: -0.00018882751
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[3].solverRotation.y
+      value: 7.276235e-11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.spine.bones.Array.data[3].solverRotation.z
-      value: 0.00018882751
+      value: 8.7790986e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].solverRotation.w
-      value: -5.8204358e-11
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].length
-      value: 0.07017899
+      value: 0.070178874
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].sqrMag
-      value: 0.004925091
+      value: 0.004925074
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].axis.x
-      value: -1.05161074e-10
+      value: -7.235531e-11
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].axis.y
-      value: 0.07017899
+      value: 0.070178874
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[3].axis.z
-      value: 0.00000006879117
+      value: 0.00000006874173
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readPosition.x
-      value: 0.00000000548549
+      value: -0.000000016856939
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readPosition.y
-      value: 2.5838494
+      value: 1.5838494
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readPosition.z
-      value: 0.020311149
+      value: -0.020311054
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readRotation.x
-      value: 5.252552e-12
+      value: 0.00000014901161
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readRotation.y
-      value: 1
+      value: 1.16413254e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readRotation.z
-      value: -0.00000014901161
+      value: -2.2758084e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].readRotation.w
-      value: -1.1641077e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[4].solverPosition.x
-      value: 0.00000000547152
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[4].solverPosition.y
-      value: 2.5838494
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[4].solverPosition.z
-      value: 0.020311149
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[4].solverRotation.x
-      value: 5.252552e-12
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.spine.bones.Array.data[4].solverRotation.y
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.spine.bones.Array.data[4].solverPosition.x
+      value: -0.000000016880222
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[4].solverPosition.y
+      value: 1.5838494
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[4].solverPosition.z
+      value: -0.020311054
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[4].solverRotation.x
+      value: 0.00000014901161
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.spine.bones.Array.data[4].solverRotation.y
+      value: 1.16413254e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.spine.bones.Array.data[4].solverRotation.z
-      value: -0.00000014901161
+      value: -2.2758084e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.spine.bones.Array.data[4].solverRotation.w
-      value: -1.1641077e-10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].readPosition.x
-      value: 0.0000000052899125
+      value: -0.00000001666136
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].readPosition.y
-      value: 2.5136704
+      value: 1.5136706
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].readPosition.z
-      value: 0.020284714
+      value: -0.02028462
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].readRotation.x
-      value: 0.7784811
+      value: -0.0056340694
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].readRotation.y
-      value: 0.59657216
+      value: -0.21512464
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].readRotation.z
-      value: 0.03645554
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftArm.bones.Array.data[0].readRotation.w
-      value: 0.19167608
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftArm.bones.Array.data[0].solverPosition.x
-      value: 0.0000000052899125
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftArm.bones.Array.data[0].solverPosition.y
-      value: 2.5136704
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftArm.bones.Array.data[0].solverPosition.z
-      value: 0.020284714
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftArm.bones.Array.data[0].solverRotation.x
       value: 0.77930975
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.leftArm.bones.Array.data[0].readRotation.w
+      value: 0.5885285
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftArm.bones.Array.data[0].solverPosition.x
+      value: -0.000000016654376
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftArm.bones.Array.data[0].solverPosition.y
+      value: 1.5136706
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftArm.bones.Array.data[0].solverPosition.z
+      value: -0.020284621
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftArm.bones.Array.data[0].solverRotation.x
+      value: 0.025195755
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].solverRotation.y
-      value: 0.5885286
+      value: -0.2382356
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].solverRotation.z
-      value: 0.0056341006
+      value: 0.77892184
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].solverRotation.w
-      value: 0.21512464
+      value: 0.5795598
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].length
-      value: 0.15339404
+      value: 0.15339412
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].sqrMag
-      value: 0.023529734
+      value: 0.023529757
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].axis.x
-      value: 0.000002002635
+      value: -0.0000006933285
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -1368,352 +1368,352 @@ PrefabInstance:
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[0].axis.z
-      value: -0.0000005852379
+      value: 0.00000003565656
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readPosition.x
-      value: 0.14033492
+      value: -0.14033538
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readPosition.y
-      value: 2.4807334
+      value: 1.4807351
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readPosition.z
-      value: 0.07273465
+      value: -0.07273455
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readRotation.x
-      value: 0.69596124
+      value: -0.21708058
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readRotation.y
-      value: 0.6801559
+      value: 0.07844165
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readRotation.z
-      value: 0.21615858
+      value: 0.69607097
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].readRotation.w
-      value: -0.07938251
+      value: 0.67985874
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverPosition.x
-      value: 0.1403354
+      value: -0.14033549
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverPosition.y
-      value: 2.4807353
+      value: 1.4807354
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverPosition.z
-      value: 0.072734624
+      value: -0.072734535
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverRotation.x
-      value: 0.6960711
+      value: -0.21710914
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverRotation.y
-      value: 0.67985886
+      value: 0.07841286
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverRotation.z
-      value: 0.2170807
+      value: 0.6960744
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].solverRotation.w
-      value: -0.078441806
+      value: 0.6798494
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].length
-      value: 0.25283417
+      value: 0.2528343
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].sqrMag
-      value: 0.063925125
+      value: 0.063925184
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].axis.x
-      value: -0.00000018503393
+      value: -0.00000008793458
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].axis.y
-      value: 0.25283423
+      value: 0.25283426
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[1].axis.z
-      value: -0.00000016698151
+      value: -0.000000048687493
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readPosition.x
-      value: 0.38837597
+      value: -0.38824356
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readPosition.y
-      value: 2.4650137
+      value: 1.4647362
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readPosition.z
-      value: 0.11914212
+      value: -0.11975325
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readRotation.x
-      value: 0.7047341
+      value: -0.18464366
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readRotation.y
-      value: 0.68297404
+      value: 0.050551385
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readRotation.z
-      value: 0.1855671
+      value: 0.7045876
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].readRotation.w
-      value: -0.0496116
+      value: 0.68330646
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverPosition.x
-      value: 0.38824344
+      value: -0.38823953
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverPosition.y
-      value: 2.4647365
+      value: 1.464728
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverPosition.z
-      value: 0.119753346
+      value: -0.11977203
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverRotation.x
-      value: 0.7045879
+      value: -0.18467204
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverRotation.y
-      value: 0.6833067
+      value: 0.05052303
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverRotation.z
-      value: 0.1846437
+      value: 0.7045923
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].solverRotation.w
-      value: -0.05055145
+      value: 0.6832959
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].length
-      value: 0.25301975
+      value: 0.25301993
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].sqrMag
-      value: 0.06401899
+      value: 0.064019084
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].axis.x
-      value: -0.00000034540892
+      value: -0.00000047322044
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].axis.y
-      value: 0.25301978
+      value: 0.25301996
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[2].axis.z
-      value: 0.000000035594645
+      value: 0.00000004541097
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readPosition.x
-      value: 0.6365991
+      value: -0.6365994
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readPosition.y
-      value: 2.4492831
+      value: 1.4492829
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readPosition.z
-      value: 0.1655835
+      value: -0.16557512
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readRotation.x
-      value: 0.69558334
+      value: 0.1220696
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readRotation.y
-      value: 0.6970826
+      value: -0.12385106
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readRotation.z
-      value: -0.12206963
+      value: 0.6955832
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].readRotation.w
-      value: 0.12385103
+      value: 0.69708276
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverPosition.x
-      value: 0.6365992
+      value: -0.6365914
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverPosition.y
-      value: 2.4492831
+      value: 1.4492658
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverPosition.z
-      value: 0.1655752
+      value: -0.16561271
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverRotation.x
-      value: 0.69558334
+      value: 0.12206963
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverRotation.y
-      value: 0.69708264
+      value: -0.12385097
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverRotation.z
-      value: -0.1220696
+      value: 0.69558316
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftArm.bones.Array.data[3].solverRotation.w
-      value: 0.12385103
+      value: 0.6970827
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readPosition.x
-      value: 0.0000000052899125
+      value: -0.00000001666136
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readPosition.y
-      value: 2.5136704
+      value: 1.5136706
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readPosition.z
-      value: 0.020284714
+      value: -0.02028462
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readRotation.x
-      value: -0.7785482
+      value: -0.005580455
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readRotation.y
-      value: 0.59648395
+      value: 0.21515146
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readRotation.z
-      value: 0.036435246
+      value: -0.7793752
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].readRotation.w
-      value: -0.19168285
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[0].solverPosition.x
-      value: 0.0000000052899125
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[0].solverPosition.y
-      value: 2.5136704
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[0].solverPosition.z
-      value: 0.020284714
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[0].solverRotation.x
-      value: -0.7793753
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[0].solverRotation.y
       value: 0.5884327
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[0].solverPosition.x
+      value: -0.000000016654376
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[0].solverPosition.y
+      value: 1.5136706
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[0].solverPosition.z
+      value: -0.020284621
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[0].solverRotation.x
+      value: 0.02528265
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[0].solverRotation.y
+      value: 0.23828115
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].solverRotation.z
-      value: 0.005580466
+      value: -0.7789846
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].solverRotation.w
-      value: -0.21515158
+      value: 0.5794531
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].length
-      value: 0.15339413
+      value: 0.15339418
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].sqrMag
-      value: 0.02352976
+      value: 0.023529774
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].axis.x
-      value: -0.0000005686332
+      value: 0.0000008541884
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -1723,447 +1723,447 @@ PrefabInstance:
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[0].axis.z
-      value: -0.0000009202555
+      value: -0.00000013861823
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readPosition.x
-      value: -0.14032722
+      value: 0.14032775
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readPosition.y
-      value: 2.4807017
+      value: 1.480704
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readPosition.z
-      value: 0.072735585
+      value: -0.07273549
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readRotation.x
-      value: -0.69608194
+      value: -0.21762662
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readRotation.y
-      value: 0.6800195
+      value: -0.07706609
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readRotation.z
-      value: 0.21669517
+      value: -0.69619167
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].readRotation.w
-      value: 0.07801688
+      value: 0.67971814
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverPosition.x
-      value: -0.14032777
+      value: 0.14032781
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverPosition.y
-      value: 2.480704
+      value: 1.4807041
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverPosition.z
-      value: 0.07273563
+      value: -0.072735436
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverRotation.x
-      value: -0.69619155
+      value: -0.21763358
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverRotation.y
-      value: 0.67971826
+      value: -0.07705935
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverRotation.z
-      value: 0.21762663
+      value: -0.6961926
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].solverRotation.w
-      value: 0.07706604
+      value: 0.6797157
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].length
-      value: 0.25283375
+      value: 0.25283387
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].sqrMag
-      value: 0.0639249
+      value: 0.06392496
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].axis.x
-      value: 0.00000023790082
+      value: 0.00000006964247
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].axis.y
-      value: 0.25283375
+      value: 0.2528339
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[1].axis.z
-      value: 0.000000063939076
+      value: 0.00000001159255
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readPosition.x
-      value: -0.38823333
+      value: 0.3880977
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readPosition.y
-      value: 2.4647796
+      value: 1.4645002
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readPosition.z
-      value: 0.1197882
+      value: -0.12040574
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readRotation.x
-      value: -0.70487946
+      value: -0.18513851
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readRotation.y
-      value: 0.68277645
+      value: -0.04923129
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readRotation.z
-      value: 0.18609858
+      value: -0.7047298
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].readRotation.w
-      value: 0.04825425
+      value: 0.6831225
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverPosition.x
-      value: -0.38809764
+      value: 0.38809675
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverPosition.y
-      value: 2.4645004
+      value: 1.4644982
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverPosition.z
-      value: 0.12040579
+      value: -0.12041016
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverRotation.x
-      value: -0.7047297
+      value: -0.18514553
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverRotation.y
-      value: 0.6831224
+      value: -0.04922469
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverRotation.z
-      value: 0.18513857
+      value: -0.70473146
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].solverRotation.w
-      value: 0.049231227
+      value: 0.6831202
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].length
-      value: 0.2458814
+      value: 0.24588123
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].sqrMag
-      value: 0.060457658
+      value: 0.060457576
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].axis.x
-      value: -0.0000004880676
+      value: -0.00000055012936
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].axis.y
-      value: 0.24588136
+      value: 0.24588133
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[2].axis.z
-      value: -0.000000023948342
+      value: 0.000000101400445
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readPosition.x
-      value: -0.6293226
+      value: 0.6293225
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readPosition.y
-      value: 2.4492955
+      value: 1.4492953
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readPosition.z
-      value: 0.16554706
+      value: -0.16553853
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readRotation.x
-      value: -0.6955832
+      value: 0.12206951
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readRotation.y
-      value: 0.69708276
+      value: 0.12385109
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readRotation.z
-      value: -0.12206951
+      value: -0.6955831
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].readRotation.w
-      value: -0.12385112
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[3].solverPosition.x
-      value: -0.6293226
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[3].solverPosition.y
-      value: 2.4492955
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[3].solverPosition.z
-      value: 0.16553877
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[3].solverRotation.x
-      value: -0.6955832
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.rightArm.bones.Array.data[3].solverRotation.y
       value: 0.69708276
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[3].solverPosition.x
+      value: 0.6293206
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[3].solverPosition.y
+      value: 1.4492911
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[3].solverPosition.z
+      value: -0.16554731
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[3].solverRotation.x
+      value: 0.12206957
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.rightArm.bones.Array.data[3].solverRotation.y
+      value: 0.12385112
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].solverRotation.z
-      value: -0.12206951
+      value: -0.695583
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightArm.bones.Array.data[3].solverRotation.w
-      value: -0.12385112
+      value: 0.6970827
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readPosition.x
-      value: 0.073412105
+      value: -0.07341211
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readPosition.y
-      value: 1.9782345
+      value: 0.9782345
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readPosition.z
-      value: -0.013568797
+      value: 0.013568893
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readRotation.x
-      value: 0.98747635
+      value: -0.14367051
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readRotation.y
-      value: 0.01966397
+      value: -0.062959164
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readRotation.z
-      value: 0.14367068
+      value: 0.9874224
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].readRotation.w
-      value: 0.06215027
+      value: 0.019798134
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverPosition.x
-      value: 0.073412105
+      value: -0.07341211
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverPosition.y
-      value: 1.9782345
+      value: 0.9782345
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverPosition.z
-      value: -0.013568799
+      value: 0.013568893
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverRotation.x
-      value: 0.98742247
+      value: -0.14367051
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverRotation.y
-      value: 0.019798135
+      value: -0.06295915
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverRotation.z
-      value: 0.14367051
+      value: 0.9874224
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].solverRotation.w
-      value: 0.06295913
+      value: 0.019798134
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].length
-      value: 0.4074995
+      value: 0.4074996
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].sqrMag
-      value: 0.16605583
+      value: 0.16605593
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].axis.x
-      value: 0.00000001631768
+      value: 0.000000016099357
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].axis.y
-      value: 0.40749958
+      value: 0.40749964
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[0].axis.z
-      value: -0.000000025719173
+      value: 0.000000035667107
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readPosition.x
-      value: 0.08196026
+      value: -0.08197268
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readPosition.y
-      value: 1.5741982
+      value: 0.5742849
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readPosition.z
-      value: 0.03875176
+      value: -0.03941556
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readRotation.x
-      value: 0.0037752078
+      value: -0.9979154
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readRotation.y
-      value: 0.06437361
+      value: 0.010255127
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readRotation.z
-      value: 0.997866
+      value: 0.0037825091
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].readRotation.w
-      value: -0.010267308
+      value: 0.06360561
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverPosition.x
-      value: 0.08197266
+      value: -0.08197268
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverPosition.y
-      value: 1.574285
+      value: 0.5742849
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverPosition.z
-      value: 0.039415643
+      value: -0.03941556
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverRotation.x
-      value: 0.0037825042
+      value: -0.99791545
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverRotation.y
-      value: 0.0636056
+      value: 0.01025513
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverRotation.z
-      value: 0.9979155
+      value: 0.0037825038
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].solverRotation.w
-      value: -0.01025513
+      value: 0.06360559
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].length
-      value: 0.4402971
+      value: 0.44029695
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].sqrMag
-      value: 0.19386154
+      value: 0.19386141
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].axis.x
-      value: -0.0000000872666
+      value: -0.000000077187636
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -2173,527 +2173,527 @@ PrefabInstance:
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[1].axis.z
-      value: -0.00000020011923
+      value: -0.00000021330708
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readPosition.x
-      value: 0.09119639
+      value: -0.091196395
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readPosition.y
-      value: 1.1376431
+      value: 0.13764313
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readPosition.z
-      value: 0.095283486
+      value: -0.09527511
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readRotation.x
-      value: 0.025127158
+      value: -0.90670466
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readRotation.y
-      value: -0.4193099
+      value: 0.0378824
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readRotation.z
-      value: 0.9067037
+      value: 0.025091128
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].readRotation.w
-      value: -0.037899032
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftLeg.bones.Array.data[2].solverPosition.x
-      value: 0.09119638
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftLeg.bones.Array.data[2].solverPosition.y
-      value: 1.1376431
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftLeg.bones.Array.data[2].solverPosition.z
-      value: 0.09527521
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftLeg.bones.Array.data[2].solverRotation.x
-      value: 0.025091141
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
-        type: 3}
-      propertyPath: solver.leftLeg.bones.Array.data[2].solverRotation.y
       value: -0.41931182
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
+      propertyPath: solver.leftLeg.bones.Array.data[2].solverPosition.x
+      value: -0.091196395
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftLeg.bones.Array.data[2].solverPosition.y
+      value: 0.13764316
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftLeg.bones.Array.data[2].solverPosition.z
+      value: -0.09527511
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftLeg.bones.Array.data[2].solverRotation.x
+      value: -0.90670466
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: solver.leftLeg.bones.Array.data[2].solverRotation.y
+      value: 0.0378824
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].solverRotation.z
-      value: 0.9067046
+      value: 0.025091128
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].solverRotation.w
-      value: -0.0378824
+      value: -0.41931182
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].length
-      value: 0.12497551
+      value: 0.124975584
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].sqrMag
-      value: 0.015618878
+      value: 0.015618897
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].axis.x
-      value: 0.0000000031122318
+      value: -0.0000000125603306
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].axis.y
-      value: 0.12497554
+      value: 0.12497567
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[2].axis.z
-      value: -0.000000031416832
+      value: -0.00000010346775
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readPosition.x
-      value: 0.097151995
+      value: -0.097152025
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readPosition.y
-      value: 1.0569732
+      value: 0.056973297
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readPosition.z
-      value: 0.000016597509
+      value: -0.000008090138
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readRotation.x
-      value: 0.0000032782548
+      value: -0.6922944
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readRotation.y
-      value: -0.7216154
+      value: 0.0000028857032
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readRotation.z
-      value: 0.6922944
+      value: 0.0000032633536
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].readRotation.w
-      value: -0.0000029006046
+      value: -0.7216153
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverPosition.x
-      value: 0.097151995
+      value: -0.097152025
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverPosition.y
-      value: 1.0569732
+      value: 0.05697328
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverPosition.z
-      value: 0.000008255243
+      value: -0.0000080913305
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverRotation.x
-      value: 0.0000032782548
+      value: -0.6922944
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverRotation.y
-      value: -0.7216154
+      value: 0.0000028857032
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverRotation.z
-      value: 0.6922944
+      value: 0.0000032633536
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.leftLeg.bones.Array.data[3].solverRotation.w
-      value: -0.0000029006046
+      value: -0.7216153
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readPosition.x
-      value: -0.073412076
+      value: 0.07341206
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readPosition.y
-      value: 1.9782345
+      value: 0.9782345
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readPosition.z
-      value: -0.013568797
+      value: 0.013568893
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readRotation.x
-      value: 0.98747635
+      value: 0.14367048
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readRotation.y
-      value: -0.019663967
+      value: -0.06295282
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readRotation.z
-      value: -0.1436707
+      value: 0.9874227
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].readRotation.w
-      value: 0.06215027
+      value: -0.019797087
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverPosition.x
-      value: -0.073412076
+      value: 0.07341206
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverPosition.y
-      value: 1.9782345
+      value: 0.9782345
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverPosition.z
-      value: -0.013568799
+      value: 0.013568893
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverRotation.x
-      value: 0.9874228
+      value: 0.14367051
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverRotation.y
-      value: -0.019797096
+      value: -0.062952824
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverRotation.z
-      value: -0.1436705
+      value: 0.9874228
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].solverRotation.w
-      value: 0.06295274
+      value: -0.01979709
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].length
-      value: 0.40749934
+      value: 0.4074995
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].sqrMag
-      value: 0.16605572
+      value: 0.16605584
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].axis.x
-      value: -0.000000007993728
+      value: 0.0000000106340545
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].axis.y
-      value: 0.40749946
+      value: 0.40749934
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[0].axis.z
-      value: 0.000000024545338
+      value: 0.00000014151391
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readPosition.x
-      value: -0.08196023
+      value: 0.08197255
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readPosition.y
-      value: 1.5741984
+      value: 0.5742843
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readPosition.z
-      value: 0.03875169
+      value: -0.039410222
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readRotation.x
-      value: -0.0037751782
+      value: -0.997915
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readRotation.y
-      value: 0.06437355
+      value: -0.010255242
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readRotation.z
-      value: 0.9978659
+      value: -0.0037824197
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].readRotation.w
-      value: 0.010267346
+      value: 0.06361154
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverPosition.x
-      value: -0.081972554
+      value: 0.08197255
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverPosition.y
-      value: 1.5742844
+      value: 0.5742843
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverPosition.z
-      value: 0.03941034
+      value: -0.039410222
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverRotation.x
-      value: -0.0037824332
+      value: -0.99791497
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverRotation.y
-      value: 0.063611485
+      value: -0.010255243
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverRotation.z
-      value: 0.99791497
+      value: -0.0037823983
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].solverRotation.w
-      value: 0.010255243
+      value: 0.06361153
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].length
-      value: 0.44029686
+      value: 0.4402968
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].sqrMag
-      value: 0.19386132
+      value: 0.19386126
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].axis.x
-      value: 0.00000008885494
+      value: 0.00000009554132
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].axis.y
-      value: 0.44029686
+      value: 0.44029707
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[1].axis.z
-      value: -0.00000017676119
+      value: -0.00000017330976
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readPosition.x
-      value: -0.09119639
+      value: 0.09119639
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readPosition.y
-      value: 1.1376435
+      value: 0.13764337
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readPosition.z
-      value: 0.09528335
+      value: -0.09527498
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readRotation.x
-      value: -0.025127197
+      value: -0.9067048
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readRotation.y
-      value: -0.4193099
+      value: -0.037882537
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readRotation.z
-      value: 0.9067037
+      value: -0.025091426
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].readRotation.w
-      value: 0.03789905
+      value: -0.41931129
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverPosition.x
-      value: -0.09119639
+      value: 0.09119639
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverPosition.y
-      value: 1.1376435
+      value: 0.1376434
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverPosition.z
-      value: 0.09527506
+      value: -0.09527498
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverRotation.x
-      value: -0.02509144
+      value: -0.9067048
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverRotation.y
-      value: -0.4193112
+      value: -0.037882537
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverRotation.z
-      value: 0.9067048
+      value: -0.025091426
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].solverRotation.w
-      value: 0.037882533
+      value: -0.41931129
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].length
-      value: 0.12497569
+      value: 0.12497579
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].sqrMag
-      value: 0.015618923
+      value: 0.015618948
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].axis.x
-      value: -0.000000051376873
+      value: -0.00000007064323
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].axis.y
-      value: 0.12497572
+      value: 0.12497582
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[2].axis.z
-      value: 0.00000028263995
+      value: 0.00000022329229
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readPosition.x
-      value: -0.09715198
+      value: 0.09715197
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readPosition.y
-      value: 1.0569732
+      value: 0.05697306
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readPosition.z
-      value: 0.000016530752
+      value: -0.000008090138
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readRotation.x
-      value: -0.000003278255
+      value: -0.6922942
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readRotation.y
-      value: -0.7216156
+      value: -0.0000028908255
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readRotation.z
-      value: 0.6922942
+      value: -0.0000032633538
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].readRotation.w
-      value: 0.0000028889626
+      value: -0.72161573
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverPosition.x
-      value: -0.09715198
+      value: 0.09715197
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverPosition.y
-      value: 1.0569732
+      value: 0.05697304
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverPosition.z
-      value: 0.0000082701445
+      value: -0.0000080913305
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverRotation.x
-      value: -0.000003278255
+      value: -0.6922942
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverRotation.y
-      value: -0.7216156
+      value: -0.0000028908255
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverRotation.z
-      value: 0.6922942
+      value: -0.0000032633538
       objectReference: {fileID: 0}
     - target: {fileID: 8622876272067299090, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: solver.rightLeg.bones.Array.data[3].solverRotation.w
-      value: 0.0000028889626
+      value: -0.72161573
       objectReference: {fileID: 0}
     - target: {fileID: 8667896217809941224, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -2708,22 +2708,22 @@ PrefabInstance:
     - target: {fileID: 8667896217809941224, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.031687036
+      value: 0.03168703
       objectReference: {fileID: 0}
     - target: {fileID: 8667896217809941224, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000028568323
+      value: -0.0000002960442
       objectReference: {fileID: 0}
     - target: {fileID: 8667896217809941224, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5724893
+      value: 1.572489
       objectReference: {fileID: 0}
     - target: {fileID: 8667896217809941224, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00000091036793
+      value: -0.0000008312055
       objectReference: {fileID: 0}
     - target: {fileID: 8667896217809941224, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -2733,7 +2733,7 @@ PrefabInstance:
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0000000037252903
+      value: -0.000000014901161
       objectReference: {fileID: 0}
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -2743,22 +2743,22 @@ PrefabInstance:
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.000008282065
+      value: -0.000008186102
       objectReference: {fileID: 0}
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
@@ -2783,6 +2783,11 @@ PrefabInstance:
     - target: {fileID: 8897218728468304594, guid: 02e20531c37ec564eb477380ea876c28,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9003817389874427240, guid: 02e20531c37ec564eb477380ea876c28,
+        type: 3}
+      propertyPath: DrawSpheres
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9003817389874427241, guid: 02e20531c37ec564eb477380ea876c28,

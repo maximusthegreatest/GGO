@@ -31,9 +31,9 @@ TagManager:
   - Grabbable
   - Hand
   - LaserIgnore
-  - 
-  - 
-  - 
+  - SaberNew
+  - GlobalVolume
+  - UICam
   - 
   - 
   - 

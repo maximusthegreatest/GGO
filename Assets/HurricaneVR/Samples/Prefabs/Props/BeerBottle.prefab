@@ -34,7 +34,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3186923021240179371}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.032, y: -0.185, z: 1.37}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7557056369235677297}
@@ -135,36 +135,61 @@ MonoBehaviour:
   GrabType: 1
   TrackingType: 1
   HoldType: 1
+  GrabControl: 0
+  OverrideGrabTrigger: 0
+  GrabTrigger: 0
+  RequireLineOfSight: 1
+  EnableInvisibleHand: 0
   PhysicsPoserFallback: 1
-  ForceGrabbable: 1
+  ParentHandModelImmediately: 0
+  ParentHandModel: 1
+  BreakDistance: 1
+  RemainsKinematic: 1
+  Stationary: 0
   ReleasedAngularConversionFactor: 1
   ReleasedVelocityFactor: 1
   ReleasedAngularFactor: 1
-  BreakDistance: 1
-  ParentHandModelImmediately: 0
-  ParentHandModel: 1
-  CollisionParents: []
+  GrabIndicator: {fileID: 0}
+  ForceGrabIndicator: {fileID: 0}
+  ShowGrabIndicator: 1
+  ShowTriggerGrabIndicator: 1
+  ShowForceGrabIndicator: 1
   LeftForceGrabberGrabPoint: {fileID: 0}
   RightForceGrabberGrabPoint: {fileID: 0}
-  StartingSocket: {fileID: 0}
-  LinkStartingSocket: 0
-  HandGrabbedClip: {fileID: 0}
-  ResetJoint: 0
-  RequireLineOfSight: 1
-  LinearSpring: 3000
-  LinearDamper: 1000
-  LinearMaxForce: 1000
-  SlerpSpring: 50000
-  SlerpDamper: 1000
-  SlerpMaxForce: 100
-  JointVelocityPower: 15
-  CanJointBreak: 0
-  JointLinearLimit: 1
-  JointBreakForce: 2000
-  JointBreakTorque: 2000
   UseDefaultHighlighter: 1
   ForceGrabberHighlighter: {fileID: 0}
+  ForceGrabbable: 1
+  ForcePullOverride: {fileID: 0}
+  JointOverride: {fileID: 0}
+  OneHandJointSettings: {fileID: 0}
+  TwoHandJointSettings: {fileID: 0}
+  PullingSettingsOverride: {fileID: 0}
+  PalmCenterOfMass: 0
+  CanJointBreak: 0
+  JointBreakForce: 2000
+  JointBreakTorque: 2000
+  HandGrabbedClip: {fileID: 0}
+  StartingSocket: {fileID: 0}
+  LinkStartingSocket: 0
+  AutoApplyLayer: 1
+  RequireOverlapClearance: 0
+  OverlapTimeout: 0.5
+  FinalJointMaxAngle: 3
+  FinalJointQuick: 1
+  FinalJointTimeout: 2
+  CollisionParents: []
+  ExtraIgnoreCollisionParents: []
+  GrabColliders: []
+  ConsiderGrabPointAngle: 1
+  UseColliderClosestPoint: 1
+  DisableHandCollision: 0
+  CollisionDetection: 2
+  ShowBoundingBox: 0
+  DrawCenterOfMass: 0
   GrabPoints: []
+  Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
   Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -186,7 +211,25 @@ MonoBehaviour:
   Destroyed:
     m_PersistentCalls:
       m_Calls: []
+  HandGrabbed:
+    m_PersistentCalls:
+      m_Calls: []
+  HandReleased:
+    m_PersistentCalls:
+      m_Calls: []
+  HandFullReleased:
+    m_PersistentCalls:
+      m_Calls: []
+  Socketed:
+    m_PersistentCalls:
+      m_Calls: []
+  UnSocketed:
+    m_PersistentCalls:
+      m_Calls: []
   Grabbers: []
+  HandGrabbers: []
+  Stabbers: []
+  Stabbable: {fileID: 0}
 --- !u!64 &2554989025072951194
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -234,6 +277,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123d9563fca44af1864835effb36ffbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CollisionType: 0
+  ForceThreshold: 2
+  VelocityThreshold: 0
   ThresholdMet:
     m_PersistentCalls:
       m_Calls:
@@ -248,9 +294,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  CollisionType: 0
-  ForceThreshold: 2
-  VelocityThreshold: 0
   LastImpulse: 0
   LastVelocity: 0
   MaxImpulse: 0
@@ -272,6 +315,7 @@ MonoBehaviour:
   CounterScale: {x: 1, y: 1, z: 1}
   SocketedClip: {fileID: 0}
   UnsocketedClip: {fileID: 0}
+  LinkedGrabbables: []
   SocketType: 1
 --- !u!114 &8486089137576952131
 MonoBehaviour:

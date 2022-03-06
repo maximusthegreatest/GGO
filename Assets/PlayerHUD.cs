@@ -1,4 +1,5 @@
 ﻿using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.ControllerInput;
 using HurricaneVR.Framework.Core.Bags;
 using HurricaneVR.Framework.Core.Grabbers;
@@ -87,9 +88,9 @@ public class PlayerHUD : MonoBehaviour
 
     public void ReleasingItem(HVRGrabberBase grabber, HVRGrabbable grabbable)
     {
-        Debug.Log("RELEASING ITEM FROM THE HUD MAYNE");
-        Debug.Log("grabber " + grabber.gameObject);
-        Debug.Log("grabable " + grabbable.gameObject);
+        //Debug.Log("RELEASING ITEM FROM THE HUD MAYNE");
+        //Debug.Log("grabber " + grabber.gameObject);
+        //Debug.Log("grabable " + grabbable.gameObject);
 
         if (grabbable)
         {
@@ -103,8 +104,8 @@ public class PlayerHUD : MonoBehaviour
     
     public void GrabbingItem(HVRGrabberBase grabber, HVRGrabbable grabbable)
     {
-        Debug.Log("grabber " + grabber.gameObject);
-        Debug.Log("grabable " + grabbable.gameObject);
+        //Debug.Log("grabber " + grabber.gameObject);
+        //Debug.Log("grabable " + grabbable.gameObject);
         if (grabbable)
         {
             //string item = grabbable.gameObject.name;
@@ -121,7 +122,7 @@ public class PlayerHUD : MonoBehaviour
 
         if (weaponHuds.ContainsKey(itemName))
         {
-            Debug.Log("here bro");
+            //Debug.Log("here bro");
             //get the game HUD
             GameObject wepHUD = weaponHuds[itemName];
             RectTransform hudTransform = wepHUD.GetComponent<RectTransform>();
@@ -136,7 +137,7 @@ public class PlayerHUD : MonoBehaviour
                 //check which position it can go in, so we need another dicitionary/enum that associates 0 with coordinates                           
                 if (_weaponSlots.ElementAtOrDefault(0) != null) //if first item is full
                 {
-                    Debug.Log("throwing into second slot");
+                    //Debug.Log("throwing into second slot");
                     _weaponSlots.Insert(1, itemName);
                     hudTransform.anchoredPosition = new Vector2(hudSlots[1].x, hudSlots[1].y);
                     wepHUD.SetActive(true);
@@ -144,7 +145,7 @@ public class PlayerHUD : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("throwing into first slot");
+                    //Debug.Log("throwing into first slot");
                     _weaponSlots.Add(itemName); //set first item
                     //give it coords
                     hudTransform.anchoredPosition = new Vector2(hudSlots[0].x, hudSlots[0].y);
@@ -165,10 +166,10 @@ public class PlayerHUD : MonoBehaviour
         Debug.Log("moving on up");
         if(_weaponSlots.Count > 0)
         {            
-                Debug.Log("moving on up inside");                                                
+                //Debug.Log("moving on up inside");                                                
                 //get hud of item thats in there
                 GameObject otherWepHUD = weaponHuds[_weaponSlots[0]];
-                Debug.Log("other wep hud" + otherWepHUD.name);
+                //Debug.Log("other wep hud" + otherWepHUD.name);
                 RectTransform otherHudTransform = otherWepHUD.GetComponent<RectTransform>();
                 otherHudTransform.anchoredPosition = new Vector2(hudSlots[0].x, hudSlots[0].y);
             
