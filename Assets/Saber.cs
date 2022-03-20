@@ -14,21 +14,42 @@ public class Saber : MonoBehaviour
     public Collider saberCollider;
     public SaberTrail trail;
     public float desiredDuration;
+    public Transform convergencePoint;
+
+    public AudioClip saberStartSound;
+    public AudioClip saberRetractSound;
+    public AudioClip saberSwingSound;
+    public AudioClip saberHumSound;
+
 
     [SerializeField]
     private Animator saberAnimator;
 
     [SerializeField]
     private Animator saberBladeAnimator;
-
+    [SerializeField]
     private GameObject _laser;
-    private Vector3 fullSize;
+    private int fullSize = 1;
     private float _colliderFullSize;
     private bool _active;
     private bool _pressedA;
-    private CapsuleCollider _cc;
+    private bool btnAnimRunning;
+    [SerializeField]
+    private CapsuleCollider _bladeCollider;
     private Rigidbody _rb;
     private float elapsedTime;
+    [SerializeField]
+    private float desiredDurationUp;
+    [SerializeField]
+    private float desiredDurationDown;
+    [SerializeField]
+    private float elapsedDownTime;
+    [SerializeField]
+    private float btnLastPressed;
+    [SerializeField]
+    private float btnUpAnimLength = .65f;
+    private AudioSource source;
+    private Rigidbody rb;
 
 
     private void Awake()
@@ -39,18 +60,22 @@ public class Saber : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        source = gameObject.AddComponent<AudioSource>(); 
+        source.spatialBlend = 1;
 
+        rb = gameObject.GetComponent<Rigidbody>();
+
+        _laser.SetActive(false);
         //_laser = transform.Find("Blade").gameObject;
         //fullSize = _laser.transform.localScale;
-        //_cc = _laser.GetComponent<CapsuleCollider>();
-        //_colliderFullSize = _cc.height;
-        //_cc.height = 0;
-        //_laser.transform.localScale = new Vector3(fullSize.x, fullSize.y, 0);
+        _bladeCollider = _laser.GetComponent<CapsuleCollider>();
+        _colliderFullSize = _bladeCollider.height;
+        _bladeCollider.height = 0;
+        _laser.transform.localScale = new Vector3(0.2f, 0.2f, 0);
         _rb = GetComponent<Rigidbody>();
 
         //_rb.centerOfMass = hilt.transform.position;
-
-        
+        elapsedTime = btnUpAnimLength;
 
     }
 
@@ -59,7 +84,12 @@ public class Saber : MonoBehaviour
     {
 
         //Debug.Log("saber velocity" + _rb.velocity);
-        //ControlLaser();
+        ControlLaser();
+        if(btnAnimRunning)
+        {            
+            elapsedTime += Time.deltaTime;
+        }
+        ControlSound();
 
     }
 
@@ -72,50 +102,83 @@ public class Saber : MonoBehaviour
 
     public void SetPressed()
     {
-        
-        _pressedA = !_pressedA;
-        elapsedTime = 0;
 
-        if(_pressedA)
+        btnLastPressed = Time.time;
+
+
+        if (btnLastPressed + elapsedTime >= btnLastPressed + btnUpAnimLength)
         {
-            saberAnimator.SetBool("SaberOn", true);
-            saberBladeAnimator.SetBool("BladeUp", true);
-        } else
-        {
-            saberAnimator.SetBool("SaberOn", false);
-            saberBladeAnimator.SetBool("BladeUp", false);
+            _pressedA = !_pressedA;
+            elapsedTime = 0;
+            
+            btnAnimRunning = true;
+
+            if (_pressedA)
+            {
+                saberAnimator.SetBool("SaberOn", true);
+            }
+            else
+            {
+                saberAnimator.SetBool("SaberOn", false);
+            }
         }
+       
+
+
 
     }
 
+    void ControlSound()
+    {
+        //get magnitude of rb on saber
+        Debug.Log("Saber mag " + rb.velocity.magnitude);
+        if(_pressedA && rb.velocity.magnitude > 1)
+        {
+            source.PlayOneShot(saberSwingSound);
+        } else if(_pressedA)
+        {
+            source.PlayOneShot(saberHumSound);
+        }
+        //if it exceeds certain limit and its on then play swing sound
+        //else if on then play hum sound
+    }
 
     void ControlLaser()
     {
         
         //Grow Saber
-        if (_pressedA && _laser.transform.localScale.z < fullSize.z)
+        if (_pressedA && _laser.transform.localScale.z < fullSize)
         {
-            elapsedTime += Time.deltaTime;
-
+            if(!_laser.activeSelf) _laser.SetActive(true);
             
 
-            Debug.Log("elapsed Time " + elapsedTime + " desiredDur" + desiredDuration);
+
+            elapsedTime += Time.deltaTime;
+            
+            
 
             float percentageComplete = elapsedTime / desiredDuration;
-            percentageComplete = Mathf.Clamp(percentageComplete, 0, 1);
-            Debug.Log("Percent complete rising" + percentageComplete);
+            float percentageCompleteUp = elapsedTime / desiredDurationUp;
+
+            if (percentageComplete > 1)
+            {
+                percentageComplete = 1;
+            }
+
+            //z scale
+            float newScale = Mathf.Lerp(_laser.transform.localScale.z, 1, percentageComplete);
+            _laser.transform.localScale = new Vector3(_laser.transform.localScale.x, _laser.transform.localScale.y, Mathf.Clamp(newScale, 0, 1));
+
+
+            //x,y scale
+            float otherScale = Mathf.Lerp(_laser.transform.localScale.x, 1, percentageCompleteUp);
+            _laser.transform.localScale = new Vector3(otherScale, otherScale, _laser.transform.localScale.z);
             
-
-            _laser.SetActive(true);
-
-
-                //Debug.Log("Lerp Value: " + Mathf.Lerp(_laser.transform.localScale.z, fullSize.z, percentageComplete));
-
-                _laser.transform.localScale = new Vector3(fullSize.x, fullSize.y, Mathf.Lerp(_laser.transform.localScale.z, fullSize.z, percentageComplete));
-                //_laser.transform.localScale += new Vector3(0, 0, saberGrowSpeed);
             
+            //Change the collider size   
 
-            
+            /*
+            This was for the follower method, which we aren't doing anymore
 
             //as we increase, we need to activate the followers that we are passing through
             foreach (SaberCapsule capsule in capsules)
@@ -128,13 +191,13 @@ public class Saber : MonoBehaviour
                 }
 
             }
-
+            */
 
             //_cc.height += saberGrowSpeed;
         } else if (_pressedA == false && _laser.transform.localScale.z > 0)
         {
+            
 
-           
             //All this logic is for changing the scale of the blade
 
             //we're not using the capsule followers anymore so we don't need to worry about the blade tip
@@ -143,32 +206,45 @@ public class Saber : MonoBehaviour
             //somehow we need to match the blade tip location with the animation
 
             //alternativly we could have a check system to only activate the blade tip on full extension
-
-
             
             elapsedTime += Time.deltaTime;
 
             float percentageComplete = elapsedTime / desiredDuration;
-            if(percentageComplete > 1)
+
+            //float percentageCompleteDown = elapsedTime / desiredDurationDown;
+
+            if (percentageComplete > 1)
             {
                 percentageComplete = 1;
             }
-            //percentageComplete = Mathf.Clamp(percentageComplete, 0, 1);
 
+            float newScale = Mathf.Lerp(_laser.transform.localScale.z, 0, percentageComplete);
+            _laser.transform.localScale = new Vector3(_laser.transform.localScale.x, _laser.transform.localScale.y, Mathf.Clamp(newScale, 0, 1));
 
-            Debug.Log("Percent complete falling" + percentageComplete);
-
-            Debug.Log("Laser scale " + _laser.transform.localScale.z);
-            _laser.transform.localScale = new Vector3(fullSize.x, fullSize.y, Mathf.Lerp(_laser.transform.localScale.z, 0, percentageComplete));
-
-            if(_laser.transform.localScale.z < 0.001f)
+            if(elapsedTime >= desiredDurationDown)
             {
-                _laser.transform.localScale = new Vector3(fullSize.x, fullSize.y, 0);
+                elapsedDownTime += Time.deltaTime;
+                float percentageCompleteDown = elapsedDownTime / (desiredDuration - desiredDurationDown);
+
+                //x,y scale
+                float otherScale = Mathf.Lerp(_laser.transform.localScale.x, 0.2f, percentageCompleteDown);                
+                _laser.transform.localScale = new Vector3(otherScale, otherScale, _laser.transform.localScale.z);                
             }
+
+            
+
+
+            if (_laser.transform.localScale.z < 0.001f)
+            {
+                _laser.transform.localScale = new Vector3(0.2f, 0.2f, 0);
+            }
+            
 
 
             //_laser.transform.localScale += new Vector3(0, 0, -saberGrowSpeed);
 
+            
+            /*
             //as we increase, we need to activate the followers that we are passing through
             foreach (SaberCapsule capsule in capsules)
             {
@@ -178,10 +254,12 @@ public class Saber : MonoBehaviour
                 }
 
             }
+            */
+
+
             //_cc.height -= saberGrowSpeed;
         } else if (_pressedA == false)
-        {
-            
+        {            
             _laser.SetActive(false);
         }
     }
@@ -190,7 +268,7 @@ public class Saber : MonoBehaviour
     public void RetractBlade()
     {
         _pressedA = false;
-        _laser.transform.localScale = new Vector3(fullSize.x, fullSize.y, 0);
+        _laser.transform.localScale = new Vector3(0.2f, 0.2f, 0);
     }
 
 
@@ -246,7 +324,7 @@ public class Saber : MonoBehaviour
 
     void OnCollisionExit(Collision collisionInfo)
     {
-        print("Collision Out: " + gameObject.name);
+        //print("Collision Out: " + gameObject.name);
     }
 
 

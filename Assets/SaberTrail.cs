@@ -40,16 +40,18 @@ public class SaberTrail : MonoBehaviour
         //4 triangles at 3 verts a piece so 12
         _weaponTrailVerts = new Vector3[_trailFrameLength * NUM_VERTICES];
         _weaponTrailTriangles = new int[_weaponTrailVerts.Length];
-
+        Debug.Log("wep tris" + _weaponTrailTriangles);
         _rend = _trailMesh.GetComponent<Renderer>();
+        _rend.material = trailMat;
+
 
         //this is just the list of vertices in the triangles in an array of ints
 
         _previousTipPosition = bladeTip.transform.position;
         _previousBasePosition = bladeBase.transform.position;
 
-        //Debug.Log("previous tip position " + _previousTipPosition);
-        //Debug.Log("previous base position " + _previousBasePosition);
+        Debug.Log(" start previous tip position " + _previousTipPosition);
+        Debug.Log("start previous base position " + _previousBasePosition);
     }
 
     // Update is called once per frame
@@ -123,30 +125,31 @@ public class SaberTrail : MonoBehaviour
             _weaponTrailTriangles[_frameCount + 10] = _frameCount + 10;
             _weaponTrailTriangles[_frameCount + 11] = _frameCount + 11;
 
-            
+
 
             //_weaponTrailMesh.SetTriangles(_weaponTrailTriangles, true)
-
+            Debug.Log("wep trail verts " + _weaponTrailVerts);
+            Debug.Log("wep trail tris " + _weaponTrailTriangles);
             _weaponTrailMesh.vertices = _weaponTrailVerts;
             _weaponTrailMesh.triangles = _weaponTrailTriangles;
 
-            Vector2[] uvs = CalculateUVs(_weaponTrailVerts, 1);
+            //Vector2[] uvs = CalculateUVs(_weaponTrailVerts, 1);
 
-            _weaponTrailMesh.uv = uvs;
+            //_weaponTrailMesh.uv = uvs;
 
             //apply a material to the triangles that fades to alpha
-            _rend.material = trailMat;
+            //_rend.material = trailMat;
 
             _previousTipPosition = bladeTip.transform.position;
             _previousBasePosition = bladeBase.transform.position;
 
-            _weaponTrailMesh.RecalculateBounds();
+            //_weaponTrailMesh.RecalculateBounds();
             _frameCount += NUM_VERTICES;
 
             
 
-            //Debug.Log("previous tip position " + _previousTipPosition);
-            //Debug.Log("previous base position " + _previousBasePosition);
+            Debug.Log("previous tip position " + _previousTipPosition);
+            Debug.Log("previous base position " + _previousBasePosition);
 
             //Debug.Log("difference " + (_previousTipPosition.y - _previousBasePosition.y));
         } else

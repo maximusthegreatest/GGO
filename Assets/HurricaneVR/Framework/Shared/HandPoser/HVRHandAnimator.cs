@@ -109,7 +109,7 @@ namespace HurricaneVR.Framework.Shared.HandPoser
         }
 
         private void ApplyBlending()
-        {
+        {            
             ApplyFingerCurls(TargetPrimary, DefaultPrimary, CurrentPrimary, CurrentPoser.PrimaryPose);
             ApplyBlend(BlendedPrimary, CurrentPoser.PrimaryPose, TargetPrimary);
 
@@ -169,6 +169,7 @@ namespace HurricaneVR.Framework.Shared.HandPoser
 
         private void ApplyBlend(HVRHandPoseData targetHand, HVRHandPoseBlend targetBlend, HVRHandPoseData sourceHand)
         {
+            Debug.Log("Apply blend max");
             //var target = targetBlend.Pose.GetPose(Hand.IsLeft);
             var lerp = targetBlend.Value * targetBlend.Weight;
 
