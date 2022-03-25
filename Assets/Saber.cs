@@ -48,6 +48,7 @@ public class Saber : MonoBehaviour
     private float btnLastPressed;
     [SerializeField]
     private float btnUpAnimLength = .65f;
+    [SerializeField]
     private AudioSource source;
     private Rigidbody rb;
 
@@ -115,10 +116,12 @@ public class Saber : MonoBehaviour
 
             if (_pressedA)
             {
+                source.PlayOneShot(saberStartSound);
                 saberAnimator.SetBool("SaberOn", true);
             }
             else
             {
+                source.PlayOneShot(saberRetractSound);
                 saberAnimator.SetBool("SaberOn", false);
             }
         }
@@ -129,18 +132,16 @@ public class Saber : MonoBehaviour
     }
 
     void ControlSound()
-    {
-        //get magnitude of rb on saber
-        Debug.Log("Saber mag " + rb.velocity.magnitude);
+    {        
+        Debug.Log("Saber playing " + source.isPlaying);
         if(_pressedA && rb.velocity.magnitude > 1)
         {
-            source.PlayOneShot(saberSwingSound);
-        } else if(_pressedA)
-        {
-            source.PlayOneShot(saberHumSound);
+            source.PlayOneShot(saberSwingSound); 
+        } else if(_pressedA && source.isPlaying == false)
+        {                        
+            source.PlayOneShot(saberHumSound, 2.5f);
         }
-        //if it exceeds certain limit and its on then play swing sound
-        //else if on then play hum sound
+        
     }
 
     void ControlLaser()
