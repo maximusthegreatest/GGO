@@ -22,6 +22,8 @@ public class Saber : MonoBehaviour
     public AudioClip saberHumSound;
 
 
+    public GameObject decalPrefab;
+
     [SerializeField]
     private Animator saberAnimator;
 
@@ -92,6 +94,23 @@ public class Saber : MonoBehaviour
         }
         ControlSound();
 
+    }
+
+
+    private void FixedUpdate()
+    {
+        //raycast out from certain point a certain distance
+        if(_pressedA)
+        {
+            RaycastHit hit;
+            // Does the ray intersect any objects excluding the player layer
+            if (Physics.Raycast(bladeTip.transform.position, transform.TransformDirection(Vector3.forward), out hit, 0.1f))
+            {
+                Instantiate(decalPrefab, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
+               
+                Debug.Log("Did Hit");
+            }
+        }
     }
 
 
