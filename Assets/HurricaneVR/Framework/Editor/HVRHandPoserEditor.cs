@@ -1365,8 +1365,8 @@ namespace HurricaneVR.Editor
             PosesListView.makeItem = MakePoseListItem;
             PosesListView.bindItem = BindItem;
             PosesListView.selectionType = SelectionType.Single;
-            PosesListView.onSelectionChanged += OnPoseListIndexChanged;
-            PosesListView.itemHeight = (int)EditorGUIUtility.singleLineHeight;
+            PosesListView.onSelectionChange += OnPoseListIndexChange;
+            PosesListView.fixedItemHeight = (int)EditorGUIUtility.singleLineHeight;
             PosesListView.style.height = EditorGUIUtility.singleLineHeight * 5;
             PopulatePoses();
         }
@@ -1390,7 +1390,7 @@ namespace HurricaneVR.Editor
         }
 
 
-        private void OnPoseListIndexChanged(List<object> p)
+        private void OnPoseListIndexChange(IEnumerable<object> p)
         {
             //if (PreviewLeft.value || PreviewRight.value)
             //{
@@ -1474,7 +1474,7 @@ namespace HurricaneVR.Editor
             serializedObject.ApplyModifiedProperties();
 
 
-            PosesListView?.Refresh();
+            PosesListView?.Rebuild();
         }
     }
 }

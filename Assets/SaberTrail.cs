@@ -42,7 +42,8 @@ public class SaberTrail : MonoBehaviour
         _weaponTrailTriangles = new int[_weaponTrailVerts.Length];
         Debug.Log("wep tris" + _weaponTrailTriangles);
         _rend = _trailMesh.GetComponent<Renderer>();
-        _rend.material = trailMat;
+        //_rend.material = trailMat;
+        _rend.sharedMaterial = trailMat;
 
 
         //this is just the list of vertices in the triangles in an array of ints
@@ -133,9 +134,21 @@ public class SaberTrail : MonoBehaviour
             _weaponTrailMesh.vertices = _weaponTrailVerts;
             _weaponTrailMesh.triangles = _weaponTrailTriangles;
 
-            //Vector2[] uvs = CalculateUVs(_weaponTrailVerts, 1);
+            //Vector2[] uvs = new Vector2[_weaponTrailVerts.Length];
 
-            //_weaponTrailMesh.uv = uvs;
+            //get width and height of plane
+
+            
+
+
+
+
+            
+
+
+            Vector2[] uvs = CalculateUVs(_weaponTrailVerts, 1);
+
+            _weaponTrailMesh.uv = uvs;
 
             //apply a material to the triangles that fades to alpha
             //_rend.material = trailMat;
@@ -143,6 +156,7 @@ public class SaberTrail : MonoBehaviour
             _previousTipPosition = bladeTip.transform.position;
             _previousBasePosition = bladeBase.transform.position;
 
+            _weaponTrailMesh.RecalculateNormals();
             //_weaponTrailMesh.RecalculateBounds();
             _frameCount += NUM_VERTICES;
 

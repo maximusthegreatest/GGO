@@ -42,8 +42,8 @@ public class RadialLayout : LayoutGroup
 #if UNITY_EDITOR
     protected override void OnValidate()
     {
-        base.OnValidate();
-        CalculateRadial();
+        //base.OnValidate();
+        //CalculateRadial();
     }
 #endif
 
