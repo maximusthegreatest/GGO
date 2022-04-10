@@ -99,7 +99,7 @@ public class SaberCapsuleFollower : MonoBehaviour
                 else
                 {
                     Debug.Log("destroy lazer");
-                    bullet.DestroyLaser(true, sparkParticle);
+                    bullet.DestroyLaser(true);
                 }
                 bullet.hitSaber = true;
             }

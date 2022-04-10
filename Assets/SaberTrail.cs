@@ -23,7 +23,7 @@ public class SaberTrail : MonoBehaviour
     private int _frameCount;
     private Vector3 _previousTipPosition;
     private Vector3 _previousBasePosition;
-    private const int NUM_VERTICES = 12;
+    private const int NUM_VERTICES = 6;
     private Renderer _rend;
 
     private enum Facing { Up, Forward, Right };
@@ -40,10 +40,10 @@ public class SaberTrail : MonoBehaviour
         //4 triangles at 3 verts a piece so 12
         _weaponTrailVerts = new Vector3[_trailFrameLength * NUM_VERTICES];
         _weaponTrailTriangles = new int[_weaponTrailVerts.Length];
-        Debug.Log("wep tris" + _weaponTrailTriangles);
+        //Debug.Log("wep tris" + _weaponTrailTriangles);
         _rend = _trailMesh.GetComponent<Renderer>();
-        //_rend.material = trailMat;
-        _rend.sharedMaterial = trailMat;
+        _rend.material = trailMat;
+        //_rend.sharedMaterial = trailMat;
 
 
         //this is just the list of vertices in the triangles in an array of ints
@@ -51,8 +51,8 @@ public class SaberTrail : MonoBehaviour
         _previousTipPosition = bladeTip.transform.position;
         _previousBasePosition = bladeBase.transform.position;
 
-        Debug.Log(" start previous tip position " + _previousTipPosition);
-        Debug.Log("start previous base position " + _previousBasePosition);
+        //Debug.Log(" start previous tip position " + _previousTipPosition);
+        //Debug.Log("start previous base position " + _previousBasePosition);
     }
 
     // Update is called once per frame
@@ -82,9 +82,10 @@ public class SaberTrail : MonoBehaviour
         
         if(hasTrail)
         {
-            Debug.Log("Enabling trail");
             if (_frameCount == (_trailFrameLength * NUM_VERTICES))
             {
+                
+
                 _frameCount = 0;
                 //wipe materials
             }
@@ -93,6 +94,7 @@ public class SaberTrail : MonoBehaviour
             //we need to create 4 triangles because the camera only renders meshes whose normals face it 
             //we need to create 2 winding directions per triangle
 
+            /*
             _weaponTrailVerts[_frameCount] = bladeBase.transform.position;
             _weaponTrailVerts[_frameCount + 1] = bladeTip.transform.position;
             _weaponTrailVerts[_frameCount + 2] = _previousTipPosition;
@@ -108,7 +110,18 @@ public class SaberTrail : MonoBehaviour
             _weaponTrailVerts[_frameCount + 9] = _previousTipPosition;
             _weaponTrailVerts[_frameCount + 10] = _previousBasePosition;
             _weaponTrailVerts[_frameCount + 11] = bladeBase.transform.position;
+            */
 
+            _weaponTrailVerts[_frameCount] = bladeBase.transform.position;
+            _weaponTrailVerts[_frameCount + 1] = _previousTipPosition;
+            _weaponTrailVerts[_frameCount + 2] = bladeTip.transform.position;
+
+            _weaponTrailVerts[_frameCount + 3] = _previousTipPosition;
+            _weaponTrailVerts[_frameCount + 4] = bladeBase.transform.position;
+            _weaponTrailVerts[_frameCount + 5] = _previousBasePosition;
+
+
+            //Debug.Log("Blade vert test " + _weaponTrailVerts[0]);
             //_weaponTrailMesh.vertices = _weaponTrailVerts;
 
             _weaponTrailTriangles[_frameCount] = _frameCount;
@@ -119,18 +132,28 @@ public class SaberTrail : MonoBehaviour
             _weaponTrailTriangles[_frameCount + 3] = _frameCount + 3;
             _weaponTrailTriangles[_frameCount + 4] = _frameCount + 4;
             _weaponTrailTriangles[_frameCount + 5] = _frameCount + 5;
+            /*
             _weaponTrailTriangles[_frameCount + 6] = _frameCount + 6;
             _weaponTrailTriangles[_frameCount + 7] = _frameCount + 7;
             _weaponTrailTriangles[_frameCount + 8] = _frameCount + 8;
             _weaponTrailTriangles[_frameCount + 9] = _frameCount + 9;
             _weaponTrailTriangles[_frameCount + 10] = _frameCount + 10;
             _weaponTrailTriangles[_frameCount + 11] = _frameCount + 11;
-
+            */
 
 
             //_weaponTrailMesh.SetTriangles(_weaponTrailTriangles, true)
-            Debug.Log("wep trail verts " + _weaponTrailVerts);
-            Debug.Log("wep trail tris " + _weaponTrailTriangles);
+            //Debug.Log("wep trail verts " + _weaponTrailVerts);
+            //Debug.Log("wep trail tris " + _weaponTrailTriangles);
+
+            _weaponTrailMesh.MarkDynamic();
+
+            Debug.Log("Wep Trail verts");
+            foreach(Vector3 wepVert in _weaponTrailVerts)
+            {
+                Debug.Log(wepVert);
+            }
+            
             _weaponTrailMesh.vertices = _weaponTrailVerts;
             _weaponTrailMesh.triangles = _weaponTrailTriangles;
 
@@ -138,16 +161,15 @@ public class SaberTrail : MonoBehaviour
 
             //get width and height of plane
 
-            
-
-
-
-
-            
-
+            _weaponTrailMesh.RecalculateBounds();
 
             Vector2[] uvs = CalculateUVs(_weaponTrailVerts, 1);
-
+            Debug.Log("uvs");
+            foreach (Vector2 uv in uvs)
+            {
+                Debug.Log("uv: " + uv);
+            }
+            
             _weaponTrailMesh.uv = uvs;
 
             //apply a material to the triangles that fades to alpha
@@ -162,8 +184,8 @@ public class SaberTrail : MonoBehaviour
 
             
 
-            Debug.Log("previous tip position " + _previousTipPosition);
-            Debug.Log("previous base position " + _previousBasePosition);
+            //Debug.Log("previous tip position " + _previousTipPosition);
+            //Debug.Log("previous base position " + _previousBasePosition);
 
             //Debug.Log("difference " + (_previousTipPosition.y - _previousBasePosition.y));
         } else
@@ -175,7 +197,7 @@ public class SaberTrail : MonoBehaviour
     }
 
 
-    public static Vector2[] CalculateUVs(Vector3[] v/*vertices*/, float scale)
+    public Vector2[] CalculateUVs(Vector3[] v/*vertices*/, float scale)
     {
         var uvs = new Vector2[v.Length];
 
@@ -191,33 +213,95 @@ public class SaberTrail : MonoBehaviour
 
             Vector3 side1 = v1 - v0;
             Vector3 side2 = v2 - v0;
+            
             var direction = Vector3.Cross(side1, side2);
             var facing = FacingDirection(direction);
+
+            float scale1, scale2;
+
+            if (_rend.bounds.size.x == 0)
+            {
+                scale1 = 1;
+            }
+            else
+            {
+                scale1 = _rend.bounds.size.x;
+            }
+
+            if (_rend.bounds.size.y == 0)
+            {
+                scale2 = 1;
+            }
+            else
+            {
+                scale2 = _rend.bounds.size.y;
+            }
+
+            Debug.Log("wep rend size " + _rend.bounds.size);
+
+            //Debug.Log("mesh sizes " + _weaponTrailMesh.bounds.size.y + " " + _weaponTrailMesh.bounds.size.z);
+
             switch (facing)
             {
                 case Facing.Forward:
+
+                    uvs[i0] = ScaledUV(v0.x, v0.y, scale1, scale2);
+                    uvs[i1] = ScaledUV(v1.x, v1.y, scale1, scale2);
+                    uvs[i2] = ScaledUV(v2.x, v2.y, scale1, scale2);
+                    
+                    Debug.Log("forward uvs");
+                    Debug.Log(uvs[i0] + " " + uvs[i1] + " " + uvs[i2]);
+
+                    break;
+                case Facing.Up:
+
+                    uvs[i0] = ScaledUV(v0.x, v0.z, scale1, scale2);
+                    uvs[i1] = ScaledUV(v1.x, v1.z, scale1, scale2);
+                    uvs[i2] = ScaledUV(v2.x, v2.z, scale1, scale2);
+                    Debug.Log("up uvs");
+                    //Debug.Log("mesh sizes " + _weaponTrailMesh.bounds.size.x + " " + _weaponTrailMesh.bounds.size.z);
+                    Debug.Log(uvs[i0] + " " + uvs[i1] + " " + uvs[i2]);
+                    break;
+                case Facing.Right:
+
+                    uvs[i0] = ScaledUV(v0.y, v0.z, scale1, scale2);
+                    uvs[i1] = ScaledUV(v1.y, v1.z, scale1, scale2);
+                    uvs[i2] = ScaledUV(v2.y, v2.z, scale1, scale2);
+                    Debug.Log("right uvs");                    
+                    Debug.Log(uvs[i0] + " " + uvs[i1] + " " + uvs[i2]);
+                    break;
+            }
+
+            /*
+            switch (facing)
+            {
+                case Facing.Forward:
+                    Debug.Log("facing forward");
                     uvs[i0] = ScaledUV(v0.x, v0.y, scale);
                     uvs[i1] = ScaledUV(v1.x, v1.y, scale);
                     uvs[i2] = ScaledUV(v2.x, v2.y, scale);
                     break;
                 case Facing.Up:
+                    Debug.Log("facing up");
                     uvs[i0] = ScaledUV(v0.x, v0.z, scale);
                     uvs[i1] = ScaledUV(v1.x, v1.z, scale);
                     uvs[i2] = ScaledUV(v2.x, v2.z, scale);
                     break;
                 case Facing.Right:
+                    Debug.Log("facing right");
                     uvs[i0] = ScaledUV(v0.y, v0.z, scale);
                     uvs[i1] = ScaledUV(v1.y, v1.z, scale);
                     uvs[i2] = ScaledUV(v2.y, v2.z, scale);
                     break;
             }
+            */
         }
         return uvs;
     }
 
 
     private static bool FacesThisWay(Vector3 v, Vector3 dir, Facing p, ref float maxDot, ref Facing ret)
-    {
+    {        
         float t = Vector3.Dot(v, dir);
         if (t > maxDot)
         {
@@ -232,6 +316,7 @@ public class SaberTrail : MonoBehaviour
     {
         var ret = Facing.Up;
         float maxDot = Mathf.NegativeInfinity;
+        //float maxDot = 0;
 
         if (!FacesThisWay(v, Vector3.right, Facing.Right, ref maxDot, ref ret))
             FacesThisWay(v, Vector3.left, Facing.Right, ref maxDot, ref ret);
@@ -244,9 +329,20 @@ public class SaberTrail : MonoBehaviour
 
         return ret;
     }
-
-    private static Vector2 ScaledUV(float uv1, float uv2, float scale)
+      
+    private Vector2 ScaledUV(float uv1, float uv2, float scale1, float scale2)
     {
-        return new Vector2(uv1 / scale, uv2 / scale);
+        //return new Vector2(uv1 / scale, uv2 / scale);
+        //return new Vector2(uv1 / _weaponTrailMesh.bounds.size.y, uv2 / _weaponTrailMesh.bounds.size.z);
+
+        //Debug.Log("uv1: " + uv1 + " uv2: " + uv2);
+
+        Vector2 uvRet = new Vector2(uv1 / scale1, uv2 / scale2);
+        if(uvRet[0] > 1 || uvRet[0] < 0  || uvRet[1] > 1 || uvRet[1] < 0 )
+        {
+            Debug.Log("Problem: " + uv1 + " " + uv2 + " " + scale1 + " " + scale2);
+        }
+
+        return uvRet;
     }
 }

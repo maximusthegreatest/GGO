@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HurricaneVR.Framework.Core.Utils;
 
 public class LaserBullet : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class LaserBullet : MonoBehaviour
     private Rigidbody rb;
     private Collider bulletCollider;
     private GameObject bulletLine;
+    
+    [SerializeField]
+    private AudioClip laserBlockSound;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +33,9 @@ public class LaserBullet : MonoBehaviour
         birth = Time.time;
         bulletCollider = GetComponent<Collider>();
         bulletLine = transform.GetChild(0).gameObject;
+
+        
+        
     }
 
     // Update is called once per frame
@@ -99,19 +106,18 @@ public class LaserBullet : MonoBehaviour
 
     }
 
-    public void DestroyLaser(bool saberHit = false, GameObject sparkParticle = null)
+    public void DestroyLaser(bool saberHit = false)
     {
         if(saberHit)
         {
             //spawn bullet particle effect at hit point
             //won't have cone effect if deflect
-            Instantiate(sparkParticle, transform.position, Quaternion.identity);
-        } 
-        
+            Instantiate(bulletSpark, transform.position, Quaternion.identity);
+            SFXPlayer.Instance.PlaySFX(laserBlockSound, transform.position);            
+        }            
             Destroy(gameObject);
+               
         
-        
-        Debug.Log("destorying laser");
         //TODO play sound and show sparks particle effect
         //spawn bullet particle effect at hit point
         
@@ -119,16 +125,12 @@ public class LaserBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("my name" + collision.gameObject.name);
-        //return;
-        
-        
-        
+
         if (collision.gameObject.name == "Blade")
         {
 
             //Debug.Log("laser hit blade");
-            //DestroyLaser(true);
+            DestroyLaser(true);
             return;
         }
         
