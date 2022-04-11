@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HurricaneVR.Framework.Core.Utils;
 
 
 public class Bomb : MonoBehaviour
@@ -9,7 +10,13 @@ public class Bomb : MonoBehaviour
     public float thrust;    
     public ParticleSystem bombShatterTriangleParticle;
     public ParticleSystem bombShatterParticle;
+    public ParticleSystem bombShatterTriangleParticleRed;
+    public ParticleSystem bombShatterParticleRed;
+
     public Vector3 rotSpeed;
+
+    [SerializeField]
+    private AudioClip bombExplosionSound;
 
     // Start is called before the first frame update
     void Start()
@@ -19,11 +26,15 @@ public class Bomb : MonoBehaviour
         thrust = Random.Range(350f, 450f);
         rb.AddForce(transform.forward * thrust);
         var sh = bombShatterParticle.shape;
+        var shR = bombShatterParticleRed.shape;
         Mesh bombMesh = gameObject.GetComponent<MeshFilter>().mesh; 
         sh.mesh = bombMesh;
+        shR.mesh = bombMesh;
 
         var nsh = bombShatterTriangleParticle.shape;
+        var nshR = bombShatterTriangleParticleRed.shape;
         nsh.mesh = bombMesh;
+        nshR.mesh = bombMesh;
 
 
 
@@ -41,7 +52,7 @@ public class Bomb : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        Debug.Log("Name" + collision.gameObject.name);
+        Debug.Log("Bomb Col" + collision.gameObject.name);
 
         if (collision.gameObject.name == "MadsonD9")
         {            
@@ -53,6 +64,12 @@ public class Bomb : MonoBehaviour
 
 
         if (collision.gameObject.name == "Bullet(Clone)")
+        {
+            DestroyBomb();
+            return;
+        }
+
+        if (collision.gameObject.name == "Blade")
         {
             DestroyBomb();
             return;
@@ -79,12 +96,17 @@ public class Bomb : MonoBehaviour
         if (hitPlayer)
         {
             //duplicate the particle but make it red
+            Instantiate(bombShatterParticleRed, transform.position, Quaternion.identity);
+            Instantiate(bombShatterTriangleParticleRed, transform.position, Quaternion.identity);
+            SFXPlayer.Instance.PlaySFX(bombExplosionSound, transform.position, 1f, 10f);
         } else
         {            
             //spawn particles from mesh for blue effect
             Instantiate(bombShatterParticle, transform.position, Quaternion.identity);
             Instantiate(bombShatterTriangleParticle, transform.position, Quaternion.identity);
+            SFXPlayer.Instance.PlaySFX(bombExplosionSound, transform.position, 1f, 10f);
             
+
         }
         
         

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5773060181680586705}
   - component: {fileID: 3531828728564623698}
   m_Layer: 0
-  m_Name: TriangleShatterParticle
+  m_Name: TriangleShatterParticleRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1372,8 +1372,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.6411953, g: 0.018726412, b: 0.794, a: 1}
-        key1: {r: 0.015086949, g: 0.9769112, b: 0.96171623, a: 1}
+        key0: {r: 1, g: 0.06889917, b: 0.0047169924, a: 1}
+        key1: {r: 0.8490566, g: 0.47216338, b: 0.45256317, a: 1}
         key2: {r: 0, g: 1, b: 0.9657576, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1381,7 +1381,7 @@ ParticleSystem:
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 54548
+        ctime1: 54741
         ctime2: 65535
         ctime3: 0
         ctime4: 0

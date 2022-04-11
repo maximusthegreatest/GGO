@@ -71,7 +71,8 @@ public class Cardinal : MonoBehaviour
     {
         Debug.Log("Gun Game is running");
         //get bomb game object and fire bombs
-        //bombSpawner.Spawn();
+        
+        bombSpawner.Spawn();
         
         laserSpawner.Spawn();
 
