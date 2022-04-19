@@ -55,7 +55,7 @@ public class GameMenu : MonoBehaviour
 
     public void QuitGame()
     {
-
+        Debug.Break();
     }
 
     public void Settings()

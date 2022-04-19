@@ -69,7 +69,7 @@ public class Saber : MonoBehaviour
         source = gameObject.AddComponent<AudioSource>(); 
         source.spatialBlend = 1;
 
-        rb = gameObject.GetComponent<Rigidbody>();
+        rb = gameObject.transform.parent.gameObject.GetComponent<Rigidbody>();
 
         _laser.SetActive(false);
         //_laser = transform.Find("Blade").gameObject;

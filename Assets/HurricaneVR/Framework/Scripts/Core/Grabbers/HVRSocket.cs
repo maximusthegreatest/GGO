@@ -455,7 +455,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
             var grabbable = args.Grabbable;
             _previousParent = grabbable.transform.parent;
-            _previousScale = grabbable.transform.localScale;
+            _previousScale = grabbable.transform.localScale;            
             grabbable.transform.parent = transform;
 
             grabbable.transform.localPosition = Vector3.zero;
@@ -473,8 +473,12 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
             if (socketable.SocketOrientation)
             {
+                Debug.Log("grabbable " + grabbable.gameObject.name);
                 offSet = -GetPositionOffset(grabbable);
+                Debug.Log("offset " + offSet);
+
                 var rotationOffset = GetRotationOffset(grabbable);
+                Debug.Log("rot Offset " + rotationOffset);
                 var delta = grabbable.transform.localRotation * Quaternion.Inverse(rotationOffset);
                 grabbable.transform.localRotation *= delta;
                 offSet = delta * offSet;
@@ -593,7 +597,10 @@ namespace HurricaneVR.Framework.Core.Grabbers
         protected virtual Vector3 GetPositionOffset(HVRGrabbable grabbable)
         {
             if (!grabbable || !grabbable.Socketable || !grabbable.Socketable.SocketOrientation)
+            {                
                 return Vector3.zero;
+            }
+                
             return grabbable.Socketable.SocketOrientation.localPosition;
         }
 

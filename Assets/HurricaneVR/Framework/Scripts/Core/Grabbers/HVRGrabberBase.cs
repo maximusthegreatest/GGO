@@ -225,7 +225,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
                 if (bag.ClosestGrabbable && canGrab(bag.ClosestGrabbable))
                     return bag.ClosestGrabbable;
             }
-
+            
             return null;
         }
 

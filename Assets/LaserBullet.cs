@@ -33,9 +33,6 @@ public class LaserBullet : MonoBehaviour
         birth = Time.time;
         bulletCollider = GetComponent<Collider>();
         bulletLine = transform.GetChild(0).gameObject;
-
-        
-        
     }
 
     // Update is called once per frame

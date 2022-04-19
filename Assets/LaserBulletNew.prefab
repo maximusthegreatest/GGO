@@ -101,7 +101,7 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 0
   m_CollisionDetection: 2
 --- !u!114 &7923802940028269424
@@ -241,8 +241,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_templateMaterial: {fileID: 2100000, guid: 974b33ccbd786464a825203eb88b8dab, type: 2}
   m_doNotOverwriteTemplateMaterialProperties: 0
-  m_startPos: {x: 0, y: 100, z: 0}
-  m_endPos: {x: 0, y: 0, z: 0}
+  m_startPos: {x: 0, y: 0, z: 0}
+  m_endPos: {x: 0, y: 100, z: 0}
   m_lineColor: {r: 1, g: 0.09648319, b: 0, a: 1}
   m_lineWidth: 0.25
   m_lightSaberFactor: 1
@@ -271,6 +271,7 @@ MonoBehaviour:
   - Right
   - Down
   - SaberFollower(Clone)
+  rb: {fileID: 7014174333242320734}
 --- !u!1 &9105711653645321012
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4805732776574777373}
   - component: {fileID: 619427806564427722}
+  - component: {fileID: 6788199255097992446}
   m_Layer: 11
   m_Name: Point Light
   m_TagString: Untagged
@@ -365,3 +367,23 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &6788199255097992446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9105711653645321012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}

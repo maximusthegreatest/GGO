@@ -92,7 +92,8 @@ public class Bomb : MonoBehaviour
     }
 
     public void DestroyBomb(bool hitPlayer = false)
-    {        
+    {
+
         if (hitPlayer)
         {
             //duplicate the particle but make it red

@@ -441,7 +441,7 @@ namespace HurricaneVR.Framework.Weapons
 
         protected virtual void FirePhysicBullet(Vector3 direction)
         {
-            GameObject bullet = Instantiate(BulletTrailPrefab, BulletOrigin.position, Quaternion.identity);
+            GameObject bullet = Instantiate(BulletTrailPrefab, BulletOrigin.position, Quaternion.identity);                      
             bullet.transform.rotation = Quaternion.LookRotation(direction);
             bullet.SetActive(true);
         }

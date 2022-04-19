@@ -36,7 +36,7 @@ namespace HurricaneVR.Samples
         public void DoHolsterAction(HVRGrabberBase grabber, HVRGrabbable grabbable)
         {
             
-            
+            /*
                 
             //call spawn follower
             if(grabbable.gameObject.name == "Saber" || grabbable.gameObject.name == "SaberFinal")
@@ -60,7 +60,7 @@ namespace HurricaneVR.Samples
                 HolsterAction holsterAction = grabbable.gameObject.GetComponent<HolsterAction>();
                 holsterAction.DoAction();
             }
-
+            */
         }
     }
 }

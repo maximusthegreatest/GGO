@@ -271,6 +271,7 @@ namespace VolumetricLines
 		{
 			var maxWidth = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
 			var scaledLineWidth = maxWidth * LineWidth * 0.5f;
+			
 
 			var min = new Vector3(
 				Mathf.Min(m_startPos.x, m_endPos.x) - scaledLineWidth,
@@ -282,6 +283,8 @@ namespace VolumetricLines
 				Mathf.Max(m_startPos.y, m_endPos.y) + scaledLineWidth,
 				Mathf.Max(m_startPos.z, m_endPos.z) + scaledLineWidth
 			);
+
+			Debug.Log("Bounds " + min + " " + max);
 			
 			return new Bounds
 			{
@@ -382,7 +385,7 @@ namespace VolumetricLines
 			DestroyMaterial();
 		}
 		
-		void Update()
+		void FixedUpdate()
 		{
 			if (transform.hasChanged)
 			{

@@ -10,12 +10,15 @@ public class PhysicBullet : MonoBehaviour
     public float raycastLength;
     public float bulletVelocity;
     public HVRRayCastGun gun;
-    public Collider[] gunColliders;
-    public GameObject colliders;
+    
+    
     public float bulletAliveTime;
     
     private float elapsed;
     private Rigidbody rb;
+    private Collider myCollider;
+
+
     
 
     // Start is called before the first frame update
@@ -23,20 +26,8 @@ public class PhysicBullet : MonoBehaviour
     {
         bulletVelocity = gun.BulletTrailSpeed;
         rb = GetComponent<Rigidbody>();
-        Collider myCollider = GetComponent<Collider>();
-
-        //1 game object with many colliders
-        //
-
-        gunColliders = colliders.GetComponentsInChildren<Collider>();
-        foreach(Collider gunCollider in gunColliders)
-        {
-            Physics.IgnoreCollision(gunCollider, myCollider);
-        }
+        myCollider = GetComponent<Collider>();
         
-        //Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), myCollider);
-
-        //do we move in start or update
         elapsed = 0f;
 
     }
@@ -75,16 +66,7 @@ public class PhysicBullet : MonoBehaviour
 
 
     void OnCollisionEnter(Collision collision)
-    {
-        /*
-        if (collision.gameObject.tag == "Pistol")
-        {
-            Debug.Log("yeet");            
-            return;
-        }
-        */
-
-        //Debug.Log("Name" + collision.gameObject.name);
+    {       
         Destroy(gameObject);
     }
 }
