@@ -9,6 +9,7 @@ using HurricaneVR.Framework.Shared;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.VFX;
 
 namespace HurricaneVR.Framework.Weapons
 {
@@ -121,10 +122,13 @@ namespace HurricaneVR.Framework.Weapons
 
         private bool _isFiring;
         private Coroutine _automaticRoutine;
+        private VisualEffect _muzzleFlashVfx;
 
         protected override void Start()
         {
             base.Start();
+
+
 
             Grabbable = GetComponent<HVRGrabbable>();
             Grabbable.Activated.AddListener(OnGrabbableActivated);
@@ -153,6 +157,8 @@ namespace HurricaneVR.Framework.Weapons
             {
                 GunSounds = GetComponent<HVRGunSounds>();
             }
+
+            _muzzleFlashVfx = MuzzleFlashObject.GetComponent<VisualEffect>();
         }
 
         private void OnReleased(HVRGrabberBase arg0, HVRGrabbable arg1)
@@ -404,8 +410,17 @@ namespace HurricaneVR.Framework.Weapons
 
             FireBullets(BulletOrigin.forward);
 
+            /*
             if (MuzzleFlashObject)
                 StartCoroutine(MuzzleFlash());
+            
+            if (MuzzleFlashObject)
+                StartCoroutine(MuzzleFlashVfx());
+            */
+            if (MuzzleFlashObject)
+                MuzzleFlashInstance();
+
+
 
             Smoke();
 
@@ -462,6 +477,27 @@ namespace HurricaneVR.Framework.Weapons
             }
         }
 
+        private IEnumerator MuzzleFlashVfx()
+        {
+
+            MuzzleFlashObject.SetActive(false);/// ADDED to cancel longer fx like smoke to allow flame fx to fire again.
+            MuzzleFlashObject.SetActive(true);
+            var elapsed = 0f;
+
+            _muzzleFlashVfx.Play();
+
+            while (elapsed < MuzzleFlashTime)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            MuzzleFlashObject.SetActive(false);
+            _muzzleFlashVfx.Stop();
+
+
+        }
+
         private IEnumerator MuzzleFlash()
         {
             MuzzleFlashObject.SetActive(false);/// ADDED to cancel longer fx like smoke to allow flame fx to fire again.
@@ -483,11 +519,18 @@ namespace HurricaneVR.Framework.Weapons
         {
             if (MuzzleSmoke)
             {
-                var muzzleSmoke = Instantiate(MuzzleSmoke, BulletOrigin.position, transform.rotation);
-                Debug.Log("Flash rot: " + Quaternion.identity);
+                var muzzleSmoke = Instantiate(MuzzleSmoke, BulletOrigin.position, transform.rotation);                
                 muzzleSmoke.SetActive(true);
                 Destroy(muzzleSmoke, MuzzleSmokeTime);
             }
+        }
+
+
+        protected virtual void MuzzleFlashInstance()
+        {            
+            var muzzleFlash = Instantiate(MuzzleFlashObject, BulletOrigin.position, transform.rotation);            
+            muzzleFlash.SetActive(true);
+            Destroy(muzzleFlash, MuzzleFlashTime);            
         }
 
         private IEnumerator FireBullet(Vector3 start, Vector3 destination)

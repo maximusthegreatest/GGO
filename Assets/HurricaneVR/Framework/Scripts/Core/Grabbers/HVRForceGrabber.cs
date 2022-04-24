@@ -110,10 +110,12 @@ namespace HurricaneVR.Framework.Core.Grabbers
         protected override void Update()
         {
             base.Update();
+            
             CheckFlick();
             CheckDrawRay();
             CheckGripButtonGrab();
             UpdateGrabIndicator();
+            
         }
 
         private void CheckFlick()
@@ -612,7 +614,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
         }
 
         private void UpdateGrabIndicator()
-        {
+        {            
             if (!IsHovering || !_grabIndicator)
                 return;
 

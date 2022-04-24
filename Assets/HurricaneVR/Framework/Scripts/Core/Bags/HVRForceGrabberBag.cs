@@ -28,6 +28,7 @@ namespace HurricaneVR.Framework.Core.Bags
             if (!base.IsValid(grabbable))
                 return false;
 
+            Debug.Log("layermask on " + gameObject.name);
             return Grabber.CheckForLineOfSight(RayCastOrigin.position, grabbable, LayerMask, MaxDistanceAllowed, UseClosestPoint);
         }
     }

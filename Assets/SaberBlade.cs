@@ -30,6 +30,11 @@ public class SaberBlade : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    private void FixedUpdate()
+    {
         bool _pressedA = saber._pressedA;
         //raycast out from certain point a certain distance
         if (_pressedA && Time.time > lastBurnSpawnTime + decalSpawnWaitTime)
@@ -56,12 +61,7 @@ public class SaberBlade : MonoBehaviour
                 }
             }
         }
-    }
 
-    private void FixedUpdate()
-    {
-
-        
     }
 
 

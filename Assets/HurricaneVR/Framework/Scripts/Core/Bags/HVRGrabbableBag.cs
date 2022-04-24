@@ -56,11 +56,11 @@ namespace HurricaneVR.Framework.Core.Bags
         protected void AddGrabbable(HVRGrabbable grabbable)
         {
             if (_distinctGrabbables.Contains(grabbable))
-            {
+            {                
                 return;
             }
             _distinctGrabbables.Add(grabbable);
-            _allGrabbables.Add(grabbable);
+            _allGrabbables.Add(grabbable);            
             grabbable.Destroyed.AddListener(OnGrabbableDestroyed);
         }
 
@@ -100,18 +100,20 @@ namespace HurricaneVR.Framework.Core.Bags
 
                 sorter.DistanceMap[grabbable] = DistanceToGrabbable(grabbable);
 
+               
+
                 if (!grabbable.HasConcaveColliders && sorter.DistanceMap[grabbable] > MaxDistanceAllowed)
-                {
+                {                    
                     _grabbablesToRemove.Add(grabbable);
                 }
                 else if (IsValid(grabbable))
-                {
+                {                    
                     if (PenalizeGrabbed && grabbable.IsBeingHeld)
                     {
                         sorter.DistanceMap[grabbable] += 1000f;
                     }
 
-                    ValidGrabbables.Add(grabbable);
+                    ValidGrabbables.Add(grabbable);                    
                 }
             }
 
@@ -142,14 +144,17 @@ namespace HurricaneVR.Framework.Core.Bags
         }
 
         protected virtual bool IsValid(HVRGrabbable grabbable)
-        {
+        {            
+            
             if (grabbable.RequiresGrabbable)
-            {
+            {                
                 if (!grabbable.RequiredGrabbable || !grabbable.RequiredGrabbable.IsBeingHeld)
-                {
+                {                    
                     return false;
                 }
             }
+
+
             return grabbable.CanBeGrabbed && !_ignoredGrabbables.Contains(grabbable);
         }
     }

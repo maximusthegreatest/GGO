@@ -19,6 +19,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
         [Header("Grabbable Bags")]
         [SerializeField] private HVRGrabbableBag _grabBag;
+        
         public List<HVRGrabbableBag> GrabBags = new List<HVRGrabbableBag>();
 
         public virtual Quaternion ControllerRotation { get; set; } = Quaternion.identity;
@@ -542,6 +543,8 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
         public bool CheckForLineOfSight(Vector3 rayOrigin, HVRGrabbable grabbable, LayerMask RaycastLayermask, float rayMaxDistance = .75f, bool useClosestPoint = true)
         {
+            
+
             if (CheckLineOfSight(rayOrigin, grabbable, RaycastLayermask, rayMaxDistance, grabbable.Colliders, QueryTriggerInteraction.Ignore, useClosestPoint))
                 return true;
 
@@ -554,6 +557,8 @@ namespace HurricaneVR.Framework.Core.Grabbers
         private bool CheckLineOfSight(Vector3 rayOrigin, HVRGrabbable grabbable, LayerMask RaycastLayermask, float rayMaxDistance, Collider[] colliders, QueryTriggerInteraction queryTrigger, bool useClosestPoint = true)
         {
             _lineOfSightRay.origin = rayOrigin;
+
+            
 
             for (var i = 0; i < colliders.Length; i++)
             {
@@ -568,7 +573,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
                 }
                 else
                 {
-                    var closestPoint = grabbableCollider.ClosestPoint(rayOrigin);
+                    var closestPoint = grabbableCollider.ClosestPoint(rayOrigin);                    
                     if (closestPoint == rayOrigin && grabbableCollider.bounds.Contains(rayOrigin))
                     {
                         if (HVRSettings.Instance.VerboseGrabbableEvents)
@@ -583,7 +588,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
                 if (Physics.Raycast(_lineOfSightRay, out var hit, rayMaxDistance, RaycastLayermask, queryTrigger))
                 {
                     if (Equals(grabbableCollider, hit.collider))
-                    {
+                    {                        
                         return true;
                     }
                 }

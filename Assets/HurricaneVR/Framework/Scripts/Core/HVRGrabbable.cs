@@ -525,9 +525,7 @@ namespace HurricaneVR.Framework.Core
         /// Gets the force grabber grab point for high light display for the given hand
         /// </summary>
         public Transform GetForceGrabPoint(HVRHandSide hand)
-        {
-            Debug.Log(this.gameObject.name);
-            Debug.Log("Getting grab point ");
+        {            
             return hand == HVRHandSide.Left ? LeftForceGrabberGrabPoint : RightForceGrabberGrabPoint;
         }
 

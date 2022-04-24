@@ -29,7 +29,7 @@ namespace HurricaneVR.Framework.Core.Bags
         }
 
         private void OnTriggerEnter(Collider other)
-        {
+        {            
             var grabbable = other.GetComponent<HVRGrabbable>();
             var childGrabbable = other.GetComponent<HVRGrabbableChild>();
 
@@ -52,9 +52,12 @@ namespace HurricaneVR.Framework.Core.Bags
             }
 
             if (grabbable)
-            {
+            {                
                 if (grabbable.FilterGrabColliders && !grabbable.GrabCollidersSet.Contains(other))
+                {                    
                     return;
+                }
+                    
 
                 if (!_map.TryGetValue(grabbable, out var colliders))
                 {
@@ -63,7 +66,7 @@ namespace HurricaneVR.Framework.Core.Bags
                 }
 
                 if (colliders.Count == 0)
-                {
+                {                    
                     AddGrabbable(grabbable);
                 }
 
