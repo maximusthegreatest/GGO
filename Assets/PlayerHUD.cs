@@ -34,10 +34,11 @@ public class PlayerHUD : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _weaponSlots = new List<string>();
-        
-        hudSlots[0] = new Vector3(-687.5f, 463.38f, 0);
-        hudSlots[1] = new Vector3(-687.5f, 383f, 0);
+        _weaponSlots = new List<string>(); 
+
+
+        hudSlots[0] = new Vector3(-172.2f, -154.7f, 0);
+        hudSlots[1] = new Vector3(-172.2f, -215.9f, 0);
 
         //get the event from handGrabber
         leftHandGrabber.Grabbed.AddListener(GrabbingItem);
@@ -54,7 +55,7 @@ public class PlayerHUD : MonoBehaviour
         //_rightGrabBag = GameObject.Find("RightHand").GetComponentInChildren<HVRTriggerGrabbableBag>();
 
         weaponHuds = new Dictionary<string, GameObject>();
-        weaponHuds.Add("Saber", saberUI);
+        weaponHuds.Add("PhotonSwordParent", saberUI);
         weaponHuds.Add("MadsonD9", pistolUI);
 
     }

@@ -170,7 +170,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7875489239784700316}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.0005, y: -0.0015, z: 0.048294783}
+  m_LocalPosition: {x: 0.0005, y: -0.0015, z: 0}
   m_LocalScale: {x: 0.19426, y: 1, z: 0.19426002}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -261,7 +261,7 @@ MonoBehaviour:
   rayMaxDistance: 10000
   ignoreMe:
     serializedVersion: 2
-    m_Bits: 6559744
+    m_Bits: 4462592
   laserColLayers: []
   laserIgnoreCol:
   - RetrieveableBounds
