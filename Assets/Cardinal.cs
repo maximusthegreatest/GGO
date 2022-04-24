@@ -74,7 +74,7 @@ public class Cardinal : MonoBehaviour
         
         bombSpawner.Spawn();
         
-        laserSpawner.Spawn();
+        //laserSpawner.Spawn();
 
         //get laser gameobject and fire lasers
     }
