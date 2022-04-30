@@ -123,6 +123,8 @@ public class LaserBullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
+        Debug.Log("laser bullet hit " +  collision.gameObject.name);
+
         if (collision.gameObject.name == "Blade")
         {
 
