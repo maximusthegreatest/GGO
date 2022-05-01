@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VolumetricLines;
+using HurricaneVR.Framework.Core.Utils;
 
 public class VolumetricLaser : MonoBehaviour
 {
@@ -16,7 +17,11 @@ public class VolumetricLaser : MonoBehaviour
 
     [SerializeField]
     private GameObject target;
-    
+    [SerializeField]
+    private AudioClip laserDecalSound;
+
+    private bool playedSound;
+
 
     private VolumetricLineBehavior _vl;
 
@@ -44,8 +49,20 @@ public class VolumetricLaser : MonoBehaviour
                     Debug.Log("laser hit " + hit.collider.gameObject.name);
                     //Debug.Log("laser transform pos " + transform.position.z + "laser rb pos " + rb.position.z + "laser col: " + hit.collider.gameObject.name + " laser hit point" + hit.point + " " + Time.time);
                     _vl.EndPos = new Vector3(0, hit.distance, 0);
-                    target.transform.position = hit.point;                    
-                    target.SetActive(true);
+                    if(hit.collider.gameObject.name != "Blade")
+                    {
+                        target.transform.position = hit.point;
+                        target.SetActive(true);
+                        if (!playedSound)
+                        {
+                            SFXPlayer.Instance.PlaySFX(laserDecalSound, hit.point, 1f, 1f);
+                            playedSound = true;
+                        }
+                    }
+
+                    break;
+                    
+                    
                     //_vl.SetStartAndEndPoints(_vl.StartPos, _vl.EndPos);
                 }                
             }

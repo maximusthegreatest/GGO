@@ -20,9 +20,13 @@ public class LaserBullet : MonoBehaviour
     private Rigidbody rb;
     private Collider bulletCollider;
     private GameObject bulletLine;
+
+    [SerializeField]
+    private GameObject laserBulletDecal;
     
     [SerializeField]
     private AudioClip laserBlockSound;
+
 
     // Start is called before the first frame update
     void Start()
@@ -165,6 +169,16 @@ public class LaserBullet : MonoBehaviour
                 if (canDamage)
                 {
                     DamagePlayer();
+                    Vector3 decalSpawnPoint = new Vector3(collision.transform.position.x, collision.transform.position.y - 0.001f, collision.transform.position.z);
+                    Vector3 myNormal = new Vector3();
+                    foreach (ContactPoint contact in collision.contacts)
+                    {
+                        myNormal = contact.normal;
+                    }
+                    
+                    Instantiate(laserBulletDecal, decalSpawnPoint, Quaternion.FromToRotation(Vector3.forward, myNormal));
+                    
+
                 }
 
                 return;

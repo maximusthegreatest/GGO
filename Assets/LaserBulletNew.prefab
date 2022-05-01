@@ -280,6 +280,7 @@ MonoBehaviour:
   rb: {fileID: 7014174333242320734}
   sphereRadius: 0.05
   target: {fileID: 7622436502839811969}
+  laserDecalSound: {fileID: 8300000, guid: eedaa3be7cdd95a4f90fd47300e89c0f, type: 3}
 --- !u!1 &9105711653645321012
 GameObject:
   m_ObjectHideFlags: 0

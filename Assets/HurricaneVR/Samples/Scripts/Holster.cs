@@ -33,34 +33,8 @@ namespace HurricaneVR.Samples
             hasItem = !hasItem;            
         }
 
-        public void DoHolsterAction(HVRGrabberBase grabber, HVRGrabbable grabbable)
-        {
-            
-            /*
-                
-            //call spawn follower
-            if(grabbable.gameObject.name == "Saber" || grabbable.gameObject.name == "SaberFinal")
-            {
-                    
-                Saber saber = grabbable.gameObject.GetComponent<Saber>();
-                foreach(SaberCapsule capsule in saber.capsules)
-                {
-                    
-                    capsule.DespawnSaberCapsuleFollower();
-                }
-                        
-            }
+        
 
-            
-            
-            
-            //if gameobject has a holsteraction method, then call it
-            if(grabbable.gameObject.GetComponent<HolsterAction>() != null)
-            {
-                HolsterAction holsterAction = grabbable.gameObject.GetComponent<HolsterAction>();
-                holsterAction.DoAction();
-            }
-            */
-        }
+        
     }
 }
