@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87bb1ebb1f9f0a40b1abac77e85a6b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrust: 50
+  thrust: 100
   bombShatterTriangleParticle: {fileID: 5773060181680586705, guid: f45e60855a99fee46aeb9a2b20a9b6fe,
     type: 3}
   bombShatterParticle: {fileID: 7921749426694240875, guid: ac4a36bd324a9384bbf3b72c8f89212e,

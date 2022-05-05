@@ -22,10 +22,21 @@ public class LaserBullet : MonoBehaviour
     private GameObject bulletLine;
 
     [SerializeField]
+    private Transform leftShoulder;
+
+    [SerializeField]
+    private Transform rightShoulder;
+
+    [SerializeField]
     private GameObject laserBulletDecal;
     
     [SerializeField]
     private AudioClip laserBlockSound;
+
+    [SerializeField]
+    private AudioClip bulletHitSound;
+
+    
 
 
     // Start is called before the first frame update
@@ -151,7 +162,7 @@ public class LaserBullet : MonoBehaviour
         if (collision.gameObject.name == "Bullet(Clone)")
         {
             Debug.Log("laser hit bullet");
-            DestroyLaser();
+            DestroyLaser();            
             return;
         }
 
@@ -162,7 +173,7 @@ public class LaserBullet : MonoBehaviour
             {
                 //Debug.Log("Is hit?");
                 Debug.Log("laser hit player");
-                Destroy(gameObject);
+                
                 Instantiate(bulletTriangleParticleEffect, transform.position, Quaternion.identity);
                 Instantiate(bulletParticleEffect, transform.position, Quaternion.identity);
 
@@ -180,20 +191,44 @@ public class LaserBullet : MonoBehaviour
                     
 
                 }
-
+                DestroyLaser();
                 return;
             }
         }
 
-        
-        
+        if(collision.gameObject.name == "BulletSoundCollider") {
+            ContactPoint contact = collision.contacts[0];
+            //get it off of the collider
+            BulletSound sound = collision.gameObject.GetComponent<BulletSound>();
+            //distance from this to left and then right
+            float leftDistance = Vector3.Distance(contact.point, sound.leftShoulder.position);
+            float rightDistance = Vector3.Distance(contact.point, sound.rightShoulder.position);
+            
+            if(leftDistance > rightDistance)
+            {
+                //spawn on right side
+                SFXPlayer.Instance.PlaySFX(sound.GetWhizSound(), sound.rightShoulder.position);
+            } else
+            {
+                SFXPlayer.Instance.PlaySFX(sound.GetWhizSound(), sound.leftShoulder.position);
+            }
+
+
+
+
+        }
+
+
+
+
         Debug.Log("Hit something else");
-        Destroy(gameObject);
+        
     }
 
     private void DamagePlayer()
     {
         Player player = GameObject.Find("Player").GetComponent<Player>();
+        SFXPlayer.Instance.PlaySFX(bulletHitSound, transform.position);        
         player.Damage(damage);
     }
 }

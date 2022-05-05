@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583aba34ae151314ba02f995514754ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrust: 1000
+  thrust: 3000
   damage: 20
   timeAlive: 10
   birth: 0
@@ -129,7 +129,9 @@ MonoBehaviour:
     type: 3}
   collisionTimeout: 0.2
   hitSaber: 0
+  laserBulletDecal: {fileID: 0}
   laserBlockSound: {fileID: 8300000, guid: 9efae517907b87c40ab094a3882191a4, type: 3}
+  bulletHitSound: {fileID: 8300000, guid: 32e9c13f2314832419308c9daa0e5c94, type: 3}
 --- !u!65 &4174388201775499317
 BoxCollider:
   m_ObjectHideFlags: 0
