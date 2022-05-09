@@ -35,6 +35,22 @@ public class ReturnWeapons : MonoBehaviour
         _areaCollider.enabled = true;
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("retrievable " + other.gameObject.name);
+        if(objectsToReturn.Contains(other.gameObject))
+        {
+            //start return routine
+            Debug.Log("bound routine " + other.gameObject.name);
+            ReturnWeapon returnWep = other.gameObject.GetComponent<ReturnWeapon>();
+            if (!returnWep.returnWepRunning)
+            {                
+                returnWep.ReturnWeaponToHolsterSetup(timeToReturn);
+            }
+        }
+    }
+
     void OnTriggerExit(Collider col)
     {
         return;

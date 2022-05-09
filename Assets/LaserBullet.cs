@@ -196,27 +196,7 @@ public class LaserBullet : MonoBehaviour
             }
         }
 
-        if(collision.gameObject.name == "BulletSoundCollider") {
-            ContactPoint contact = collision.contacts[0];
-            //get it off of the collider
-            BulletSound sound = collision.gameObject.GetComponent<BulletSound>();
-            //distance from this to left and then right
-            float leftDistance = Vector3.Distance(contact.point, sound.leftShoulder.position);
-            float rightDistance = Vector3.Distance(contact.point, sound.rightShoulder.position);
-            
-            if(leftDistance > rightDistance)
-            {
-                //spawn on right side
-                SFXPlayer.Instance.PlaySFX(sound.GetWhizSound(), sound.rightShoulder.position);
-            } else
-            {
-                SFXPlayer.Instance.PlaySFX(sound.GetWhizSound(), sound.leftShoulder.position);
-            }
-
-
-
-
-        }
+        
 
 
 
@@ -230,5 +210,41 @@ public class LaserBullet : MonoBehaviour
         Player player = GameObject.Find("Player").GetComponent<Player>();
         SFXPlayer.Instance.PlaySFX(bulletHitSound, transform.position);        
         player.Damage(damage);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "BulletSoundCollider")
+        {
+            
+            
+            
+                
+                //get it off of the collider
+                BulletSound sound = other.gameObject.GetComponent<BulletSound>();
+                //distance from this to left and then right
+                float leftDistance = Vector3.Distance(transform.position, sound.leftShoulder.position);
+                float rightDistance = Vector3.Distance(transform.position, sound.rightShoulder.position);
+
+                if (leftDistance > rightDistance)
+                {
+                    //spawn on right side
+                    SFXPlayer.Instance.PlaySFX(sound.GetWhizSound(), sound.rightShoulder.position);
+                }
+                else
+                {
+                    SFXPlayer.Instance.PlaySFX(sound.GetWhizSound(), sound.leftShoulder.position);
+                }
+
+                
+            
+
+
+            
+
+
+
+
+        }
     }
 }

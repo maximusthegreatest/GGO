@@ -129,6 +129,8 @@ MonoBehaviour:
     type: 3}
   collisionTimeout: 0.2
   hitSaber: 0
+  leftShoulder: {fileID: 0}
+  rightShoulder: {fileID: 0}
   laserBulletDecal: {fileID: 0}
   laserBlockSound: {fileID: 8300000, guid: 9efae517907b87c40ab094a3882191a4, type: 3}
   bulletHitSound: {fileID: 8300000, guid: 32e9c13f2314832419308c9daa0e5c94, type: 3}
@@ -279,6 +281,9 @@ MonoBehaviour:
   - RightShoulder
   - GrabbableBag
   - SocketBag
+  laserTargetIgnoreCol:
+  - Blade
+  - mine(Clone)
   rb: {fileID: 7014174333242320734}
   sphereRadius: 0.05
   target: {fileID: 7622436502839811969}

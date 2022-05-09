@@ -11,6 +11,7 @@ public class VolumetricLaser : MonoBehaviour
     public LayerMask ignoreMe;
     public List<string> laserColLayers;
     public List<string> laserIgnoreCol;
+    public List<string> laserTargetIgnoreCol;
     public Rigidbody rb;
     private GameObject laserBullet;
     public float sphereRadius;
@@ -28,7 +29,7 @@ public class VolumetricLaser : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target.SetActive(true);
+        target.SetActive(false);
         _vl = GetComponent<VolumetricLineBehavior>();
         laserBullet = gameObject.transform.parent.gameObject;
     }
@@ -49,7 +50,8 @@ public class VolumetricLaser : MonoBehaviour
                     Debug.Log("laser hit " + hit.collider.gameObject.name);
                     //Debug.Log("laser transform pos " + transform.position.z + "laser rb pos " + rb.position.z + "laser col: " + hit.collider.gameObject.name + " laser hit point" + hit.point + " " + Time.time);
                     _vl.EndPos = new Vector3(0, hit.distance, 0);
-                    if(hit.collider.gameObject.name != "Blade")
+                    
+                    if (!laserTargetIgnoreCol.Contains(hit.collider.gameObject.name))
                     {
                         target.transform.position = hit.point;
                         target.SetActive(true);

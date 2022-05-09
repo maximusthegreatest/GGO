@@ -9,13 +9,14 @@ public class ReturnWeapon : MonoBehaviour
     public List<Holster> holsters = new List<Holster>();
     public bool returnWepRunning;
     private IEnumerator _coroutine;
+    [SerializeField]
     private HVRGrabbable _grabbable;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        _grabbable = gameObject.GetComponent<HVRGrabbable>();
+        
     }
 
     // Update is called once per frame
@@ -34,6 +35,7 @@ public class ReturnWeapon : MonoBehaviour
 
     IEnumerator ReturnWeaponRoutine(float waitTime)
     {
+        Debug.Log("inside wep routine");
         returnWepRunning = true;
         yield return new WaitForSeconds(waitTime);
 
@@ -47,7 +49,7 @@ public class ReturnWeapon : MonoBehaviour
                 emptyHolster = holster;
             }
         }
-
+        Debug.Log("made it to empty holster check");
         if (emptyHolster)
         {
             Debug.Log("Grab routine");

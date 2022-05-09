@@ -11,12 +11,18 @@ public class LaserSpawner : MonoBehaviour
     public GameObject player;
     public GameObject laser;
 
+    public Vector3 laserSpawnLocation;
+
+
     [Header("Laser Spawn Time")]
     public float minSpawnTime;
     public float maxSpawnTime;
 
 
     private CharacterController controller;
+    [SerializeField]
+    private float distanceWanted = 3.0f;
+    
 
     List<Vector3> laserSpawns;
 
@@ -50,21 +56,23 @@ public class LaserSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Vector3 diff = transform.position - player.transform.position;
+        diff.z = 0; // ignore Y (as requested in question)        
+        transform.position = player.transform.position + diff.normalized * distanceWanted;
     }
 
-    Vector3 GetLaserSpawnPoint()
+    Vector3 GetLaserHitPoint()
     {
         //get random vert from Global verts
 
         //TODO make sure its also not within a certain range of any of the current spawn points
-        Vector3 spawnPoint = GetRandomLaserSpawnPoint();
-        while (laserSpawns.Contains(spawnPoint)) 
+        Vector3 hitPoint = GetRandomLaserSpawnPoint();
+        while (laserSpawns.Contains(hitPoint)) 
         {
-            GetLaserSpawnPoint();
+            GetLaserHitPoint();
         }
 
-        return spawnPoint;
+        return hitPoint;
 
 
         
@@ -78,8 +86,8 @@ public class LaserSpawner : MonoBehaviour
     Vector3 GetRandomLaserSpawnPoint()
     {
         int myIndex = Random.Range(0, GlobalVertices.Count);
-        Vector3 spawnPoint = GlobalVertices[myIndex];
-        return spawnPoint;
+        Vector3 hitPoint = GlobalVertices[myIndex];
+        return hitPoint;
     }
 
     void GetVertices()
@@ -121,22 +129,33 @@ public class LaserSpawner : MonoBehaviour
         if (lastSpawnTime + laserCooldownTime <= Time.time)
         {
             Debug.Log("spawning laser");
-            Vector3 spawnLocation = GetLaserSpawnPoint();
+            Vector3 hitLocation = GetLaserHitPoint();
+            Debug.Log("laser hit location " + hitLocation);
 
             //set a max size of the 
-            
+
             //Vector3 direction = player.transform.position - spawnLocation;
-            Instantiate(laser, spawnLocation, Quaternion.Euler(transform.forward));
+
+            //swap this to spawn it at one point and then angle towards your spawnLocation
+            //angle transform.forward to hitLocation
+
+            //find the vector pointing from our position to the target
+            Vector3 _direction = (hitLocation - laserSpawnLocation).normalized;
+
+            //create the rotation we need to be in to look at the target
+            Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+
+            Instantiate(laser, laserSpawnLocation, _lookRotation);
             
             //add spawnLocation to the laserSpawns list, as long as it hasn't gone over a certain size
             if (laserSpawns.Count < 5)
             {
-                laserSpawns.Add(spawnLocation);
+                laserSpawns.Add(hitLocation);
             }
             else
             {
                 laserSpawns.RemoveAt(0);
-                laserSpawns.Add(spawnLocation);
+                laserSpawns.Add(hitLocation);
             }
 
 
