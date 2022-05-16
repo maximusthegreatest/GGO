@@ -9,7 +9,7 @@ namespace RootMotion.FinalIK
     /// </summary>
     public static class VRIKCalibrator
     {
-
+        
                
         /// <summary>
         /// The settings for VRIK tracker calibration.
@@ -171,6 +171,10 @@ namespace RootMotion.FinalIK
             // Root position and rotation
             Vector3 headPos = headTracker.position + headTracker.rotation * Quaternion.LookRotation(settings.headTrackerForward, settings.headTrackerUp) * settings.headOffset;
             ik.references.root.position = new Vector3(headPos.x, ik.references.root.position.y, headPos.z);
+
+            Debug.Log("calibrated height " + (headPos.y - ik.references.root.position.y));
+            
+             
             Vector3 headForward = headTracker.rotation * settings.headTrackerForward;
             headForward.y = 0f;            
             ik.references.root.rotation = Quaternion.LookRotation(headForward);
@@ -285,8 +289,7 @@ namespace RootMotion.FinalIK
             data.rightLegGoal = new CalibrationData.Target(ik.solver.rightLeg.bendGoal);
             data.pelvisTargetRight = rootController != null? rootController.pelvisTargetRight: Vector3.zero;
             data.pelvisPositionWeight = ik.solver.spine.pelvisPositionWeight;
-            data.pelvisRotationWeight = ik.solver.spine.pelvisRotationWeight;
-
+            data.pelvisRotationWeight = ik.solver.spine.pelvisRotationWeight;            
             return data;
         }
 

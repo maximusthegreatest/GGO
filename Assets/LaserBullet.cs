@@ -15,6 +15,8 @@ public class LaserBullet : MonoBehaviour
     public GameObject bulletParticleEffect;
     public float collisionTimeout;
     public bool hitSaber;
+    public GameObject bulletHitPlayerDecalPrefab;
+
 
     private bool canDamage = true;
     private Rigidbody rb;
@@ -72,7 +74,7 @@ public class LaserBullet : MonoBehaviour
         if(true)
         {
             //draw a laser in the direction of the force
-            Debug.Log("Yeet");
+            //Debug.Log("Yeet");
             Debug.DrawRay(point, direction, Color.red, 10000);
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = lookRotation;
@@ -90,10 +92,6 @@ public class LaserBullet : MonoBehaviour
             Destroy(gameObject);
         }
 
-        
-
-
-        
     }
 
 
@@ -153,7 +151,8 @@ public class LaserBullet : MonoBehaviour
         if (collision.gameObject.name == "MadsonD9")
         {
             Debug.Log("laser hit gun");
-            DamagePlayer();
+            ContactPoint contact = collision.contacts[0];            
+            DamagePlayer(contact);
             DestroyLaser();
             return;
         }
@@ -169,7 +168,7 @@ public class LaserBullet : MonoBehaviour
         //first check if the gameobject has a parent
         if(collision.gameObject.transform.parent)
         {
-            if (collision.gameObject.transform.parent.gameObject.name == "XRRig")
+            if (collision.gameObject.transform.root.gameObject.name == "XRRig")
             {
                 //Debug.Log("Is hit?");
                 Debug.Log("laser hit player");
@@ -179,15 +178,9 @@ public class LaserBullet : MonoBehaviour
 
                 if (canDamage)
                 {
-                    DamagePlayer();
-                    Vector3 decalSpawnPoint = new Vector3(collision.transform.position.x, collision.transform.position.y - 0.001f, collision.transform.position.z);
-                    Vector3 myNormal = new Vector3();
-                    foreach (ContactPoint contact in collision.contacts)
-                    {
-                        myNormal = contact.normal;
-                    }
+                    ContactPoint contact = collision.contacts[0];
+                    DamagePlayer(contact);
                     
-                    Instantiate(laserBulletDecal, decalSpawnPoint, Quaternion.FromToRotation(Vector3.forward, myNormal));
                     
 
                 }
@@ -205,11 +198,27 @@ public class LaserBullet : MonoBehaviour
         
     }
 
-    private void DamagePlayer()
+    private void DamagePlayer(ContactPoint contact)
     {
         Player player = GameObject.Find("Player").GetComponent<Player>();
-        SFXPlayer.Instance.PlaySFX(bulletHitSound, transform.position);        
+        SFXPlayer.Instance.PlaySFX(bulletHitSound, transform.position);
+        //instantiate decal hit        
+        //Vector3 pos = contact.point;
+       // Instantiate(bulletHitPlayerDecalPrefab, pos, Quaternion.FromToRotation(Vector3.forward, contact.normal));
+        Debug.Log("Should have spawned bullet decal");
         player.Damage(damage);
+
+
+        /*
+        Vector3 decalSpawnPoint = new Vector3(collision.transform.position.x, collision.transform.position.y - 0.001f, collision.transform.position.z);
+        Vector3 myNormal = new Vector3();
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            myNormal = contact.normal;
+        }
+
+        Instantiate(laserBulletDecal, decalSpawnPoint, Quaternion.FromToRotation(Vector3.forward, myNormal));
+        */
     }
 
     private void OnTriggerEnter(Collider other)

@@ -129,9 +129,12 @@ MonoBehaviour:
     type: 3}
   collisionTimeout: 0.2
   hitSaber: 0
+  bulletHitPlayerDecalPrefab: {fileID: 7523143844551656787, guid: 655820ee0c7350840805dcbb2e70ea41,
+    type: 3}
   leftShoulder: {fileID: 0}
   rightShoulder: {fileID: 0}
-  laserBulletDecal: {fileID: 0}
+  laserBulletDecal: {fileID: 7523143844551656787, guid: 655820ee0c7350840805dcbb2e70ea41,
+    type: 3}
   laserBlockSound: {fileID: 8300000, guid: 9efae517907b87c40ab094a3882191a4, type: 3}
   bulletHitSound: {fileID: 8300000, guid: 32e9c13f2314832419308c9daa0e5c94, type: 3}
 --- !u!65 &4174388201775499317
@@ -417,7 +420,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1264712828422478004, guid: 8da0d543342ac5a4e9e41bbe68987897,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264712828422478004, guid: 8da0d543342ac5a4e9e41bbe68987897,
+        type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783966387638033393, guid: 8da0d543342ac5a4e9e41bbe68987897,
+        type: 3}
+      propertyPath: m_Convex
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7033182841283804568, guid: 8da0d543342ac5a4e9e41bbe68987897,

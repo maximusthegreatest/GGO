@@ -284,7 +284,7 @@ namespace VolumetricLines
 				Mathf.Max(m_startPos.z, m_endPos.z) + scaledLineWidth
 			);
 
-			Debug.Log("Bounds " + min + " " + max);
+			//Debug.Log("Bounds " + min + " " + max);
 			
 			return new Bounds
 			{

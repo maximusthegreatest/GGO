@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RootMotion.FinalIK;
 
 public class LaserSpawner : MonoBehaviour
 {
@@ -11,18 +12,22 @@ public class LaserSpawner : MonoBehaviour
     public GameObject player;
     public GameObject laser;
 
-    public Vector3 laserSpawnLocation;
+    public Transform laserSpawnLocation;
 
 
     [Header("Laser Spawn Time")]
     public float minSpawnTime;
     public float maxSpawnTime;
+    public VRIK ik;
 
 
     private CharacterController controller;
     [SerializeField]
-    private float distanceWanted = 3.0f;
+    private float distanceWanted;
+
     
+    
+
 
     List<Vector3> laserSpawns;
 
@@ -49,16 +54,18 @@ public class LaserSpawner : MonoBehaviour
         player = GameObject.Find("PlayerController");
         controller = player.GetComponent<CharacterController>();
 
-
+        distanceWanted = transform.position.z - player.transform.position.z;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 diff = transform.position - player.transform.position;
-        diff.z = 0; // ignore Y (as requested in question)        
-        transform.position = player.transform.position + diff.normalized * distanceWanted;
+        float diff =  transform.position.z - player.transform.position.z;
+        //lets say the player has moved towards the laser spawner
+        float adjustment = distanceWanted - diff;
+
+        transform.position = new Vector3(player.transform.position.x, transform.position.y, transform.position.z + adjustment);
     }
 
     Vector3 GetLaserHitPoint()
@@ -90,14 +97,25 @@ public class LaserSpawner : MonoBehaviour
         return hitPoint;
     }
 
-    void GetVertices()
-    {
-        LocalVertices = new List<Vector3>(GetComponent<MeshFilter>().mesh.vertices);
 
-        foreach(Vector3 point in LocalVertices)
+    void AddGlobalVertices()
+    {
+        foreach (Vector3 point in LocalVertices)
         {
             GlobalVertices.Add(transform.TransformPoint(point));
         }
+    }
+
+    void ClearGlobalVertices()
+    {
+        GlobalVertices.Clear();
+    }
+
+    void GetVertices()
+    {
+        LocalVertices = new List<Vector3>(GetComponent<MeshFilter>().mesh.vertices);
+        AddGlobalVertices();
+        
     }
 
 
@@ -128,6 +146,8 @@ public class LaserSpawner : MonoBehaviour
         
         if (lastSpawnTime + laserCooldownTime <= Time.time)
         {
+            ClearGlobalVertices();
+            AddGlobalVertices();
             Debug.Log("spawning laser");
             Vector3 hitLocation = GetLaserHitPoint();
             Debug.Log("laser hit location " + hitLocation);
@@ -140,12 +160,12 @@ public class LaserSpawner : MonoBehaviour
             //angle transform.forward to hitLocation
 
             //find the vector pointing from our position to the target
-            Vector3 _direction = (hitLocation - laserSpawnLocation).normalized;
+            Vector3 _direction = (hitLocation - laserSpawnLocation.position).normalized;
 
             //create the rotation we need to be in to look at the target
             Quaternion _lookRotation = Quaternion.LookRotation(_direction);
 
-            Instantiate(laser, laserSpawnLocation, _lookRotation);
+            Instantiate(laser, laserSpawnLocation.position, _lookRotation);
             
             //add spawnLocation to the laserSpawns list, as long as it hasn't gone over a certain size
             if (laserSpawns.Count < 5)
