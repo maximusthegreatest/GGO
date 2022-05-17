@@ -75,8 +75,14 @@ public class Bomb : MonoBehaviour
             return;
         }
 
+        if (collision.gameObject.name == "mine(Clone)")
+        {
+            DestroyBomb();
+            return;
+        }
 
-        if (collision.gameObject.transform.parent.gameObject.name == "XRRig")
+
+        if (collision.gameObject.transform?.parent.gameObject.name == "XRRig")
         {
             //Debug.Log("Is hit?");
             DestroyBomb(true);

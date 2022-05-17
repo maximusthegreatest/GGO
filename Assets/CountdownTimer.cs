@@ -10,9 +10,6 @@ using UnityEngine.UI;
 public class CountdownTimer : MonoBehaviour
 {
     public int time;
-
-    public Cardinal cardinal;
-
     public Text timerText;
 
     public AudioClip tickingSound;
@@ -164,7 +161,8 @@ public class CountdownTimer : MonoBehaviour
         //hide radial menu
         fadeText = false;
         transform.parent.gameObject.SetActive(false);
-        cardinal.currentMode = Cardinal.GameMode.GunGame;
+        //cardinal.currentMode = Cardinal.GameMode.GunGame;
+        Cardinal.instance.UpdateGameMode(GameMode.GunGame);
         //StopCoroutine(countdownTextRoutine);
         foreach (CountdownIconImage icon in countdownIcons)
         {
@@ -194,7 +192,8 @@ public class CountdownTimer : MonoBehaviour
                 //hide radial menu
                 fadeText = false;
                 transform.parent.gameObject.SetActive(false);
-                cardinal.currentMode = Cardinal.GameMode.GunGame;
+                Cardinal.instance.UpdateGameMode(GameMode.GunGame);
+
                 foreach (CountdownIconImage icon in countdownIcons)
                 {
                     icon.gameObject.SetActive(true);

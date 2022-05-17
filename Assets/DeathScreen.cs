@@ -5,8 +5,6 @@ using UnityEngine;
 public class DeathScreen : MonoBehaviour
 {
 
-    public Cardinal cardinal;
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -23,9 +21,8 @@ public class DeathScreen : MonoBehaviour
     public void RestartGame()
     {
         //hide the menu and show screen again
-        Debug.Log("Restarting Game");
-
-        cardinal.currentMode = Cardinal.GameMode.Default;
+        Debug.Log("Restarting Game");        
+        Cardinal.instance.UpdateGameMode(GameMode.Default);
         gameObject.SetActive(false);
 
     }

@@ -1,11 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.Rendering;
+using TMPro;
+
+public enum GameMode { Default, GunGame, Settings, Dead };
 
 public class Cardinal : MonoBehaviour
 {
-    public enum GameMode { Default, GunGame, Settings, Dead };
+    public static Cardinal instance;
+    public static event Action<GameMode> OnGameModeChanged;
+
+   
 
     public Player player;
 
@@ -17,7 +24,14 @@ public class Cardinal : MonoBehaviour
 
     public GameObject deathScreen;
 
-    
+    public TextMeshProUGUI roundCounter;
+
+    private int currentRound = 0;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +42,7 @@ public class Cardinal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {        
+        /*
         //Debug.Log("Current Mode: " + currentMode);
         if (currentMode != GameMode.Dead)
         {
@@ -36,6 +51,46 @@ public class Cardinal : MonoBehaviour
         {
             //show death screen
         }
+        */
+    }
+
+    public void IncrementRound()
+    {
+        currentRound++;
+        roundCounter.text = "Round: " + currentRound;
+    }
+
+    public int GetCurrentRound()
+    {
+        return currentRound;
+    }
+
+    public void ResetSystem()
+    {
+        currentRound = 0;
+    }
+
+    public void UpdateGameMode(GameMode newGameMode)
+    {
+        currentMode = newGameMode;
+
+        switch(newGameMode)
+        {
+            case GameMode.Default:
+                break;
+            
+            case GameMode.GunGame:                
+                break;
+
+            case GameMode.Settings:
+                break;
+
+            case GameMode.Dead:
+                Death();
+                break;
+        }
+
+        OnGameModeChanged?.Invoke(newGameMode);
     }
 
 
@@ -69,12 +124,18 @@ public class Cardinal : MonoBehaviour
    
     public void GunGame()
     {
-        Debug.Log("Gun Game is running");
+        
+        
+        
+        //break down this logic in a way that is condensed into it's own unit
+
+        
+        //Debug.Log("Gun Game is running");
         //get bomb game object and fire bombs
         
         //bombSpawner.Spawn();
         
-        laserSpawner.Spawn();
+        //laserSpawner.Spawn();
 
         //get laser gameobject and fire lasers
     }

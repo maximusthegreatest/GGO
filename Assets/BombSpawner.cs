@@ -36,7 +36,7 @@ public class BombSpawner : MonoBehaviour
         
     }
 
-    public void Spawn()
+    public int Spawn(int currentBombCount, float minSpawnTime, float maxSpawnTime)
     {
         //check when last bomb was spawned, and check if cool down timer was hit 
         //check which spawner was used and alternate
@@ -60,7 +60,11 @@ public class BombSpawner : MonoBehaviour
                 spawnLocation = true;
             }
 
-            bombCooldownTime = Random.Range(2f, 5f);
+            bombCooldownTime = Random.Range(minSpawnTime, maxSpawnTime);
+            return ++currentBombCount;
+        } else
+        {
+            return 0;
         }
         
 

@@ -15,9 +15,7 @@ public class LaserSpawner : MonoBehaviour
     public Transform laserSpawnLocation;
 
 
-    [Header("Laser Spawn Time")]
-    public float minSpawnTime;
-    public float maxSpawnTime;
+    
     public VRIK ik;
 
 
@@ -141,7 +139,9 @@ public class LaserSpawner : MonoBehaviour
     }
     */
 
-    public void Spawn()
+    
+
+    public int Spawn(int currentLaserCount , float minSpawnTime, float maxSpawnTime)
     {
         
         if (lastSpawnTime + laserCooldownTime <= Time.time)
@@ -180,7 +180,11 @@ public class LaserSpawner : MonoBehaviour
 
 
             lastSpawnTime = Time.time;
-            laserCooldownTime = Random.Range(minSpawnTime, maxSpawnTime);
+            laserCooldownTime = Random.Range(minSpawnTime, maxSpawnTime);            
+            return ++currentLaserCount;
+        } else
+        {
+            return 0;
         }
 
 
