@@ -16,6 +16,8 @@ public class CountdownTimer : MonoBehaviour
     public AudioClip dingSound;
     public AudioClip goSound;
 
+
+    public Animator deathGunAnimator;
     
 
     [SerializeField]
@@ -116,6 +118,10 @@ public class CountdownTimer : MonoBehaviour
         transform.parent.gameObject.SetActive(true);
         RadialLayout rLayout = GetComponent<RadialLayout>();
         rLayout.CalculateRadial();
+
+        //move to rifle idle
+        deathGunAnimator.SetBool("Fire", true);
+
         countdownRoutine = StartCoroutine(Countdown());
     }
 

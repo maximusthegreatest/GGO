@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class BombSettings : MonoBehaviour
 {
-    [SerializeField]
-    public int bombCount;
-    [SerializeField]
-    public float minSpawnTime;
-    [SerializeField]
-    public float maxSpawnTime;
+    
 
     // Start is called before the first frame update
     void Start()

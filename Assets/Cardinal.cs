@@ -12,8 +12,6 @@ public class Cardinal : MonoBehaviour
     public static Cardinal instance;
     public static event Action<GameMode> OnGameModeChanged;
 
-   
-
     public Player player;
 
     public BombSpawner bombSpawner;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum AiStateId
 {
-    ShootRifle
+    Idle, ShootRifle
 }
 public interface AiState 
 {

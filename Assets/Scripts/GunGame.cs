@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public enum GunGameState { LaserRound, SniperRound, MinionRound, MeleeRound  };
@@ -8,6 +9,10 @@ public class GunGame : MonoBehaviour
 {
 
     public static GunGame instance;
+
+    public static event Action<GunGameState> OnGunGameStateChanged;
+
+
     public GunGameState currentState;
 
     public int totalRounds;
@@ -82,13 +87,16 @@ public class GunGame : MonoBehaviour
 
         }
 
+
+        OnGunGameStateChanged?.Invoke(newGunGameState);
+
         //set gun game state to laseround
 
-        
+
         //Cardinal.instance.IncrementRound();
 
         //set up round specific settings
-        
+
 
     }
 

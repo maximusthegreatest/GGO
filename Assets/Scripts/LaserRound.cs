@@ -9,10 +9,10 @@ public class LaserRound : MonoBehaviour
     public BombSpawner bombSpawner;
 
     [SerializeField]
-    private List<LaserSettings> laserRoundSettings = new List<LaserSettings>();
+    private List<LaserSetting> laserRoundSettings = new List<LaserSetting>();
 
     [SerializeField]
-    private List<BombSettings> bombRoundSettings = new List<BombSettings>();
+    private List<BombSetting> bombRoundSettings = new List<BombSetting>();
 
     private int laserCount;
     private int currentLaserCount;

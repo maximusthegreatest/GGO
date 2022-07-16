@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using RootMotion.FinalIK;
 
 public class LaserSpawner : MonoBehaviour
 {
+
+    public static event Action<bool> LaserSpawned;
 
     public float laserCooldownTime;    
     public Vector3 minSpawnDistance;
@@ -90,7 +93,7 @@ public class LaserSpawner : MonoBehaviour
 
     Vector3 GetRandomLaserSpawnPoint()
     {
-        int myIndex = Random.Range(0, GlobalVertices.Count);
+        int myIndex = UnityEngine.Random.Range(0, GlobalVertices.Count);
         Vector3 hitPoint = GlobalVertices[myIndex];
         return hitPoint;
     }
@@ -166,7 +169,9 @@ public class LaserSpawner : MonoBehaviour
             Quaternion _lookRotation = Quaternion.LookRotation(_direction);
 
             Instantiate(laser, laserSpawnLocation.position, _lookRotation);
-            
+            LaserSpawned?.Invoke(true);
+            //right here we need to inform AiSniperState that we are firing
+
             //add spawnLocation to the laserSpawns list, as long as it hasn't gone over a certain size
             if (laserSpawns.Count < 5)
             {
@@ -180,7 +185,7 @@ public class LaserSpawner : MonoBehaviour
 
 
             lastSpawnTime = Time.time;
-            laserCooldownTime = Random.Range(minSpawnTime, maxSpawnTime);            
+            laserCooldownTime = UnityEngine.Random.Range(minSpawnTime, maxSpawnTime);            
             return ++currentLaserCount;
         } else
         {
