@@ -15,7 +15,7 @@ TagManager:
   - Shield
   - Water
   - UI
-  - 
+  - hide
   - 
   - Saber
   - Laser
@@ -44,4 +44,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: HealthUI
+    uniqueID: 4060837073
     locked: 0

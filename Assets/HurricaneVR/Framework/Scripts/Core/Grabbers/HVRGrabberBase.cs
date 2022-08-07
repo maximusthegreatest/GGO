@@ -233,7 +233,7 @@ namespace HurricaneVR.Framework.Core.Grabbers
         protected virtual void CheckGrab()
         {
             if (!IsGrabActivated || !AllowGrabbing || IsGrabbing)
-            {
+            {                
                 return;
             }
 

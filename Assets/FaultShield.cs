@@ -8,6 +8,8 @@ public class FaultShield : MonoBehaviour
     public DeathGun deathGun;
     public Material damageMat;
     public Material hitMat;
+    [SerializeField]
+    private SniperRound sniperRound;
 
 
     // Start is called before the first frame update
@@ -29,13 +31,15 @@ public class FaultShield : MonoBehaviour
         if (collision.gameObject.name == "Bullet(Clone)")
         {
             ParticleSystemRenderer hexagon = GetComponentInParent<ParticleSystemRenderer>();
-            Debug.Log("hex mat " + hexagon.material.name);
+            //Debug.Log("hex mat " + hexagon.material.name);
 
             if (hexagon.material.name.Contains(damageMat.name))
             {
-                deathGun.DamageDeathGun(10);
+                deathGun.DamageDeathGun(50);
                 Debug.Log(" Death Gun Health: " + deathGun.health);
                 hexagon.material = hitMat;
+                //stop the shield round
+                sniperRound.NextRound();
             }
             
 

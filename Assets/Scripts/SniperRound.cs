@@ -16,17 +16,19 @@ public class SniperRound : MonoBehaviour
     private Material faultShieldMat;
     private ParticleSystemRenderer lastFaultedHexagon;
 
+    [SerializeField]
+    private List<ShieldSetting> shieldRoundSettings = new List<ShieldSetting>();
+    private ShieldSetting currentShieldSetting;
+
     public void StartRound(int currentRound)
     {
         //things we want 
         Debug.Log("starting sniper round");
-        
+
         //startcountdown of round
+        currentShieldSetting = shieldRoundSettings[currentRound];
 
-        //start manipulation of shield
-
-        
-        
+        //start manipulation of shield        
         StartCoroutine(StartRoundTime());
     }
 
@@ -49,7 +51,7 @@ public class SniperRound : MonoBehaviour
         lastFaultedHexagon = hexagonToFault;
 
         hexagonToFault.material = faultShieldMat;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(currentShieldSetting.shieldFaultTime);
 
         //end all the coroutines on the hit or the end round
         StartCoroutine(ShieldFault());
@@ -69,11 +71,17 @@ public class SniperRound : MonoBehaviour
     IEnumerator StartRoundTime()
     {
         Debug.Log("starting round time");
+
+        
+
         cube.SetActive(true);
         StartCoroutine(ShieldFault());
         
         //this needs to pull from a dataobject
-        yield return new WaitForSeconds(20f); 
+        
+        yield return new WaitForSeconds(currentShieldSetting.roundTime); 
+        
+        
         //advance to next round
         if (!wasHit)
         {

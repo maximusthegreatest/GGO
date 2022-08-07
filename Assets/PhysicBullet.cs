@@ -66,7 +66,8 @@ public class PhysicBullet : MonoBehaviour
 
 
     void OnCollisionEnter(Collision collision)
-    {       
+    {
+        Debug.Log("bullet collision " + collision.gameObject.name);
         Destroy(gameObject);
     }
 }

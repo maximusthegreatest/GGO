@@ -11,6 +11,7 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
+
 namespace HurricaneVR.Framework.Weapons
 {
     [RequireComponent(typeof(HVRGrabbable))]

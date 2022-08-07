@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class DeathGun : MonoBehaviour
 {
     public int health = 100;
     
     private Animator anim;
+
+    [SerializeField]
+    private DeathGunHealthBar healthBar;
 
 
 
@@ -30,7 +34,8 @@ public class DeathGun : MonoBehaviour
 
     public void DamageDeathGun(int damageToDeal)
     {
-        health -= damageToDeal;
+        health -= damageToDeal;        
+        healthBar.TookDamage(health);
     }
 
 
