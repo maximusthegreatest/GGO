@@ -72,8 +72,6 @@ public class SniperRound : MonoBehaviour
     {
         Debug.Log("starting round time");
 
-        
-
         cube.SetActive(true);
         StartCoroutine(ShieldFault());
         

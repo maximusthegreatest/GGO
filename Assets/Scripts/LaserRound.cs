@@ -19,6 +19,7 @@ public class LaserRound : MonoBehaviour
 
     private int bombCount;
     private int currentBombCount;
+    public int currentBombExplodedCount;
 
     private float laserMinSpawnTime;
     private float laserMaxSpawnTime;
@@ -44,6 +45,8 @@ public class LaserRound : MonoBehaviour
     public void StartRound(int currentRound)
     {
 
+        
+        
         Debug.Log("Starting laser round " + currentRound);
 
         startMoveRound = false;
@@ -66,7 +69,9 @@ public class LaserRound : MonoBehaviour
         bombMaxSpawnTime = bombRoundSettings[currentRound].maxSpawnTime;
         bombMinSpawnTime = bombRoundSettings[currentRound].minSpawnTime;
 
-        hasSpawnedAllBombs = true;
+        hasSpawnedAllBombs = false;
+        currentBombExplodedCount = 0;
+
 
         startLaserSpawning = true;
         startBombSpawning = true;
@@ -125,12 +130,15 @@ public class LaserRound : MonoBehaviour
         }
 
         if(hasSpawnedAllBombs && hasSpawnedAllLasers && !startMoveRound )
-        {
-            Debug.Log("this is running a shitload");
-            //then wait for time, then change gunmode round
-            delayTime = roundTimes[myCurrentRound];
+        {            
+            if(currentBombExplodedCount == bombCount)
+            {
+                //then wait for time, then change gunmode round
+                delayTime = roundTimes[myCurrentRound];
+
+                StartCoroutine(WaitForNextRound());
+            }
             
-            StartCoroutine(WaitForNextRound());
         }
 
 

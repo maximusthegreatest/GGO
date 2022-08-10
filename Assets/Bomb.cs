@@ -18,9 +18,19 @@ public class Bomb : MonoBehaviour
     [SerializeField]
     private AudioClip bombExplosionSound;
 
+    [SerializeField]
+    private LaserRound laserRound;
+
     // Start is called before the first frame update
     void Start()
     {
+        //Destroy bomb regardless of what happens after certain amount of time
+        Destroy(gameObject, 20f);
+
+
+        GameObject gunGame = GameObject.Find("GunGame");
+        laserRound = gunGame.GetComponent<LaserRound>();
+
         //move the bomb towards the player 
         rb = GetComponent<Rigidbody>();
         thrust = Random.Range(350f, 450f);
@@ -42,12 +52,21 @@ public class Bomb : MonoBehaviour
 
     }
 
+    
+
     // Update is called once per frame
     void Update()
     {
         
         transform.Rotate(rotSpeed * Time.deltaTime);
     }
+
+
+    private void OnDestroy()
+    {
+        laserRound.currentBombExplodedCount++;        
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -97,8 +116,10 @@ public class Bomb : MonoBehaviour
         player.Damage(damage);
     }
 
+    
+
     public void DestroyBomb(bool hitPlayer = false)
-    {
+    {        
 
         if (hitPlayer)
         {

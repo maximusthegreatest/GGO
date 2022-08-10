@@ -26,6 +26,7 @@ public class FuckAround : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        return;
         if(playerInputs.IsRightHoldActive)
         {
             
