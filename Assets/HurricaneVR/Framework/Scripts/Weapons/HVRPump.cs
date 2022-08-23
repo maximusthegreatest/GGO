@@ -8,6 +8,9 @@ namespace HurricaneVR.Framework.Weapons
 {
     public class HVRPump : MonoBehaviour
     {
+
+        public GameObject cubeIndicator;
+        
         [Header("Pump Events")]
 
         public UnityEvent FullRelease = new UnityEvent();
@@ -95,6 +98,8 @@ namespace HurricaneVR.Framework.Weapons
             _previousVelocity = velocity;
             _previousHandPosition = _handGrabber.TrackedController.position;
 
+            //add bolt up logic here(HVR Radial)
+            Debug.Log("hand acceleration mag " + _handAcceleration.magnitude);
             if (_handAcceleration.magnitude > VelocityThreshold)
             {
                 Unlock();
@@ -103,9 +108,19 @@ namespace HurricaneVR.Framework.Weapons
             if (_locked)
                 return;
 
+            Debug.Log("grabber pos " + _handGrabber.TrackedController.position);
             var pullDirection = (_handGrabber.TrackedController.position - HandCheckAnchor.position);
+            Debug.Log("pull direction " + pullDirection);
             var backDirection = (MaximumPosition.position - Forward.position).normalized * 10;
+            var backDirectionNew = (MaximumPosition.position - Forward.position) * 10;
+            Debug.Log("b direction " + backDirectionNew);
+            Debug.Log("b direction normal" + backDirection);
+            
             var amount = Vector3.Dot(pullDirection, backDirection);
+            var amountNew = Vector3.Dot(pullDirection, backDirectionNew);
+
+            Debug.Log("amount normal" + amount);
+            Debug.Log("amount " + amountNew);
 
             if (amount > 0)
             {
@@ -118,11 +133,13 @@ namespace HurricaneVR.Framework.Weapons
                 ClampPullBack(distance, backDirection);
                 CheckLock(distance);
                 MoveBolt();
-
             }
             else
             {
+                //turn on cube and see where the amount is < 0
+                cubeIndicator.SetActive(true);
                 Close();
+
             }
         }
 
