@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using HurricaneVR.Framework.Core.Utils;
+using HurricaneVR.Framework.Core;
 
 public class LaserBullet : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class LaserBullet : MonoBehaviour
     private GameObject bulletLine;
 
     [SerializeField]
+    private float bulletHitWeaponForce;
+
+    [SerializeField]
     private Transform leftShoulder;
 
     [SerializeField]
@@ -38,7 +42,10 @@ public class LaserBullet : MonoBehaviour
     [SerializeField]
     private AudioClip bulletHitSound;
 
-    
+    [SerializeField]
+    private AudioClip bulletHitMetalSound;
+
+
 
 
     // Start is called before the first frame update
@@ -138,9 +145,15 @@ public class LaserBullet : MonoBehaviour
 
         Debug.Log("laser bullet hit " +  collision.gameObject.name);
 
+        if (collision.gameObject.name == "PhotonSwordContainer")
+        {
+            ThrowWeapon(collision.gameObject);
+        }
+
+
         if (collision.gameObject.name == "Blade")
         {
-
+            Debug.Log("blade col");
             //Debug.Log("laser hit blade");
             DestroyLaser(true);
             return;
@@ -151,8 +164,9 @@ public class LaserBullet : MonoBehaviour
         if (collision.gameObject.name == "MadsonD9")
         {
             Debug.Log("laser hit gun");
-            ContactPoint contact = collision.contacts[0];            
-            DamagePlayer(contact);
+            ContactPoint contact = collision.contacts[0];
+            //DamagePlayer(contact);
+            ThrowWeapon(collision.gameObject);
             DestroyLaser();
             return;
         }
@@ -196,6 +210,19 @@ public class LaserBullet : MonoBehaviour
 
         Debug.Log("Hit something else");
         
+    }
+
+    private void ThrowWeapon(GameObject weaponCollidedWith)
+    {
+        //play metal hit sound at location of collision
+        SFXPlayer.Instance.PlaySFX(bulletHitMetalSound, weaponCollidedWith.transform.position);
+        //get grabbable
+        HVRGrabbable wepGrabbable = weaponCollidedWith.GetComponent<HVRGrabbable>();
+
+        wepGrabbable.ForceRelease();
+        Rigidbody wepRb = weaponCollidedWith.GetComponent<Rigidbody>();
+        wepRb.AddForce(bulletHitWeaponForce * transform.forward, ForceMode.Impulse);
+
     }
 
     private void DamagePlayer(ContactPoint contact)

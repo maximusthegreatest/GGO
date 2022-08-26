@@ -131,12 +131,14 @@ MonoBehaviour:
   hitSaber: 0
   bulletHitPlayerDecalPrefab: {fileID: 7523143844551656787, guid: 655820ee0c7350840805dcbb2e70ea41,
     type: 3}
+  bulletHitWeaponForce: 115
   leftShoulder: {fileID: 0}
   rightShoulder: {fileID: 0}
   laserBulletDecal: {fileID: 7523143844551656787, guid: 655820ee0c7350840805dcbb2e70ea41,
     type: 3}
   laserBlockSound: {fileID: 8300000, guid: 9efae517907b87c40ab094a3882191a4, type: 3}
   bulletHitSound: {fileID: 8300000, guid: 32e9c13f2314832419308c9daa0e5c94, type: 3}
+  bulletHitMetalSound: {fileID: 8300000, guid: 431df9f58999224478432b2cecc46bf0, type: 3}
 --- !u!65 &4174388201775499317
 BoxCollider:
   m_ObjectHideFlags: 0

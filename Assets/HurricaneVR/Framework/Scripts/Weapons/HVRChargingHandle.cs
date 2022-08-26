@@ -82,7 +82,15 @@ namespace HurricaneVR.Framework.Weapons
 
                 if (amount > 0)
                 {
-                    transform.position = Forward.position + backDirection.normalized * amount * Difficulty;
+                    
+                    Vector3 newPosition = Forward.position + backDirection.normalized * amount * Difficulty;
+
+                    //this needs to be modified to only move on certain axes
+
+                    Debug.Log("position before new pos " + transform.position);
+
+                    transform.position = new Vector3(transform.position.x, transform.position.y, newPosition.z);
+                    Debug.Log("position after new pos " + transform.position);
 
                     var distance = Vector3.Distance(transform.position, Forward.position);
 
@@ -132,6 +140,8 @@ namespace HurricaneVR.Framework.Weapons
         {
             base.OnGrabbed(grabber);
             GrabbedPositionTracker.transform.localPosition = transform.InverseTransformPoint(grabber.transform.position);
+            Debug.Log("grabbed position tracker " + GrabbedPositionTracker.transform.localPosition);
+            //Debug.Break();
         }
 
         protected override void OnReleased(HVRGrabberBase grabber)
