@@ -145,9 +145,11 @@ public class LaserBullet : MonoBehaviour
 
         Debug.Log("laser bullet hit " +  collision.gameObject.name);
 
-        if (collision.gameObject.name == "PhotonSwordContainer")
+        if (collision.gameObject.name == "PhotonSwordParent")
         {
+            Debug.Log("throw saber");
             ThrowWeapon(collision.gameObject);
+
         }
 
 

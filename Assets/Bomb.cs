@@ -100,13 +100,18 @@ public class Bomb : MonoBehaviour
             return;
         }
 
-
-        if (collision.gameObject.transform?.parent.gameObject.name == "XRRig")
+        //need to do a check whether or not it has has parent first 
+        if(collision.gameObject.transform?.parent)
         {
-            //Debug.Log("Is hit?");
-            DestroyBomb(true);
-            DamagePlayer(50);
+            if (collision.gameObject.transform.parent.gameObject.name == "XRRig")
+            {
+                //Debug.Log("Is hit?");
+                DestroyBomb(true);
+                DamagePlayer(50);
+            }
         }
+
+        
     }
 
     private void DamagePlayer(int damage)

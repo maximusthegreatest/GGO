@@ -6,12 +6,14 @@ using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Core.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+
 using UnityEngine.Serialization;
 
 namespace HurricaneVR.Framework.Weapons
 {
     public class HVRChargingHandle : HVRGrabbable
     {
+
         [Header("Charging Handle Events")]
 
         public UnityEvent FullRelease = new UnityEvent();
@@ -26,6 +28,7 @@ namespace HurricaneVR.Framework.Weapons
 
         [Tooltip("Bolt that moves with the charging handle")]
         public HVRBolt Bolt;
+
 
         [Header("Required Tracking Transforms")]
         [Tooltip("Maximum charging handle back position")]
@@ -73,23 +76,30 @@ namespace HurricaneVR.Framework.Weapons
         {
             base.ProcessUpdate();
 
+            //do a check here and see if the bolt has rotated first
 
             if (PrimaryGrabber)
             {
                 var pullDirection = (PrimaryGrabber.transform.position - GrabbedPositionTracker.transform.position);
+
                 var backDirection = (MaximumPosition.position - Forward.position).normalized * 10;
+                
                 var amount = Vector3.Dot(pullDirection, backDirection);
+                
+                
+                //TextMeshProUGUI amountText = GetComponent<TextMeshProUGUI>().text;
 
                 if (amount > 0)
                 {
-                    
+                    Debug.Log("apply pull");
                     Vector3 newPosition = Forward.position + backDirection.normalized * amount * Difficulty;
 
                     //this needs to be modified to only move on certain axes
 
                     Debug.Log("position before new pos " + transform.position);
 
-                    transform.position = new Vector3(transform.position.x, transform.position.y, newPosition.z);
+                    //transform.position = new Vector3(transform.position.x, transform.position.y, newPosition.z);
+                    transform.position = newPosition;
                     Debug.Log("position after new pos " + transform.position);
 
                     var distance = Vector3.Distance(transform.position, Forward.position);
@@ -138,9 +148,8 @@ namespace HurricaneVR.Framework.Weapons
 
         protected override void OnGrabbed(HVRGrabberBase grabber)
         {
-            base.OnGrabbed(grabber);
+            base.OnGrabbed(grabber);            
             GrabbedPositionTracker.transform.localPosition = transform.InverseTransformPoint(grabber.transform.position);
-            Debug.Log("grabbed position tracker " + GrabbedPositionTracker.transform.localPosition);
             //Debug.Break();
         }
 

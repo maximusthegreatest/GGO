@@ -74,6 +74,10 @@ namespace HurricaneVR.Framework.Components
                     return;
 
                 var currentVector = transform.localRotation * LocalAxisStart;
+                Debug.Log("loc rot " + transform.localRotation);    
+                Debug.Log("current vector " + currentVector);
+                //Debug.Break();
+
                 var rotationAxis = LocalRotationAxis;
 
                 var controllerRotation = new Vector3(
@@ -81,13 +85,19 @@ namespace HurricaneVR.Framework.Components
                     PrimaryGrabber.HVRTrackedController.DeltaEulerZ,
                     PrimaryGrabber.HVRTrackedController.DeltaEulerZ);
 
+                
+
                 controllerRotation.Scale(-rotationAxis);
 
                 var rotation = Quaternion.Euler(controllerRotation);
+                
 
                 var newRotation = transform.localRotation * rotation;
 
+                
                 var newVector = newRotation * LocalAxisStart;
+
+                Debug.Log("Controller rotation " + newVector);
 
                 var delta = -PrimaryGrabber.HVRTrackedController.DeltaEulerZ;
 
