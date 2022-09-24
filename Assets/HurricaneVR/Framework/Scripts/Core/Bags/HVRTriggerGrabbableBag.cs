@@ -29,7 +29,9 @@ namespace HurricaneVR.Framework.Core.Bags
         }
 
         private void OnTriggerEnter(Collider other)
-        {            
+        {
+            Debug.Log(gameObject.transform.parent.name + " grabbable bag is entering trigger area of " + other.gameObject.name );
+
             var grabbable = other.GetComponent<HVRGrabbable>();
             var childGrabbable = other.GetComponent<HVRGrabbableChild>();
 
@@ -52,7 +54,8 @@ namespace HurricaneVR.Framework.Core.Bags
             }
 
             if (grabbable)
-            {                
+            {
+                //Debug.Log(gameObject.transform.parent.name + " grabbable bag is entering trigger area of " + other.gameObject.name + " made it");
                 if (grabbable.FilterGrabColliders && !grabbable.GrabCollidersSet.Contains(other))
                 {                    
                     return;
@@ -76,7 +79,6 @@ namespace HurricaneVR.Framework.Core.Bags
 
         private void OnTriggerExit(Collider other)
         {
-
 
             var grabbable = other.GetComponent<HVRGrabbable>();
             var childGrabbable = other.GetComponent<HVRGrabbableChild>();

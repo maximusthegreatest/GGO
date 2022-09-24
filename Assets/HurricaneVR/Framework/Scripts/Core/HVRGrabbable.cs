@@ -901,8 +901,10 @@ namespace HurricaneVR.Framework.Core
                 Socket = null;
             }
 
+            
+
             if (!PrimaryGrabber && LinkedSocket)
-            {
+            {                
                 StartCoroutine(CheckLinkedSocket());
             }
         }

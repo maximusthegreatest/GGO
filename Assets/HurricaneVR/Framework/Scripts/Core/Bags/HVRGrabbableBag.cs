@@ -92,6 +92,7 @@ namespace HurricaneVR.Framework.Core.Bags
             for (var i = 0; i < _allGrabbables.Count; i++)
             {
                 var grabbable = _allGrabbables[i];
+                Debug.Log("From all grab bag, name: " + grabbable.gameObject.name);
                 if (!grabbable || !grabbable.gameObject.activeSelf || !grabbable.enabled)
                 {
                     anyDestroyedOrDisabled = true;
