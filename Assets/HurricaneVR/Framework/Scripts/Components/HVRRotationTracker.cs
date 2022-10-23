@@ -1,8 +1,16 @@
-﻿using HurricaneVR.Framework.Shared;
+﻿using System;
+using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.Utils;
+using HurricaneVR.Framework.Shared;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace HurricaneVR.Framework.Components
 {
+    /// <summary>
+    /// Used to track the rotation in degrees about a defined axis of rotation.
+    /// Degrees are reported from the starting rotation of the transform.
+    /// </summary>
     public class HVRRotationTracker : MonoBehaviour
     {
         [Tooltip("Local axis of rotation")]
@@ -16,6 +24,9 @@ namespace HurricaneVR.Framework.Components
 
         [Tooltip("Max angle for Step Size calculation, should match limits set on whatever is controlling the rotational limits of this object")]
         public float MaximumAngle = 360f;
+
+        public RotationTrackerStepEvent StepChanged = new RotationTrackerStepEvent();
+        public RotationTrackerAngleEvent AngleChanged = new RotationTrackerAngleEvent();
 
         [Header("Debug")]
 
@@ -75,7 +86,7 @@ namespace HurricaneVR.Framework.Components
             {
                 _angleVector = currentVector;
                 Angle += angleDelta;
-                OnAngleChanged(ClampedAngle, angleDelta, ClampedAngle / 360f, true);
+                OnAngleChanged(ClampedAngle, angleDelta);
             }
 
             var stepAngle = ClampedAngle;
@@ -105,14 +116,19 @@ namespace HurricaneVR.Framework.Components
 
         protected virtual void OnStepChanged(int step, bool raiseEvents)
         {
-            //if (raiseEvents)
-            //DialStepChanged.Invoke(step);
+            StepChanged.Invoke(step);
         }
 
-        protected virtual void OnAngleChanged(float angle, float delta, float percent, bool raiseEvents)
+        protected virtual void OnAngleChanged(float angle, float delta)
         {
-            //if (raiseEvents)
-            //DialTurned.Invoke(angle, delta, percent);
+            AngleChanged.Invoke(angle, delta);
         }
     }
+
+    [Serializable]
+    public class RotationTrackerAngleEvent : UnityEvent<float, float> { }
+
+
+    [Serializable]
+    public class RotationTrackerStepEvent : UnityEvent<int> { }
 }

@@ -18,6 +18,9 @@ namespace HurricaneVR.Framework.Core.Utils
         public AudioSource SFXReferenceSource;
         public int SFXSourceCount;
 
+        [Tooltip("Changes object name to the clip. This will create garbage.")]
+        public bool SetClipName;
+
         Dictionary<Guid, PlayEvent> m_PlayEvents = new Dictionary<Guid, PlayEvent>();
         List<int> m_PlayingSources = new List<int>();
 
@@ -64,13 +67,13 @@ namespace HurricaneVR.Framework.Core.Utils
             for (int i = 0; i < m_PlayingSources.Count; ++i)
             {
                 int id = m_PlayingSources[i];
+                
                 if (!m_SFXSourcePool[id].isPlaying)
                 {
                     m_SFXSourcePool[id].gameObject.SetActive(false);
+                    m_PlayingSources.RemoveAt(i);
+                    i--;
                 }
-
-                m_PlayingSources.RemoveAt(i);
-                i--;
             }
 
             IDToRemove.Clear();
@@ -120,7 +123,11 @@ namespace HurricaneVR.Framework.Core.Utils
             m_UsedSource = m_UsedSource + 1;
             if (m_UsedSource >= m_SFXSourcePool.Length) m_UsedSource = 0;
 
-            audioSource.name = clip.name;
+            if (SetClipName && Application.isEditor)
+            {
+                audioSource.name = clip.name;
+            }
+
             audioSource.gameObject.SetActive(true);
             audioSource.transform.position = position;
             audioSource.clip = clip;

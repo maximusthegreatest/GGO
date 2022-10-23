@@ -14,36 +14,34 @@ namespace HurricaneVR.Framework.Weapons
         [Tooltip("Bullet Range")] 
         public float MaxRange = 40f;
 
-
         [Header("Magazine Cleanup")]
         [Tooltip("Should the empty magazine be destroyed")]
         public bool DestroyIfEmpty = true;
         [Tooltip("How long to wait after ejecting the magazine to destroy it")]
         public float EmptyDestroyTimer = 3f;
-        public bool destroyOnEject;
 
-        [SerializeField]
-        private int CurrentCount = 15;
+        [Header("Debug")]
+        public int CurrentCount;
 
         public bool HasAmmo => CurrentCount > 0;
         public bool IsEmpty => CurrentCount <= 0;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             CurrentCount = StartingCount;
         }
 
-        public void AddBullet()
+        public virtual void AddBullet()
         {
             CurrentCount++;
         }
 
-        public bool CanAddBullet()
+        public virtual bool CanAddBullet()
         {
             return CurrentCount < MaxCount;
         }
 
-        public bool TryAddBullet()
+        public virtual bool TryAddBullet()
         {
             if (CanAddBullet())
             {
@@ -53,21 +51,16 @@ namespace HurricaneVR.Framework.Weapons
             return false;
         }
 
-        public void RemoveBullet()
+        public virtual void RemoveBullet()
         {
             CurrentCount--;
             if (CurrentCount < 0)
                 CurrentCount = 0;
         }
 
-        public void StartDestroy()
+        public virtual void StartDestroy()
         {
             Destroy(gameObject, EmptyDestroyTimer);
-        }
-
-        public int GetCurrentAmmo()
-        {
-            return CurrentCount;
         }
     }
 }

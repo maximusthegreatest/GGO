@@ -14,6 +14,9 @@ namespace HurricaneVR.Framework.Core.Utils
         {
             foreach (var t in Transforms)
             {
+                if (!t)
+                    continue;
+
                 var colliders = t.GetComponentsInChildren<Collider>();
 
                 if (TriggersOnly)
@@ -24,6 +27,9 @@ namespace HurricaneVR.Framework.Core.Utils
 
                 foreach (var other in Transforms.Where(e => e != t))
                 {
+                    if (!other)
+                        continue;
+
                     var otherColliders = other.GetComponentsInChildren<Collider>();
 
                     if (TriggersOnly)

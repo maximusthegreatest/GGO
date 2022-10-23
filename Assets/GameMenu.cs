@@ -54,7 +54,7 @@ public class GameMenu : MonoBehaviour
     public void HighScore()
     {
         //autoScaler.ResizeIKCharacter();
-        calibration.AutoCalibrateCharacter();
+        //calibration.AutoCalibrateCharacter();
         //scale laser spawner        
 
         float calHeight = laserSpawnerScript.ik.solver.spine.headTarget.position.y - laserSpawnerScript.ik.references.root.position.y;

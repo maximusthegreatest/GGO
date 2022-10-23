@@ -13,7 +13,11 @@ public class Bomb : MonoBehaviour
     public ParticleSystem bombShatterTriangleParticleRed;
     public ParticleSystem bombShatterParticleRed;
 
+    public BombDestroy bombDestroy;
+
     public Vector3 rotSpeed;
+
+    public bool hitPlayer = false;
 
     [SerializeField]
     private AudioClip bombExplosionSound;
@@ -26,6 +30,9 @@ public class Bomb : MonoBehaviour
     {
         //Destroy bomb regardless of what happens after certain amount of time
         Destroy(gameObject, 20f);
+
+        bombDestroy.bomb = this;
+
 
 
         GameObject gunGame = GameObject.Find("GunGame");
@@ -76,7 +83,8 @@ public class Bomb : MonoBehaviour
         if (collision.gameObject.name == "MadsonD9")
         {            
             DamagePlayer(50);
-            DestroyBomb(true);
+            hitPlayer = true;
+            bombDestroy.Destroy();
             return;
             //DamagePlayer();
         }
@@ -84,19 +92,19 @@ public class Bomb : MonoBehaviour
 
         if (collision.gameObject.name == "Bullet(Clone)")
         {
-            DestroyBomb();
+            bombDestroy.Destroy();
             return;
         }
 
         if (collision.gameObject.name == "Blade")
         {
-            DestroyBomb();
+            bombDestroy.Destroy();
             return;
         }
 
         if (collision.gameObject.name == "mine(Clone)")
         {
-            DestroyBomb();
+            bombDestroy.Destroy();
             return;
         }
 
@@ -106,7 +114,8 @@ public class Bomb : MonoBehaviour
             if (collision.gameObject.transform.parent.gameObject.name == "XRRig")
             {
                 //Debug.Log("Is hit?");
-                DestroyBomb(true);
+                hitPlayer = true;
+                bombDestroy.Destroy();
                 DamagePlayer(50);
             }
         }

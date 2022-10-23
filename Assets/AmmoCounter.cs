@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using HurricaneVR.Framework.Weapons;
+using HurricaneVR.Framework.Weapons.Guns;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 
@@ -9,7 +9,7 @@ public class AmmoCounter : MonoBehaviour
 {
     int _ammoCount;
 
-    public MadsonD9 pistol;
+    public HVRPistol pistol;
     public Text ammoCountText;
 
     private bool _isReloading;
@@ -42,7 +42,7 @@ public class AmmoCounter : MonoBehaviour
         if(!_isReloading)
         {
             //get ammo and set the text
-            _ammoCount = pistol.Ammo.GetCurrentAmmo();
+            _ammoCount = pistol.Ammo.CurrentCount;
             if(pistol.IsBulletChambered)
             {
                 _ammoCount++;

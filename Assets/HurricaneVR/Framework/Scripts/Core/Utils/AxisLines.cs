@@ -2,6 +2,7 @@
 
 namespace HurricaneVR.Framework.Core.Utils
 {
+    [ExecuteInEditMode]
     public class AxisLines : MonoBehaviour
     {
         public bool DrawX = true;

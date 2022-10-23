@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd81e9e4d5c74d6e99fd2fadd5e6c0f0, type: 3}
   m_Name: HVR_Recoil_Pistol
   m_EditorClassIdentifier: 
-  UpForce: 1
-  BackwardsForce: 0
+  UpForce: 0.6
+  BackwardsForce: 10
   TwoHandUpForce: 0.2
   TwoHandBackwardsForce: 0
   UseTwoHandRecoilForce: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
   TwoHandMaxUpForce: 200
   MaxSideForce: 12
   TwoHandMaxSideForce: 0
-  RecoveryDelay: 0.05
-  TwoHandedRecoveryDelay: 0.02
+  RecoveryDelay: 0
+  TwoHandedRecoveryDelay: 0
   RecoveryTime: 0
-  TwoHandedRecoveryTime: 0.5
+  TwoHandedRecoveryTime: 0

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using HurricaneVR.Framework.Shared.Utilities;
 using UnityEditor;
@@ -20,12 +22,20 @@ namespace HurricaneVR.Editor
         private const string URLPatreon = "https://www.patreon.com/user?u=46531723&fan_landing=true";
 
         private const string URLBasicGrabbableWithPose = "https://www.youtube.com/watch?v=HZQ6QdMmZ34";
-        private const string URLVRIKIntegrationSetup = "https://www.youtube.com/watch?v=PgfULQ-Zp_E";
+        private const string URLVRIKIntegrationSetup = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/integrations/finalik.html";
         private const string LatestNotes = "HVRLatestReleaseNotes";
+
+        private const string URLManual = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/intro.html";
+        private const string URLHandGrabber = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/hands.html";
+        private const string URLSockets = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/sockets.html";
+        private const string URLSetup = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/setup.html";
+        private const string URLCustomHand = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/hand_setup.html";
+        private const string URLDoor = "https://cloudwalker2020.github.io/HurricaneVR-Docs/manual/components/door.html";
+        private const string URLDiscord = "https://discord.com/invite/7QUXEcuwKY";
 
         private const string DEFINESteamVR = "HVR_STEAMVR";
         private const string DEFINEOculus = "HVR_OCULUS";
-        private const string DEFINEPun = "HVR_PUN";
+        //private const string DEFINEPun = "HVR_PUN";
 
         private static HVRSetupWindow _window;
         private VisualElement _root;
@@ -37,6 +47,7 @@ namespace HurricaneVR.Editor
         {
             _window = GetWindow<HVRSetupWindow>(true);
             _window.titleContent = new GUIContent("Hurricane v" + HVREditorManager.Version);
+            _window.minSize = new Vector2(800f, 600f);
         }
 
 #if CLOUDWALKER
@@ -61,15 +72,11 @@ namespace HurricaneVR.Editor
             _root.Add(visualTree.CloneTree());
 
             var projectSetupPanel = _root.Q<VisualElement>("ProjectSetupPanel");
-            var debugPanel = _root.Q<VisualElement>("DebugPanel");
             var notesPanel = _root.Q<VisualElement>("ReleaseNotesPanel");
-            var tutPanel = _root.Q<VisualElement>("TutorialsPanel");
             var aboutPanel = _root.Q<VisualElement>("AboutPanel");
 
             _panels.Add(projectSetupPanel);
-            _panels.Add(debugPanel);
             _panels.Add(notesPanel);
-            _panels.Add(tutPanel);
             _panels.Add(aboutPanel);
 
             _root.Q<Button>("BtnProjectSetup").clickable.clicked += () =>
@@ -77,10 +84,6 @@ namespace HurricaneVR.Editor
                 UpdatePanel(projectSetupPanel);
             };
 
-            //_root.Q<Button>("BtnDiagnostics").clickable.clicked += () =>
-            //{
-            //    UpdatePanel(debugPanel);
-            //};
 
             _root.Q<Button>("BtnAbout").clickable.clicked += () =>
             {
@@ -90,11 +93,6 @@ namespace HurricaneVR.Editor
             _root.Q<Button>("BtnReleaseNotes").clickable.clicked += () =>
             {
                 UpdatePanel(notesPanel);
-            };
-
-            _root.Q<Button>("BtnTutorials").clickable.clicked += () =>
-            {
-                UpdatePanel(tutPanel);
             };
 
 
@@ -114,13 +112,20 @@ namespace HurricaneVR.Editor
 
             SetupUrl("BtnReview", URLHurricaneReview);
             SetupUrl("BtnKofi", URLKofi);
-            SetupUrl("BtnPatreon", URLPatreon);
+            SetupUrl("btnDocs", URLManual);
+            SetupUrl("btnSockets", URLSockets);
+            SetupUrl("btnHandGrabber", URLHandGrabber);
+            SetupUrl("btnDiscord", URLDiscord);
+            SetupUrl("btnSetup", URLSetup);
+            SetupUrl("btnCustomHand", URLCustomHand);
+            SetupUrl("btnDoorSetup", URLDoor);
+            //SetupUrl("BtnPatreon", URLPatreon);
 
             UpdatePanel(notesPanel);
 
             SetupDefineButton("BtnEnableSteamVR", "BtnDisableSteamVR", DEFINESteamVR);
             SetupDefineButton("BtnEnableOculus", "BtnDisableOculus", DEFINEOculus);
-            SetupDefineButton("BtnEnablePUN", "BtnDisablePUN", DEFINEPun);
+            //SetupDefineButton("BtnEnablePUN", "BtnDisablePUN", DEFINEPun);
 
             _root.Q<Button>("BtnExtractSteamVR").clickable.clicked += () =>
             {
@@ -132,10 +137,10 @@ namespace HurricaneVR.Editor
                 AssetDatabase.ImportPackage(Application.dataPath + "/HurricaneVR/Framework/Integrations/OculusIntegration.unitypackage", true);
             };
 
-            _root.Q<Button>("BtnExtractPUN").clickable.clicked += () =>
-            {
-                AssetDatabase.ImportPackage(Application.dataPath + "/HurricaneVR/Framework/Integrations/PUN2Integration.unitypackage", true);
-            };
+            //_root.Q<Button>("BtnExtractPUN").clickable.clicked += () =>
+            //{
+            //    AssetDatabase.ImportPackage(Application.dataPath + "/HurricaneVR/Framework/Integrations/PUN2Integration.unitypackage", true);
+            //};
         }
 
         private void SetupUrl(string buttonName, string url)
@@ -170,13 +175,13 @@ namespace HurricaneVR.Editor
                 var so = new SerializedObject(asset[0]);
 
                 var prop = so.FindProperty("m_DefaultSolverIterations");
-                prop.intValue = 10;
+                prop.intValue = 6;
 
                 prop = so.FindProperty("m_DefaultSolverVelocityIterations");
-                prop.intValue = 10;
+                prop.intValue = 2;
 
                 prop = so.FindProperty("m_DefaultMaxAngularSpeed");
-                prop.floatValue = 100f;
+                prop.floatValue = 30f;
 
                 so.ApplyModifiedProperties();
                 so.Update();
@@ -213,9 +218,6 @@ namespace HurricaneVR.Editor
                 SetLayer(HVRLayers.Grabbable, HVRLayers.Hand, false);
                 SetLayer(HVRLayers.Grabbable, HVRLayers.Grabbable, false);
                 SetLayer(HVRLayers.Hand, HVRLayers.Hand, false);
-
-                IgnoreAllBut(HVRLayers.LeftTarget, HVRLayers.Hand);
-                IgnoreAllBut(HVRLayers.RightTarget, HVRLayers.Hand);
 
                 so.ApplyModifiedProperties();
                 so.Update();
@@ -284,12 +286,24 @@ namespace HurricaneVR.Editor
             Physics.IgnoreLayerCollision(layerOne, layerTwo, ignore);
         }
 
+        private void SetLayer(HVRLayers one, int layerTwo, bool ignore = true)
+        {
+            var layerOne = LayerMask.NameToLayer(one.ToString());
+            
+            if (layerOne < 0)
+            {
+                Debug.LogWarning($"{one} layer does not exist.");
+            }
+
+            if (layerOne < 0 || layerTwo < 0)
+                return;
+
+            Physics.IgnoreLayerCollision(layerOne, layerTwo, ignore);
+        }
+
         private void SetupLayers()
         {
-            const int PlayerLayer = 8;
-            const int GrabbableLayer = 20;
-            const int HandLayer = 21;
-
+            var log = new StringBuilder();
 
             UnityEngine.Object[] asset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset");
 
@@ -301,64 +315,17 @@ namespace HurricaneVR.Editor
                     SerializedObject serializedObject = new SerializedObject(asset[0]);
                     SerializedProperty layers = serializedObject.FindProperty("layers");
 
+                    //TryShiftOldPlayerLayer(layers);
 
+                    CleanUpOldDynamicPoseLayers(layers);
 
-                    var leftSet = false;
-                    var rightSet = false;
-
-
-                    for (int i = 9; i < layers.arraySize; ++i)
-                    {
-
-                        var layer = layers.GetArrayElementAtIndex(i).stringValue;
-
-                        if (layer == "LeftTarget")
-                        {
-                            leftSet = true;
-                        }
-
-                        if (layer == "RightTarget")
-                        {
-                            rightSet = true;
-                        }
-                    }
-
-                    if (!leftSet)
-                    {
-                        Debug.Log($"LeftTarget missing, will try to assign.");
-                    }
-
-                    if (!rightSet)
-                    {
-                        Debug.Log($"RightTarget missing, will try to assign.");
-                    }
-
-                    TryUpdateLayer(layers, PlayerLayer, "Player");
-                    TryUpdateLayer(layers, GrabbableLayer, "Grabbable");
-                    TryUpdateLayer(layers, HandLayer, "Hand");
-
-                    for (int i = 9; i < layers.arraySize; ++i)
-                    {
-                        if (string.IsNullOrWhiteSpace(layers.GetArrayElementAtIndex(i).stringValue))
-                        {
-                            if (!leftSet)
-                            {
-                                layers.GetArrayElementAtIndex(i).stringValue = "LeftTarget";
-                                Debug.Log($"LeftTarget assigned to layer {i}");
-                                leftSet = true;
-                            }
-                            else if (!rightSet)
-                            {
-                                layers.GetArrayElementAtIndex(i).stringValue = "RightTarget";
-                                Debug.Log($"RightTarget assigned to layer {i}");
-                                rightSet = true;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                    }
+                    TryUpdateLayer(layers, HVRConstants.PlayerLayer, HVRLayers.Player.ToString(), log);
+                    log.AppendLine("-----------------");
+                    TryUpdateLayer(layers, HVRConstants.GrabbableLayer, HVRLayers.Grabbable.ToString(), log);
+                    log.AppendLine("-----------------");
+                    TryUpdateLayer(layers, HVRConstants.HandLayer, HVRLayers.Hand.ToString(), log);
+                    log.AppendLine("-----------------");
+                    TryUpdateDynamicPoseLayer(layers, log);
 
                     serializedObject.ApplyModifiedProperties();
                     serializedObject.Update();
@@ -366,6 +333,8 @@ namespace HurricaneVR.Editor
                     EditorUtility.SetDirty(tagManager);
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
+
+                    EditorUtility.DisplayDialog("Layer Report", log.ToString(), "Ok");
 
                     Debug.Log($"TagManager saved.");
                 }
@@ -380,34 +349,109 @@ namespace HurricaneVR.Editor
             }
         }
 
-        private void TryUpdateLayer(SerializedProperty layers, int layer, string layerName)
+        //private static void TryShiftOldPlayerLayer(SerializedProperty layers)
+        //{
+        //    var playerOldValue = layers.GetArrayElementAtIndex(HVRConstants.OldPlayerLayer).stringValue;
+        //    var playerNewValue = layers.GetArrayElementAtIndex(HVRConstants.PlayerLayer).stringValue;
+
+        //    if (playerOldValue == HVRLayers.Player.ToString() && string.IsNullOrWhiteSpace(playerNewValue))
+        //    {
+        //        layers.GetArrayElementAtIndex(HVRConstants.PlayerLayer).stringValue = HVRLayers.Player.ToString();
+        //        layers.GetArrayElementAtIndex(HVRConstants.OldPlayerLayer).stringValue = null;
+        //    }
+        //}
+
+        private static void TryUpdateDynamicPoseLayer(SerializedProperty layers, StringBuilder log)
         {
-            for (var i = 8; i < layers.arraySize; ++i)
+            var dynamicPoseSet = false;
+
+            for (int i = 8; i < layers.arraySize; ++i)
             {
-                if (i == layer)
-                    continue;
+                var layer = layers.GetArrayElementAtIndex(i).stringValue;
 
-                var layerN = layers.GetArrayElementAtIndex(i).stringValue;
-
-                if (layerN == layerName)
+                if (layer == HVRLayers.DynamicPose.ToString())
                 {
-                    Debug.Log($"{layerName} was found at position {i}. Remove it and try again.");
+                    dynamicPoseSet = true;
+                    break;
                 }
             }
 
-            var playerLayer = layers.GetArrayElementAtIndex(layer);
-            if (string.IsNullOrWhiteSpace(playerLayer.stringValue))
+            if (!dynamicPoseSet)
             {
-                Debug.Log($"{layerName} assigned to layer {layer}");
-                playerLayer.stringValue = layerName;
+                for (int i = 9; i < layers.arraySize; ++i)
+                {
+                    if (string.IsNullOrWhiteSpace(layers.GetArrayElementAtIndex(i).stringValue))
+                    {
+                        layers.GetArrayElementAtIndex(i).stringValue = HVRLayers.DynamicPose.ToString();
+                        log.AppendLine($"{HVRLayers.DynamicPose} assigned to layer {i}");
+                        dynamicPoseSet = true;
+                        break;
+                    }
+                }
             }
-            else if (playerLayer.stringValue != layerName)
+
+            if (!dynamicPoseSet)
             {
-                Debug.LogWarning($"Layer {layer} is already populated with {playerLayer.stringValue}");
+                log.AppendLine($"{HVRLayers.DynamicPose} layer could not be set. Make space for an additional layer and try again.");
+            }
+        }
+
+        private static void CleanUpOldDynamicPoseLayers(SerializedProperty layers)
+        {
+            for (int i = 8; i < layers.arraySize; ++i)
+            {
+                var layer = layers.GetArrayElementAtIndex(i).stringValue;
+
+                if (layer == "LeftTarget" || layer == "RightTarget")
+                {
+                    layers.GetArrayElementAtIndex(i).stringValue = null;
+                }
+            }
+        }
+
+        private void TryUpdateLayer(SerializedProperty layers, int layer, string layerName, StringBuilder log)
+        {
+
+            var anySpace = false;
+
+            for (var i = 8; i < layers.arraySize; ++i)
+            {
+                var layerN = layers.GetArrayElementAtIndex(i).stringValue;
+
+                if (string.IsNullOrWhiteSpace(layerN))
+                {
+                    anySpace = true;
+                }
+                
+                if (i == layer)
+                    continue;
+
+                if (layerN == layerName)
+                {
+                    log.AppendLine($"{layerName} was found at position {i}. Intended position is {layer}. Remove it and try again.");
+                    return;
+                }
+            }
+
+            if (!anySpace)
+            {
+                log.AppendLine($"No layer space available for required layer '{layerName}'. Make space and try again.");
+                return;
+            }
+
+            var property = layers.GetArrayElementAtIndex(layer);
+            if (string.IsNullOrWhiteSpace(property.stringValue))
+            {
+                log.AppendLine($"{layerName} assigned to layer {layer}");
+                property.stringValue = layerName;
+            }
+            else if (property.stringValue != layerName)
+            {
+                log.AppendLine($"{property.stringValue} was found at position {layer}. Intended layer is {layerName}. Remove and try again, or manually place {layerName} in another slot and update any {layerName} objects accordingly.");
             }
             else
             {
-                Debug.Log($"{layerName} already exists at slot {layer}");
+                log.AppendLine($"{layerName} already exists at slot {layer}");
             }
         }
 
@@ -437,9 +481,9 @@ namespace HurricaneVR.Editor
                     case DEFINESteamVR:
                         dir = $"SteamVR";
                         break;
-                    case DEFINEPun:
-                        dir = "PUN";
-                        break;
+                    //case DEFINEPun:
+                    //    dir = "PUN";
+                    //    break;
                     default:
                         return;
                 }

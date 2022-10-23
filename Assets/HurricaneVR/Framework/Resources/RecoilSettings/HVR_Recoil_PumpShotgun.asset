@@ -12,26 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd81e9e4d5c74d6e99fd2fadd5e6c0f0, type: 3}
   m_Name: HVR_Recoil_PumpShotgun
   m_EditorClassIdentifier: 
-  UpForce: 0.5
-  BackwardsForce: 10
-  TwoHandUpForce: 0
+  UpForce: 4
+  BackwardsForce: 15
+  TwoHandUpForce: 2
   TwoHandBackwardsForce: 0
-  UseTwoHandRecoilForce: 0
+  UseTwoHandRecoilForce: 1
   ImpulseForce: 1
-  RandomSideToSideRecoil: 0
-  SideToSideMin: -0.03
-  SideToSideMax: 0.03
+  RandomSideToSideRecoil: 1
+  SideToSideMin: -1
+  SideToSideMax: 1
   TwoHandSideToSideMin: 0
-  TwoHandSideToSideMax: 10
+  TwoHandSideToSideMax: 0
   LimitRecoilForce: 1
-  MaxUpForce: 100
+  MaxUpForce: 5
   UseTwoHandMaxUpforce: 0
   UseTwoHandMaxSideForce: 0
-  MaxBackForce: 100
+  MaxBackForce: 2000
   TwoHandMaxUpForce: 200
-  MaxSideForce: 10
+  MaxSideForce: 200
   TwoHandMaxSideForce: 0
-  RecoveryDelay: 0.1
+  RecoveryDelay: 0
   TwoHandedRecoveryDelay: 0.15
   RecoveryTime: 0.1
   TwoHandedRecoveryTime: 0.15

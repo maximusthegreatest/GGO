@@ -1,4 +1,5 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/HurricaneVR/Framework/Scripts/ControllerInput/HVRInputActions.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/HurricaneVR/Framework/Scripts/ControllerInput/InputSystem/HVRInputActions.inputactions'
+
 #if ENABLE_INPUT_SYSTEM
 using System;
 using System.Collections;
@@ -123,6 +124,14 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""GripForce"",
+                    ""type"": ""Value"",
+                    ""id"": ""36b1a84c-21c8-4826-8ecc-bfd5fea14c7b"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""SecondaryButton"",
                     ""type"": ""Button"",
                     ""id"": ""1414e4ef-05d7-40b1-b759-aa2c2c9cee56"",
@@ -143,6 +152,30 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""a2c3edea-193d-4944-91ba-2e2630b711d2"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ControllerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""4ac0bda8-e0c1-4d35-9125-d1a86167ce4c"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ControllerRotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""5c60ec11-4989-4ca5-8c81-a31ee8afad7f"",
+                    ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Haptics"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c2bd3cd6-8deb-46c4-95a9-93eaa08c44b3"",
+                    ""expectedControlType"": ""Haptic"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -205,6 +238,17 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6f261d50-7cf3-4d07-9fe5-f57d21751d4d"",
+                    ""path"": ""<ViveController>{LeftHand}/menu"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""54ac7ab0-8ca9-4cbc-a6d1-da5ee0b055cb"",
                     ""path"": ""<XRController>{LeftHand}/{primary2DAxis}"",
                     ""interactions"": """",
@@ -249,6 +293,17 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""d8e6dbb2-9e0e-453c-aaa5-5967f2fab6f6"",
+                    ""path"": ""<ViveController>{LeftHand}/trackpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Secondary2DAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""fadeed58-e6fc-4cc4-9fdc-5cfae044209c"",
                     ""path"": ""<XRController>{LeftHand}/{secondary2DAxisClick}"",
                     ""interactions"": """",
@@ -260,11 +315,33 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""366ac51f-3093-4ead-8dba-662fe2cbb81f"",
+                    ""path"": ""<ViveController>{LeftHand}/trackpadClicked"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Secondary2DAxisClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b74594f8-e87a-43ae-82ec-47612e07bfb3"",
                     ""path"": ""<XRController>{LeftHand}/{secondary2DAxisTouch}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Secondary2DAxisTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72eeb177-b210-4a4a-8a29-1db62419451d"",
+                    ""path"": ""<ViveController>{LeftHand}/trackpadTouched"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
                     ""action"": ""Secondary2DAxisTouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -332,6 +409,50 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TriggerTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a25f7f9-be46-4a4a-b346-a0d2c02c2817"",
+                    ""path"": ""<ValveIndexController>{LeftHand}/gripForce"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""GripForce"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfa3aaa8-78b6-48e7-8002-beb9903fe613"",
+                    ""path"": ""<XRController>{LeftHand}/pointerPosition"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""ControllerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""61b858cd-a94a-42be-b4ea-566b0502fec7"",
+                    ""path"": ""<XRController>{LeftHand}/pointerRotation"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""ControllerRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e719282e-3d03-4d88-aa13-873641db842a"",
+                    ""path"": ""<XRController>{LeftHand}/haptic"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Haptics"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -446,6 +567,14 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""GripForce"",
+                    ""type"": ""Value"",
+                    ""id"": ""0432db25-4c80-4b6f-9b2d-8986bef39507"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""SecondaryButton"",
                     ""type"": ""Button"",
                     ""id"": ""cba87b5e-c43b-4c38-b5dc-320d8fbb6136"",
@@ -466,6 +595,30 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""19c8c1da-1f49-498c-8cb4-be13aab1abc5"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ControllerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""07b14640-88dd-4da1-9a5c-c9039894b5cc"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ControllerRotation"",
+                    ""type"": ""Value"",
+                    ""id"": ""5d32a867-da55-4d98-9417-50f370471336"",
+                    ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Haptics"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7648f0bd-f36f-42c0-ade0-e15b6c3c62fe"",
+                    ""expectedControlType"": ""Haptic"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -528,6 +681,17 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""24b22f5b-4580-4c90-bdaa-47775335806a"",
+                    ""path"": ""<ViveController>{RightHand}/menu"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""488857b2-965c-486c-b24e-e21628ad2a07"",
                     ""path"": ""<XRController>{RightHand}/{primary2DAxis}"",
                     ""interactions"": """",
@@ -572,6 +736,17 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""80b61ccb-82b6-4211-8ba9-e566090957b8"",
+                    ""path"": ""<ViveController>{RightHand}/trackpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Secondary2DAxis"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d094a06a-f8ca-4c85-b478-a5276f7da3e4"",
                     ""path"": ""<XRController>{RightHand}/{secondary2DAxisClick}"",
                     ""interactions"": """",
@@ -583,11 +758,33 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""c33bf2de-0080-4d75-b40b-0d3593ac31d8"",
+                    ""path"": ""<ViveController>{RightHand}/trackpadClicked"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Secondary2DAxisClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""75e038e5-ec3b-417e-adf4-77881b52a1ff"",
                     ""path"": ""<XRController>{RightHand}/{secondary2DAxisTouch}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Secondary2DAxisTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c6386f8-5725-475b-9a82-7a50899c9059"",
+                    ""path"": ""<ViveController>{RightHand}/trackpadTouched"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
                     ""action"": ""Secondary2DAxisTouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -644,6 +841,50 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TriggerTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4192ed0-d0cf-4e23-9667-c97de50aa066"",
+                    ""path"": ""<ValveIndexController>{RightHand}/gripForce"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""GripForce"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b8dde4f-389e-4c1c-b991-1dd5ab5a4191"",
+                    ""path"": ""<XRController>{RightHand}/pointerPosition"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""ControllerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02bbe9e2-867c-4358-8ce9-7aff8fd0a0c1"",
+                    ""path"": ""<XRController>{RightHand}/pointerRotation"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""ControllerRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a59792b-c32d-4272-9a42-d8bcc47580da"",
+                    ""path"": ""<XRController>{RightHand}/haptic"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR Usage"",
+                    ""action"": ""Haptics"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -790,9 +1031,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
         m_LeftHand_Secondary2DAxisTouch = m_LeftHand.FindAction("Secondary2DAxisTouch", throwIfNotFound: true);
         m_LeftHand_Grip = m_LeftHand.FindAction("Grip", throwIfNotFound: true);
         m_LeftHand_GripPress = m_LeftHand.FindAction("GripPress", throwIfNotFound: true);
+        m_LeftHand_GripForce = m_LeftHand.FindAction("GripForce", throwIfNotFound: true);
         m_LeftHand_SecondaryButton = m_LeftHand.FindAction("SecondaryButton", throwIfNotFound: true);
         m_LeftHand_SecondaryTouch = m_LeftHand.FindAction("SecondaryTouch", throwIfNotFound: true);
         m_LeftHand_TriggerTouch = m_LeftHand.FindAction("TriggerTouch", throwIfNotFound: true);
+        m_LeftHand_ControllerPosition = m_LeftHand.FindAction("ControllerPosition", throwIfNotFound: true);
+        m_LeftHand_ControllerRotation = m_LeftHand.FindAction("ControllerRotation", throwIfNotFound: true);
+        m_LeftHand_Haptics = m_LeftHand.FindAction("Haptics", throwIfNotFound: true);
         // RightHand
         m_RightHand = asset.FindActionMap("RightHand", throwIfNotFound: true);
         m_RightHand_TriggerPress = m_RightHand.FindAction("TriggerPress", throwIfNotFound: true);
@@ -808,9 +1053,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
         m_RightHand_Secondary2DAxisTouch = m_RightHand.FindAction("Secondary2DAxisTouch", throwIfNotFound: true);
         m_RightHand_Grip = m_RightHand.FindAction("Grip", throwIfNotFound: true);
         m_RightHand_GripPress = m_RightHand.FindAction("GripPress", throwIfNotFound: true);
+        m_RightHand_GripForce = m_RightHand.FindAction("GripForce", throwIfNotFound: true);
         m_RightHand_SecondaryButton = m_RightHand.FindAction("SecondaryButton", throwIfNotFound: true);
         m_RightHand_SecondaryTouch = m_RightHand.FindAction("SecondaryTouch", throwIfNotFound: true);
         m_RightHand_TriggerTouch = m_RightHand.FindAction("TriggerTouch", throwIfNotFound: true);
+        m_RightHand_ControllerPosition = m_RightHand.FindAction("ControllerPosition", throwIfNotFound: true);
+        m_RightHand_ControllerRotation = m_RightHand.FindAction("ControllerRotation", throwIfNotFound: true);
+        m_RightHand_Haptics = m_RightHand.FindAction("Haptics", throwIfNotFound: true);
         // HMD
         m_HMD = asset.FindActionMap("HMD", throwIfNotFound: true);
         m_HMD_hmdPosition = m_HMD.FindAction("hmdPosition", throwIfNotFound: true);
@@ -882,9 +1131,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_LeftHand_Secondary2DAxisTouch;
     private readonly InputAction m_LeftHand_Grip;
     private readonly InputAction m_LeftHand_GripPress;
+    private readonly InputAction m_LeftHand_GripForce;
     private readonly InputAction m_LeftHand_SecondaryButton;
     private readonly InputAction m_LeftHand_SecondaryTouch;
     private readonly InputAction m_LeftHand_TriggerTouch;
+    private readonly InputAction m_LeftHand_ControllerPosition;
+    private readonly InputAction m_LeftHand_ControllerRotation;
+    private readonly InputAction m_LeftHand_Haptics;
     public struct LeftHandActions
     {
         private @HVRInputActions m_Wrapper;
@@ -902,9 +1155,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
         public InputAction @Secondary2DAxisTouch => m_Wrapper.m_LeftHand_Secondary2DAxisTouch;
         public InputAction @Grip => m_Wrapper.m_LeftHand_Grip;
         public InputAction @GripPress => m_Wrapper.m_LeftHand_GripPress;
+        public InputAction @GripForce => m_Wrapper.m_LeftHand_GripForce;
         public InputAction @SecondaryButton => m_Wrapper.m_LeftHand_SecondaryButton;
         public InputAction @SecondaryTouch => m_Wrapper.m_LeftHand_SecondaryTouch;
         public InputAction @TriggerTouch => m_Wrapper.m_LeftHand_TriggerTouch;
+        public InputAction @ControllerPosition => m_Wrapper.m_LeftHand_ControllerPosition;
+        public InputAction @ControllerRotation => m_Wrapper.m_LeftHand_ControllerRotation;
+        public InputAction @Haptics => m_Wrapper.m_LeftHand_Haptics;
         public InputActionMap Get() { return m_Wrapper.m_LeftHand; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -953,6 +1210,9 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @GripPress.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnGripPress;
                 @GripPress.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnGripPress;
                 @GripPress.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnGripPress;
+                @GripForce.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnGripForce;
+                @GripForce.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnGripForce;
+                @GripForce.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnGripForce;
                 @SecondaryButton.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnSecondaryButton;
                 @SecondaryButton.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnSecondaryButton;
                 @SecondaryButton.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnSecondaryButton;
@@ -962,6 +1222,15 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @TriggerTouch.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnTriggerTouch;
                 @TriggerTouch.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnTriggerTouch;
                 @TriggerTouch.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnTriggerTouch;
+                @ControllerPosition.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnControllerPosition;
+                @ControllerPosition.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnControllerPosition;
+                @ControllerPosition.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnControllerPosition;
+                @ControllerRotation.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnControllerRotation;
+                @ControllerRotation.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnControllerRotation;
+                @ControllerRotation.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnControllerRotation;
+                @Haptics.started -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnHaptics;
+                @Haptics.performed -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnHaptics;
+                @Haptics.canceled -= m_Wrapper.m_LeftHandActionsCallbackInterface.OnHaptics;
             }
             m_Wrapper.m_LeftHandActionsCallbackInterface = instance;
             if (instance != null)
@@ -1005,6 +1274,9 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @GripPress.started += instance.OnGripPress;
                 @GripPress.performed += instance.OnGripPress;
                 @GripPress.canceled += instance.OnGripPress;
+                @GripForce.started += instance.OnGripForce;
+                @GripForce.performed += instance.OnGripForce;
+                @GripForce.canceled += instance.OnGripForce;
                 @SecondaryButton.started += instance.OnSecondaryButton;
                 @SecondaryButton.performed += instance.OnSecondaryButton;
                 @SecondaryButton.canceled += instance.OnSecondaryButton;
@@ -1014,6 +1286,15 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @TriggerTouch.started += instance.OnTriggerTouch;
                 @TriggerTouch.performed += instance.OnTriggerTouch;
                 @TriggerTouch.canceled += instance.OnTriggerTouch;
+                @ControllerPosition.started += instance.OnControllerPosition;
+                @ControllerPosition.performed += instance.OnControllerPosition;
+                @ControllerPosition.canceled += instance.OnControllerPosition;
+                @ControllerRotation.started += instance.OnControllerRotation;
+                @ControllerRotation.performed += instance.OnControllerRotation;
+                @ControllerRotation.canceled += instance.OnControllerRotation;
+                @Haptics.started += instance.OnHaptics;
+                @Haptics.performed += instance.OnHaptics;
+                @Haptics.canceled += instance.OnHaptics;
             }
         }
     }
@@ -1035,9 +1316,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_RightHand_Secondary2DAxisTouch;
     private readonly InputAction m_RightHand_Grip;
     private readonly InputAction m_RightHand_GripPress;
+    private readonly InputAction m_RightHand_GripForce;
     private readonly InputAction m_RightHand_SecondaryButton;
     private readonly InputAction m_RightHand_SecondaryTouch;
     private readonly InputAction m_RightHand_TriggerTouch;
+    private readonly InputAction m_RightHand_ControllerPosition;
+    private readonly InputAction m_RightHand_ControllerRotation;
+    private readonly InputAction m_RightHand_Haptics;
     public struct RightHandActions
     {
         private @HVRInputActions m_Wrapper;
@@ -1055,9 +1340,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
         public InputAction @Secondary2DAxisTouch => m_Wrapper.m_RightHand_Secondary2DAxisTouch;
         public InputAction @Grip => m_Wrapper.m_RightHand_Grip;
         public InputAction @GripPress => m_Wrapper.m_RightHand_GripPress;
+        public InputAction @GripForce => m_Wrapper.m_RightHand_GripForce;
         public InputAction @SecondaryButton => m_Wrapper.m_RightHand_SecondaryButton;
         public InputAction @SecondaryTouch => m_Wrapper.m_RightHand_SecondaryTouch;
         public InputAction @TriggerTouch => m_Wrapper.m_RightHand_TriggerTouch;
+        public InputAction @ControllerPosition => m_Wrapper.m_RightHand_ControllerPosition;
+        public InputAction @ControllerRotation => m_Wrapper.m_RightHand_ControllerRotation;
+        public InputAction @Haptics => m_Wrapper.m_RightHand_Haptics;
         public InputActionMap Get() { return m_Wrapper.m_RightHand; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1106,6 +1395,9 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @GripPress.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnGripPress;
                 @GripPress.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnGripPress;
                 @GripPress.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnGripPress;
+                @GripForce.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnGripForce;
+                @GripForce.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnGripForce;
+                @GripForce.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnGripForce;
                 @SecondaryButton.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnSecondaryButton;
                 @SecondaryButton.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnSecondaryButton;
                 @SecondaryButton.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnSecondaryButton;
@@ -1115,6 +1407,15 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @TriggerTouch.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnTriggerTouch;
                 @TriggerTouch.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnTriggerTouch;
                 @TriggerTouch.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnTriggerTouch;
+                @ControllerPosition.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnControllerPosition;
+                @ControllerPosition.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnControllerPosition;
+                @ControllerPosition.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnControllerPosition;
+                @ControllerRotation.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnControllerRotation;
+                @ControllerRotation.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnControllerRotation;
+                @ControllerRotation.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnControllerRotation;
+                @Haptics.started -= m_Wrapper.m_RightHandActionsCallbackInterface.OnHaptics;
+                @Haptics.performed -= m_Wrapper.m_RightHandActionsCallbackInterface.OnHaptics;
+                @Haptics.canceled -= m_Wrapper.m_RightHandActionsCallbackInterface.OnHaptics;
             }
             m_Wrapper.m_RightHandActionsCallbackInterface = instance;
             if (instance != null)
@@ -1158,6 +1459,9 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @GripPress.started += instance.OnGripPress;
                 @GripPress.performed += instance.OnGripPress;
                 @GripPress.canceled += instance.OnGripPress;
+                @GripForce.started += instance.OnGripForce;
+                @GripForce.performed += instance.OnGripForce;
+                @GripForce.canceled += instance.OnGripForce;
                 @SecondaryButton.started += instance.OnSecondaryButton;
                 @SecondaryButton.performed += instance.OnSecondaryButton;
                 @SecondaryButton.canceled += instance.OnSecondaryButton;
@@ -1167,6 +1471,15 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
                 @TriggerTouch.started += instance.OnTriggerTouch;
                 @TriggerTouch.performed += instance.OnTriggerTouch;
                 @TriggerTouch.canceled += instance.OnTriggerTouch;
+                @ControllerPosition.started += instance.OnControllerPosition;
+                @ControllerPosition.performed += instance.OnControllerPosition;
+                @ControllerPosition.canceled += instance.OnControllerPosition;
+                @ControllerRotation.started += instance.OnControllerRotation;
+                @ControllerRotation.performed += instance.OnControllerRotation;
+                @ControllerRotation.canceled += instance.OnControllerRotation;
+                @Haptics.started += instance.OnHaptics;
+                @Haptics.performed += instance.OnHaptics;
+                @Haptics.canceled += instance.OnHaptics;
             }
         }
     }
@@ -1285,9 +1598,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
         void OnSecondary2DAxisTouch(InputAction.CallbackContext context);
         void OnGrip(InputAction.CallbackContext context);
         void OnGripPress(InputAction.CallbackContext context);
+        void OnGripForce(InputAction.CallbackContext context);
         void OnSecondaryButton(InputAction.CallbackContext context);
         void OnSecondaryTouch(InputAction.CallbackContext context);
         void OnTriggerTouch(InputAction.CallbackContext context);
+        void OnControllerPosition(InputAction.CallbackContext context);
+        void OnControllerRotation(InputAction.CallbackContext context);
+        void OnHaptics(InputAction.CallbackContext context);
     }
     public interface IRightHandActions
     {
@@ -1304,9 +1621,13 @@ public class @HVRInputActions : IInputActionCollection, IDisposable
         void OnSecondary2DAxisTouch(InputAction.CallbackContext context);
         void OnGrip(InputAction.CallbackContext context);
         void OnGripPress(InputAction.CallbackContext context);
+        void OnGripForce(InputAction.CallbackContext context);
         void OnSecondaryButton(InputAction.CallbackContext context);
         void OnSecondaryTouch(InputAction.CallbackContext context);
         void OnTriggerTouch(InputAction.CallbackContext context);
+        void OnControllerPosition(InputAction.CallbackContext context);
+        void OnControllerRotation(InputAction.CallbackContext context);
+        void OnHaptics(InputAction.CallbackContext context);
     }
     public interface IHMDActions
     {

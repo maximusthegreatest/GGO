@@ -2,9 +2,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
+
+#if USING_OPENXR
+using UnityEngine.XR.OpenXR.Input;
+#endif
 
 namespace HurricaneVR.Framework.ControllerInput
 {
@@ -12,15 +18,46 @@ namespace HurricaneVR.Framework.ControllerInput
     public class HVRInputSystemController : HVRController
     {
         public static HVRInputActions InputActions = null;
+        private InputDevice _inputDevice;
 
-        protected override void Awake()
+        public bool IsOpenXR;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void Cleanup()
         {
-            base.Awake();
+            if (InputActions != null)
+            {
+                InputActions.Disable();
+                InputActions.Dispose();
+                InputActions = null;
+            }
+        }
 
+        public static void Init()
+        {
             if (InputActions == null)
             {
                 InputActions = new HVRInputActions();
                 InputActions.Enable();
+            }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            Init();
+
+            UnityEngine.InputSystem.InputSystem.onDeviceChange += OnDeviceChanged;
+        }
+
+        private void OnDeviceChanged(InputDevice device, InputDeviceChange change)
+        {
+            if (change == InputDeviceChange.Added)
+            {
+                if (device.usages.Contains(CommonUsages.LeftHand) && Side == HVRHandSide.Left || device.usages.Contains(CommonUsages.RightHand) && Side == HVRHandSide.Right)
+                {
+                    _inputDevice = device;
+                }
             }
         }
 
@@ -36,6 +73,7 @@ namespace HurricaneVR.Framework.ControllerInput
                 TrackpadAxis = InputActions.LeftHand.Secondary2DAxis.ReadValue<Vector2>();
 
                 Grip = InputActions.LeftHand.Grip.ReadValue<float>();
+                GripForce = InputActions.LeftHand.GripForce.ReadValue<float>();
                 Trigger = InputActions.LeftHand.Trigger.ReadValue<float>();
 
                 SetBool(out PrimaryButton, InputActions.LeftHand.PrimaryButton);
@@ -64,6 +102,7 @@ namespace HurricaneVR.Framework.ControllerInput
                 TrackpadAxis = InputActions.RightHand.Secondary2DAxis.ReadValue<Vector2>();
 
                 Grip = InputActions.RightHand.Grip.ReadValue<float>();
+                GripForce = InputActions.RightHand.GripForce.ReadValue<float>();
                 Trigger = InputActions.RightHand.Trigger.ReadValue<float>();
 
                 SetBool(out PrimaryButton, InputActions.RightHand.PrimaryButton);
@@ -74,7 +113,7 @@ namespace HurricaneVR.Framework.ControllerInput
 
                 SetBool(out JoystickTouch, InputActions.RightHand.Primary2DAxisTouch);
                 SetBool(out TrackPadTouch, InputActions.RightHand.Secondary2DAxisTouch);
-                
+
                 SetBool(out TriggerTouch, InputActions.RightHand.TriggerTouch);
 
                 SetBool(out MenuButton, InputActions.RightHand.Menu);
@@ -102,86 +141,25 @@ namespace HurricaneVR.Framework.ControllerInput
             }
         }
 
-        protected override void CheckButtonState(HVRButtons button, ref HVRButtonState buttonState)
+        public override void Vibrate(float amplitude, float duration = 1, float frequency = 1)
         {
-            ResetButton(ref buttonState);
+            if (HVRSettings.Instance.DisableHaptics) return;
 
-            switch (button)
+#if USING_OPENXR
+
+            if (IsOpenXR)
             {
-                case HVRButtons.Grip:
-                    buttonState.Value = Grip;
+                var action = Side == HVRHandSide.Left ? InputActions.LeftHand.Haptics : InputActions.RightHand.Haptics;
 
-                    if (!InputMap.GripUseAnalog)
-                    {
-                        SetButtonState(button, ref buttonState, GripButton);
-                    }
-
-                    if (InputMap.GripUseAnalog || InputMap.GripUseEither && !buttonState.Active)
-                    {
-                        SetButtonState(button, ref buttonState, Grip >= InputMap.GripThreshold);
-                    }
-
-
-                    break;
-                case HVRButtons.Trigger:
-                    buttonState.Value = Trigger;
-                    if (InputMap.TriggerUseAnalog)
-                        SetButtonState(button, ref buttonState, Trigger >= InputMap.TriggerThreshold);
-                    else
-                        SetButtonState(button, ref buttonState, TriggerButton);
-                    break;
-                case HVRButtons.Primary:
-                    SetButtonState(button, ref buttonState, PrimaryButton);
-                    break;
-                case HVRButtons.PrimaryTouch:
-                    SetButtonState(button, ref buttonState, PrimaryTouch);
-                    break;
-                case HVRButtons.Secondary:
-                    SetButtonState(button, ref buttonState, SecondaryButton);
-                    break;
-                case HVRButtons.SecondaryTouch:
-                    SetButtonState(button, ref buttonState, SecondaryTouch);
-                    break;
-                case HVRButtons.Menu:
-                    SetButtonState(button, ref buttonState, MenuButton);
-                    break;
-                case HVRButtons.JoystickButton:
-                    SetButtonState(button, ref buttonState, JoystickClicked);
-                    break;
-                case HVRButtons.TrackPadButton:
-                    SetButtonState(button, ref buttonState, TrackPadClicked);
-                    break;
-                case HVRButtons.JoystickTouch:
-                    SetButtonState(button, ref buttonState, JoystickTouch);
-                    break;
-                case HVRButtons.TrackPadTouch:
-                    SetButtonState(button, ref buttonState, TrackPadTouch);
-                    break;
-                case HVRButtons.TriggerTouch:
-                    SetButtonState(button, ref buttonState, TriggerTouch);
-                    break;
-                case HVRButtons.ThumbTouch:
-                    SetButtonState(button, ref buttonState, ThumbTouch);
-                    break;
-                case HVRButtons.TriggerNearTouch:
-                    SetButtonState(button, ref buttonState, TriggerNearTouch);
-                    break;
-                case HVRButtons.ThumbNearTouch:
-                    SetButtonState(button, ref buttonState, ThumbNearTouch);
-                    break;
-                case HVRButtons.TrackPadLeft:
-                    SetButtonState(button, ref buttonState, TrackPadClicked && TrackpadAxis.x <= -InputMap.Axis2DLeftThreshold);
-                    break;
-                case HVRButtons.TrackPadRight:
-                    SetButtonState(button, ref buttonState, TrackPadClicked && TrackpadAxis.x >= InputMap.Axis2DRighThreshold);
-                    break;
-                case HVRButtons.TrackPadUp:
-                    SetButtonState(button, ref buttonState, TrackPadClicked && TrackpadAxis.y >= InputMap.Axis2DUpThreshold);
-                    break;
-                case HVRButtons.TrackPadDown:
-                    SetButtonState(button, ref buttonState, TrackPadClicked && TrackpadAxis.y <= -InputMap.Axis2DDownThreshold);
-                    break;
+                if (action != null && _inputDevice != null)
+                {
+                    OpenXRInput.SendHapticImpulse(action, amplitude, frequency, duration, _inputDevice);
+                    return;
+                }
             }
+#endif
+            base.Vibrate(amplitude, duration, frequency);
+
         }
     }
 }

@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Linq;
+using HurricaneVR.Framework.Core.Bags;
 using HurricaneVR.Framework.Core.Sockets;
 using UnityEngine;
 
 namespace HurricaneVR.Framework.Core.Grabbers
 {
+
+    /// <summary>
+    /// Grabber that uses a HVRSocketContainer as a target of the grab. Main uses are over the shoulder or chest collection type inventories
+    /// </summary>
     public class HVRSocketContainerGrabber : HVRGrabberBase
     {
         public HVRSocketContainer SocketContainer;
@@ -14,6 +19,18 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
         public override bool IsGrabActivated => !GrabbleMustBeHeld && SocketContainer.HasAvailableSocket();
         public override bool AllowSwap => true;
+
+        protected override void Start()
+        {
+            base.Start();
+
+            if (GrabBags.Count == 0)
+            {
+                var bag = gameObject.AddComponent<HVRTriggerGrabbableBag>();
+                GrabBags.Add(bag);
+                bag.Grabber = this;
+            }
+        }
 
         public override bool CanHover(HVRGrabbable grabbable)
         {
@@ -82,9 +99,9 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
         protected override void OnGrabbed(HVRGrabArgs args)
         {
-            //Debug.Log($"OnGrabbed");
-            if(!SocketContainer.TryAddGrabbable(args.Grabbable))
-                ForceRelease();
+            //socket cannot grab something if it's being held, so we force release it first so it's CanGrab will not return false
+            ForceRelease();
+            SocketContainer.TryAddGrabbable(args.Grabbable);
         }
     }
 }

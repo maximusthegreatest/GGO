@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
-using HurricaneVR.Framework.Shared.HandPoser;
 using UnityEngine;
 
 namespace HurricaneVR.Framework.Core.Stabbing
@@ -8,6 +9,9 @@ namespace HurricaneVR.Framework.Core.Stabbing
     public class HVRStabbable : MonoBehaviour
     {
         public HVRStabbableSettings Settings;
+        
+        [Tooltip("Collision of these colliders are ignored with the stabber.")]
+        public List<Collider> Ignorecolliders = new List<Collider>();
 
         public HVRStabEvent Stabbed = new HVRStabEvent();
         public HVRStabEvents UnStabbed = new HVRStabEvents();
@@ -19,7 +23,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
         public Vector3 Velocity { get; private set; }
         private Vector3 _previousPosition;
 
-        void Awake()
+        protected virtual void Awake()
         {
             if (!Settings)
             {
@@ -28,12 +32,34 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
             Settings.CheckCurve();
             Stabbers = new List<HVRStabber>();
+
+            if (Ignorecolliders == null) Ignorecolliders = new List<Collider>();
+            if (Ignorecolliders.Count == 0)
+            {
+                RefreshColliders();
+            }
+        }
+        /// <summary>
+        /// Refreshes ignore colliders, if rigidbody present it will get those colliders, if not it will get all children colliders
+        /// </summary>
+        public virtual void RefreshColliders()
+        {
+            Ignorecolliders.Clear();
+
+            if (TryGetComponent(out Rigidbody rb))
+            {
+                Ignorecolliders.AddRange(rb.GetColliders());
+            }
+            else
+            {
+                Ignorecolliders.AddRange(GetComponentsInChildren<Collider>().Where(e => !e.isTrigger));
+            }
         }
 
-        public void Update()
-        {
-            //DrawBounds();
-        }
+        //public void Update()
+        //{
+        //    //DrawBounds();
+        //}
 
         private void DrawBounds()
         {
@@ -41,7 +67,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
             bounds.DrawBounds();
         }
 
-      
+
 
         public void FixedUpdate()
         {
@@ -55,7 +81,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
             var cleanup = false;
             foreach (var stabber in Stabbers)
             {
-                if (!stabber || !stabber.gameObject.activeSelf || !stabber.enabled)
+                if (!stabber || !stabber.gameObject.activeInHierarchy || !stabber.enabled)
                 {
                     cleanup = true;
                     break;
@@ -64,15 +90,14 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
             if (cleanup)
             {
-                Stabbers.RemoveAll(e => e == null || !e.gameObject.activeSelf || !e.enabled);
+                Stabbers.RemoveAll(e => e == null || !e.gameObject.activeInHierarchy || !e.enabled);
             }
         }
 
 
-        public virtual void OnStabberEnter(HVRStabber stabber, Collision collision)
+        public virtual void OnStabberEnter(HVRStabber stabber, Collision collision, ContactPoint contactPoint)
         {
             Stabbers.Add(stabber);
-            Stabbed.Invoke(stabber, this, collision);
         }
 
         public virtual void OnStabberExit(HVRStabber stabber)

@@ -1,27 +1,52 @@
-﻿using HurricaneVR.Framework.Core.Utils;
+﻿using System;
+using HurricaneVR.Framework.Core.ScriptableObjects;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
 
 namespace HurricaneVR.Framework.Components
 {
+    /// <summary>
+    /// Helper component to constrain a drawer along the desired movement axis handling the joint creation and limiting for you.
+    /// Joint is constrained between the start and end position which is defined in the component inspector.
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class HVRPhysicsDrawer : MonoBehaviour
     {
         [Header("Settings")]
+        [Tooltip("Axis the drawer will travel on in local space.")]
         public HVRAxis Axis;
+
+        [Tooltip("Rigidbody to joint to.")]
         public Rigidbody ConnectedBody;
+
+        [Tooltip("Optional spring that will return to the starting position")]
         public float Spring = 0;
+
+        [Tooltip("Damper to provide 'friction' to the drawer.")]
         public float Damper = 10;
 
+        [Header("SFX")]
+        public float SFXResetThreshold = .02f;
+        public AudioClip SFXOpened;
+        public AudioClip SFXClosed;
 
+        [Header("Editor Fields")]
         [Tooltip("The resting position of the button")]
         public Vector3 StartPosition;
 
         [Tooltip("Furthest position the button can travel")]
         public Vector3 EndPosition;
 
+        public Vector3 OpenPosition;
+
+
         [Header("Debug")]
         public bool UpdateSpring;
+        public bool PreviousOpened;
+        public bool Opened;
+        public bool PreviousClosed;
+        public bool Closed;
 
         public Rigidbody Rigidbody { get; private set; }
 
@@ -37,14 +62,26 @@ namespace HurricaneVR.Framework.Components
             _axis = Axis.GetVector();
             Rigidbody.useGravity = false;
             SetupJoint();
+
+            //set initial values to prevent sfx on start
+            GetValues(out var distance, out var openedDistance, out var resetThreshold);
+
+            if (distance > openedDistance)
+            {
+                Opened = true;
+            }
+            else if (distance < openedDistance)
+            {
+                Closed = true;
+            }
         }
 
         private void SetupJoint()
         {
             _joint = gameObject.AddComponent<ConfigurableJoint>();
             _joint.connectedBody = ConnectedBody;
-            //_joint.anchor = StartPosition;
             _joint.autoConfigureConnectedAnchor = false;
+            _joint.anchor = Vector3.zero;
 
             var worldStartPosition = StartPosition;
             if (transform.parent)
@@ -76,8 +113,8 @@ namespace HurricaneVR.Framework.Components
 
             _limitJoint = gameObject.AddComponent<ConfigurableJoint>();
             _limitJoint.connectedBody = ConnectedBody;
-            //_limitJoint.anchor = EndPosition;
             _limitJoint.autoConfigureConnectedAnchor = false;
+            _limitJoint.anchor = Vector3.zero;
 
             if (ConnectedBody)
             {
@@ -96,49 +133,85 @@ namespace HurricaneVR.Framework.Components
             _limitJoint.LimitXMotion();
             _limitJoint.SetLinearLimit(Vector3.Distance(StartPosition, EndPosition));
         }
-        private void FixedUpdate()
+
+
+
+        private void Update()
         {
-        //    if (UpdateSpring)
-        //    {
-        //        _joint.SetXDrive(Spring, Damper, Spring);
-        //        UpdateSpring = false;
-        //    }
+            GetValues(out var distance, out var openedDistance, out var resetThreshold);
 
-        //    var distance = (StartPosition - transform.localPosition).magnitude;
+            var closeReset = openedDistance + resetThreshold;
+            var openReset = openedDistance - resetThreshold;
 
-        //    if (!IsPressed && distance >= DownThreshold)
-        //    {
-        //        IsPressed = true;
-        //        OnButtonDown();
-        //    }
-        //    else if (IsPressed && distance < ResetThreshold)
-        //    {
-        //        IsPressed = false;
-        //        OnButtonUp();
-        //    }
+            if (!Opened && distance > openedDistance)
+            {
+                Opened = true;
+                if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFX(SFXOpened, transform.position);
+            }
+            else if (!Closed && distance < openedDistance)
+            {
+                Closed = true;
+                if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFX(SFXClosed, transform.position);
+            }
+            else if (Opened && distance < openReset)
+            {
+                Opened = false;
+            }
+            else if (Closed && distance > closeReset)
+            {
+                Closed = false;
+            }
+
+            PreviousClosed = Closed;
+            PreviousOpened = Opened;
         }
 
+        private void GetValues(out float distance, out float openDistance, out float resetDelta)
+        {
+            distance = 0f;
+            openDistance = 0f;
+            resetDelta = SFXResetThreshold;
+            switch (Axis)
+            {
+                case HVRAxis.X:
+                case HVRAxis.NegX:
+                    distance = transform.localPosition.x - StartPosition.x;
+                    openDistance = OpenPosition.x - StartPosition.x;
+                    break;
+                case HVRAxis.Y:
+                case HVRAxis.NegY:
+                    distance = transform.localPosition.y - StartPosition.y;
+                    openDistance = OpenPosition.y - StartPosition.y;
+                    break;
+                case HVRAxis.Z:
+                case HVRAxis.NegZ:
+                    distance = transform.localPosition.z - StartPosition.z;
+                    openDistance = OpenPosition.z - StartPosition.z;
+                    break;
+            }
 
-        //protected virtual void OnButtonDown()
-        //{
-        //    if (SFXButtonDown)
-        //    {
-        //        SFXPlayer.Instance?.PlaySFX(SFXButtonDown, transform.position);
-        //    }
+            distance = Mathf.Abs(distance);
+            openDistance = Mathf.Abs(openDistance);
 
-        //    ButtonDown.Invoke(this);
-        //}
+            if (resetDelta > openDistance)
+            {
+                resetDelta = openDistance * .5f;
+            }
+        }
 
-        //protected virtual void OnButtonUp()
-        //{
-        //    if (SFXButtonUp)
-        //    {
-        //        SFXPlayer.Instance?.PlaySFX(SFXButtonUp, transform.position);
-        //    }
-        //    ButtonUp.Invoke(this);
-        //}
+        private void OnDrawGizmosSelected()
+        {
+            var forward = (EndPosition - StartPosition).normalized;
+            var closeReset = transform.parent.TransformPoint(OpenPosition + (forward * SFXResetThreshold));
+            var openReset = transform.parent.TransformPoint(OpenPosition - (forward * SFXResetThreshold));
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(closeReset, .005f);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(openReset, .005f);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.parent.TransformPoint(OpenPosition), .005f);
+        }
     }
 
-    //[Serializable]
-    //public class HVRButtonEvent : UnityEvent<HVRPhysicsButton> { }
 }

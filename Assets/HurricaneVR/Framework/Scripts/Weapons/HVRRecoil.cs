@@ -1,4 +1,5 @@
 ﻿using System;
+using HurricaneVR.Framework.Core.ScriptableObjects;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
@@ -168,7 +169,7 @@ namespace HurricaneVR.Framework.Weapons
             }
             else
             {
-                Rigidbody.AddTorque(transform.right * (upForce), ForceMode.Impulse);
+                Rigidbody.AddTorque(transform.right * (upForce *( TorqueAxisReversed ? -1 : 1)), ForceMode.Impulse);
             }
 
 

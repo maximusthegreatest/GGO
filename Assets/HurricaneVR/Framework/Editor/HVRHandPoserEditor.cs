@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using HurricaneVR.Framework.ControllerInput;
+using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.HandPoser;
+using HurricaneVR.Framework.Core.HandPoser.Data;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
-using HurricaneVR.Framework.Shared.HandPoser;
-using HurricaneVR.Framework.Shared.HandPoser.Data;
 using HurricaneVR.Framework.Shared.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
+
+#if UNITY_2021_2_OR_NEWER
+using UnityEditor.SceneManagement;
+#else
+using UnityEditor.Experimental.SceneManagement;
+#endif
 
 namespace HurricaneVR.Editor
 {
@@ -20,23 +28,21 @@ namespace HurricaneVR.Editor
         private SerializedProperty SP_LeftHandPreview;
         private SerializedProperty SP_RightHandPreview;
         private SerializedProperty SP_BodyPreview;
+        private SerializedProperty SP_PreviewLeft;
+        private SerializedProperty SP_PreviewRight;
+        private SerializedProperty SP_LeftAutoPose;
+        private SerializedProperty SP_RightAutoPose;
+
+        private SerializedProperty SP_SelectionIndex;
+        private SerializedProperty SP_PoseNames;
+
 
         private SerializedProperty SP_PrimaryPose;
         private SerializedProperty SP_Blends;
 
-        private SerializedProperty SP_LeftAutoPose;
-        private SerializedProperty SP_RightAutoPose;
-
-        private SerializedProperty SP_PreviewLeft;
-        private SerializedProperty SP_PreviewRight;
-        private SerializedProperty SP_PoseNames;
-        private SerializedProperty SP_SelectionIndex;
-
         private VisualElement _root;
         private VisualTreeAsset _tree;
         private HVRHandPoser Poser;
-
-        private int _previousIndex;
 
         private IntegerField _selectionIndexField;
         private string _leftInstanceId;
@@ -89,6 +95,7 @@ namespace HurricaneVR.Editor
             }
             set
             {
+                Debug.Log("left hand preview set");
                 if (SP_LeftHandPreview != null) SP_LeftHandPreview.objectReferenceValue = value;
             }
         }
@@ -108,12 +115,10 @@ namespace HurricaneVR.Editor
 
         private HVRHandPoseBlend PrimaryPose
         {
-            get
-            {
-                return Poser.PrimaryPose;
-            }
+            get { return Poser.PrimaryPose; }
             set
             {
+                Debug.Log("setting primary pose");
                 Poser.PrimaryPose = value;
                 serializedObject.ApplyModifiedProperties();
             }
@@ -121,10 +126,7 @@ namespace HurricaneVR.Editor
 
         public HVRHandPose SelectedPose
         {
-            get
-            {
-                return SelectedBlendPose?.Pose;
-            }
+            get { return SelectedBlendPose?.Pose; }
             set
             {
                 if (SelectedBlendPose == null) return;
@@ -135,8 +137,10 @@ namespace HurricaneVR.Editor
         public HVRHandPoseBlend SelectedBlendPose
         {
             get
-            {                
-                if (CurrentPoseIndex <= PrimaryIndex) return Poser.PrimaryPose;                
+            {
+                //Debug.Log("Current Pose index " + CurrentPoseIndex);
+                //Debug.Log("Primary Index " + PrimaryIndex);
+                if (CurrentPoseIndex <= PrimaryIndex) return Poser.PrimaryPose;
                 return Poser.Blends[BlendIndex];
             }
         }
@@ -162,33 +166,68 @@ namespace HurricaneVR.Editor
             get => CurrentPoseIndex - 1 - PrimaryIndex;
         }
 
-        private Transform _selectedLeftBone;
-        private Transform _selectedRightBone;
-        private bool _drawLeftRotation;
-        private bool _drawRightRotation;
-        private int _selectedRightFinger;
-        private int _selectedLeftFinger;
+        private static readonly Dictionary<string, PreviewState> _map = new Dictionary<string, PreviewState>();
+        private static readonly List<string> cleanup = new List<string>();
 
-        private void OnSceneGUI()
+        private class PreviewState
         {
-            GetHands(ref LeftPosableHand, ref RightPosableHand);
+            public Transform Target;
+            public Transform SelectedBone;
+            public int SelectedFinger;
+            public HVRPosableHand Hand;
 
-            if (FullBody)
+            public bool DrawRotation;
+
+
+            public bool FullBody;
+            public Transform Body;
+            public bool IsLeft;
+        }
+
+        static HVRHandPoserEditor()
+        {
+            SceneView.duringSceneGui -= OnSceneGUI2;
+            SceneView.duringSceneGui += OnSceneGUI2;
+        }
+
+
+        private static void OnSceneGUI2(SceneView view)
+        {
+            cleanup.Clear();
+
+            foreach (var kvp in _map)
             {
-                DrawHandHandles(_leftIKTarget, ref _drawLeftRotation);
-                DrawHandHandles(_rightIKTarget, ref _drawRightRotation);
-            }
-            else
-            {
-                DrawHandHandles(LeftHandPreview?.transform, ref _drawLeftRotation);
-                DrawHandHandles(RightHandPreview?.transform, ref _drawRightRotation);
+                var state = kvp.Value;
+                if (state.Target)
+                {
+                    if (!state.Hand)
+                    {
+                        if (state.FullBody)
+                        {
+                            if (state.Body) state.Hand = state.Body.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => e == state.IsLeft);
+                            else
+                            {
+                                cleanup.Add(kvp.Key);
+                                state.Target = null;
+                            }
+                        }
+                        else
+                        {
+                            state.Target.TryGetComponent(out state.Hand);
+                        }
+                    }
+
+                    DrawHandHandles(state.Target, ref state.DrawRotation);
+                    SetupBoneButtons(state.Hand, ref state.SelectedBone, ref state.SelectedFinger);
+                    DrawRotationHandle(state.SelectedBone);
+                }
+                else
+                {
+                    if (!Application.isPlaying) cleanup.Add(kvp.Key);
+                }
             }
 
-            SetupBoneButtons(LeftPosableHand, ref _selectedLeftBone, ref _selectedLeftFinger);
-            SetupBoneButtons(RightPosableHand, ref _selectedRightBone, ref _selectedRightFinger);
-
-            DrawRotationHandle(_selectedLeftBone);
-            DrawRotationHandle(_selectedRightBone);
+            foreach (var c in cleanup) _map.Remove(c);
         }
 
         private void GetHands(ref HVRPosableHand leftHand, ref HVRPosableHand rightHand)
@@ -266,20 +305,20 @@ namespace HurricaneVR.Editor
 
             if (_leftPhysicsPoser)
             {
-                _leftPhysicsPoser.Setup();
                 _leftPhysicsPoser.transform.SetLayerRecursive(HVRLayers.Hand);
                 _leftPhysicsPoser.CurrentMask = ~LayerMask.GetMask("Hand");
+                if (_leftPhysicsPoser.Validate()) _leftPhysicsPoser.Setup();
             }
 
             if (_rightPhysicsPoser)
             {
-                _rightPhysicsPoser.Setup();
                 _rightPhysicsPoser.transform.SetLayerRecursive(HVRLayers.Hand);
                 _rightPhysicsPoser.CurrentMask = ~LayerMask.GetMask("Hand");
+                if (_rightPhysicsPoser.Validate()) _rightPhysicsPoser.Setup();
             }
         }
 
-        private void DrawHandHandles(Transform handleTarget, ref bool drawRotation)
+        private static void DrawHandHandles(Transform handleTarget, ref bool drawRotation)
         {
             if (!handleTarget)
                 return;
@@ -377,6 +416,7 @@ namespace HurricaneVR.Editor
                             {
                                 selectedFinger = i;
                             }
+
                             selectedBone = bone.Transform;
                         }
                     }
@@ -387,6 +427,9 @@ namespace HurricaneVR.Editor
                 selectedBone = null;
             }
         }
+
+        private bool _inPrefabMode;
+        private bool _active;
         
         private void OnEnable()
         {
@@ -395,7 +438,7 @@ namespace HurricaneVR.Editor
             _leftInstanceId = "LeftPreview_" + target.GetInstanceID();
             _rightInstanceId = "RightPreview_" + target.GetInstanceID();
             _bodyId = "Body_" + target.GetInstanceID();
-
+            
             SP_LeftHandPreview = serializedObject.FindProperty("LeftHandPreview");
             SP_RightHandPreview = serializedObject.FindProperty("RightHandPreview");
             SP_BodyPreview = serializedObject.FindProperty("BodyPreview");
@@ -413,54 +456,49 @@ namespace HurricaneVR.Editor
             SP_SelectionIndex = serializedObject.FindProperty("SelectionIndex");
             SP_PoseNames = serializedObject.FindProperty("PoseNames");
 
-
-
-            CheckBadParameters();
-
             _root = new VisualElement();
             _tree = UnityEngine.Resources.Load<VisualTreeAsset>("HVRHandPoserEditor");
+
+            var stage = PrefabStageUtility.GetPrefabStage(Poser.gameObject);
+            _inPrefabMode = stage != null;
+
+            _active = true;
+            var s = _root.schedule.Execute(EditorUpdate);
+            s.Every(1000);
+            s.Until(() => !_active);
+        }
+
+        private void EditorUpdate()
+        {
+            CheckRigidBody();
+        }
+
+        private void OnDisable()
+        {
+            _active = false;
         }
 
         private void CreatePoseIfNeeded()
         {
+            
             if (PrimaryPose.Pose == null && HVRSettings.Instance.OpenHandPose)
             {
                 Debug.Log("Creating pose if needed");
+                
                 _root.schedule.Execute(() =>
-                {
+                {                    
                     PrimaryPose.SetDefaults();
                     serializedObject.ApplyModifiedProperties();
                 });
                 var poseProperty = SP_PrimaryPose.FindPropertyRelative("Pose");
-                var clone = poseProperty.objectReferenceValue = HVRSettings.Instance.OpenHandPose.DeepCopy();
+                var clone = poseProperty.objectReferenceValue = HVRSettings.Instance.OpenHandPose.DeepCopy();                
                 clone.name = "Unsaved!";
                 serializedObject.ApplyModifiedProperties();
             }
         }
 
-        private void CheckBadParameters()
-        {
-            if (PrimaryPose.AnimationParameter == null || !HVRSettings.Instance.AnimationParameters.Contains(PrimaryPose.AnimationParameter))
-            {
-                SP_PrimaryPose.FindPropertyRelative("AnimationParameter").stringValue = HVRHandPoseBlend.DefaultParameter;
-            }
-
-            for (var i = 0; i < SP_Blends.arraySize; i++)
-            {
-                var paramProperty = SP_Blends.GetArrayElementAtIndex(i).FindPropertyRelative("AnimationParameter");
-
-                if (!HVRSettings.Instance.AnimationParameters.Contains(paramProperty.stringValue))
-                {
-                    paramProperty.stringValue = HVRHandPoseBlend.DefaultParameter;
-                }
-            }
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
         public override VisualElement CreateInspectorGUI()
         {
-
             _root.Clear();
             _tree.CloneTree(_root);
 
@@ -468,14 +506,6 @@ namespace HurricaneVR.Editor
 
             blendEditorRoot = _root.Q<BindableElement>("BlendEditorRoot");
             blendEditorRoot.Q<ObjectField>("Pose").objectType = typeof(HVRHandPose);
-            var paramContainer = blendEditorRoot.Q<VisualElement>("ParameterContainer");
-
-            var parameterChoices = new List<string> { HVRHandPoseBlend.DefaultParameter };
-            parameterChoices.AddRange(HVRSettings.Instance.AnimationParameters);
-
-            var paramField = new PopupField<string>(parameterChoices, HVRHandPoseBlend.DefaultParameter);
-            paramField.bindingPath = "AnimationParameter";
-            paramContainer.Add(paramField);
 
             _root.Add(blendEditorRoot);
 
@@ -490,101 +520,111 @@ namespace HurricaneVR.Editor
             SetupHandButtons();
             SetupAutoPoseButtons();
 
+            //can't remember why I would add this field on the ui...
+            //_selectionIndexField = new IntegerField("SelectedIndex");
+            //_selectionIndexField.bindingPath = "SelectionIndex";
+            //_selectionIndexField.RegisterValueChangedCallback(evt =>
+            //{
+            //    if (PosesListView.selectedIndex != evt.newValue) PosesListView.selectedIndex = evt.newValue;
+            //});
+            //_root.Add(_selectionIndexField);
 
-            _selectionIndexField = new IntegerField("SelectedIndex");
-            _selectionIndexField.bindingPath = "SelectionIndex";
-            _selectionIndexField.RegisterValueChangedCallback(evt =>
+            if (_inPrefabMode)
             {
-                if (PosesListView.selectedIndex != evt.newValue) PosesListView.selectedIndex = evt.newValue;
-            });
-            _root.Add(_selectionIndexField);
-
-            PreviewLeftToggle = _root.Q<Toggle>("PreviewLeft");
-            PreviewLeftToggle.BindProperty(SP_PreviewLeft);
-            PreviewRightToggle = _root.Q<Toggle>("PreviewRight");
-            PreviewRightToggle.BindProperty(SP_PreviewRight);
-
-            PreviewLeftToggle.RegisterValueChangedCallback(OnPreviewLeftChanged);
-            PreviewRightToggle.RegisterValueChangedCallback(OnPreviewRightChanged);
-
-            ToggleLeftAutoPose = _root.Q<Toggle>("LeftAutoPose");
-            ToggleLeftAutoPose.BindProperty(SP_LeftAutoPose);
-            ToggleRightAutoPose = _root.Q<Toggle>("RightAutoPose");
-            ToggleRightAutoPose.BindProperty(SP_RightAutoPose);
-
-            ToggleLeftAutoPose.RegisterValueChangedCallback(OnLeftAutoPoseChanged);
-            ToggleRightAutoPose.RegisterValueChangedCallback(OnRightAutoPoseChanged);
-
-            _previousIndex = SelectedIndex;
-
-            if (SelectedIndex >= PosesListView.itemsSource.Count + PrimaryIndex)
-            {
-                Debug.Log($"Stored SelectedIndex is higher than pose count.");
-                SelectedIndex = PosesListView.itemsSource.Count - PrimaryIndex - 1;
-                serializedObject.ApplyModifiedProperties();
-            }
-
-            PosesListView.selectedIndex = SelectedIndex;
-
-
-            GetPhysicsPosers();
-
-            if (FullBody)
-            {                
-                var body = GameObject.Find(_bodyId);
-                if (body)
-                {
-                    SP_BodyPreview.objectReferenceValue = body;
-                }
-
-                UpdateBodyPreview(SelectedPose?.LeftHand, SelectedPose?.RightHand, PreviewLeft, PreviewRight);
+                _root.Q("MirrorAxis").style.display = DisplayStyle.None;
+                _root.Q("boxPreview").style.display = DisplayStyle.None;
             }
             else
             {
-                SP_PreviewLeft.boolValue = SP_LeftHandPreview.objectReferenceValue != null;
-                SP_PreviewRight.boolValue = SP_RightHandPreview.objectReferenceValue != null;
+                _root.Q("warning").style.display = DisplayStyle.None;
 
-                if (!SP_PreviewLeft.boolValue)
+                PreviewLeftToggle = _root.Q<Toggle>("PreviewLeft");
+                PreviewLeftToggle.BindProperty(SP_PreviewLeft);
+                PreviewRightToggle = _root.Q<Toggle>("PreviewRight");
+                PreviewRightToggle.BindProperty(SP_PreviewRight);
+
+                PreviewLeftToggle.RegisterValueChangedCallback(OnPreviewLeftChanged);
+                PreviewRightToggle.RegisterValueChangedCallback(OnPreviewRightChanged);
+
+                ToggleLeftAutoPose = _root.Q<Toggle>("LeftAutoPose");
+         
+                ToggleLeftAutoPose.BindProperty(SP_LeftAutoPose);
+                ToggleRightAutoPose = _root.Q<Toggle>("RightAutoPose");
+                ToggleRightAutoPose.BindProperty(SP_RightAutoPose);
+
+                ToggleLeftAutoPose.RegisterValueChangedCallback(OnLeftAutoPoseChanged);
+                ToggleRightAutoPose.RegisterValueChangedCallback(OnRightAutoPoseChanged);
+
+                if (SelectedIndex >= PosesListView.itemsSource.Count + PrimaryIndex)
                 {
-                    FindPreviewHand(true, out var left);
-                    if (left)
+                    Debug.Log($"Stored SelectedIndex is higher than pose count.");
+                    SelectedIndex = PosesListView.itemsSource.Count - PrimaryIndex - 1;
+                    serializedObject.ApplyModifiedProperties();
+                }
+
+                PosesListView.selectedIndex = SelectedIndex;
+
+
+                GetPhysicsPosers();
+
+                if (FullBody)
+                {
+                    var body = GameObject.Find(_bodyId);
+                    if (body)
                     {
-                        SP_PreviewLeft.boolValue = true;
-                        SP_LeftHandPreview.objectReferenceValue = left;
+                        SP_BodyPreview.objectReferenceValue = body;
                     }
-                }
 
-                if (!SP_PreviewRight.boolValue)
+                    UpdateBodyPreview(SelectedPose != null ? SelectedPose.LeftHand : null, SelectedPose != null ? SelectedPose.RightHand : null, PreviewLeft, PreviewRight);
+                }
+                else
                 {
-                    FindPreviewHand(false, out var right);
-                    if (right)
+                    SP_PreviewLeft.boolValue = SP_LeftHandPreview.objectReferenceValue != null;
+                    SP_PreviewRight.boolValue = SP_RightHandPreview.objectReferenceValue != null;
+
+                    if (!SP_PreviewLeft.boolValue)
                     {
-                        SP_PreviewRight.boolValue = true;
-                        SP_RightHandPreview.objectReferenceValue = right;
+                        FindPreviewHand(true, out var left);
+                        if (left)
+                        {
+                            SP_PreviewLeft.boolValue = true;
+                            SP_LeftHandPreview.objectReferenceValue = left;
+                        }
                     }
+
+                    if (!SP_PreviewRight.boolValue)
+                    {
+                        FindPreviewHand(false, out var right);
+                        if (right)
+                        {
+                            SP_PreviewRight.boolValue = true;
+                            SP_RightHandPreview.objectReferenceValue = right;
+                        }
+                    }
+
+                    UpdatePreview(false, SP_PreviewRight.boolValue, SelectedPose != null ? SelectedPose.LeftHand : null);
+                    UpdatePreview(true, SP_PreviewLeft.boolValue, SelectedPose != null ? SelectedPose.RightHand : null);
                 }
 
-                UpdatePreview(false, SP_PreviewRight.boolValue, SelectedPose?.LeftHand);
-                UpdatePreview(true, SP_PreviewLeft.boolValue, SelectedPose?.RightHand);
+                if (_leftPhysicsPoser)
+                {
+                    SP_LeftAutoPose.boolValue = _leftPhysicsPoser.LiveUpdate;
+                }
+                else
+                {
+                    SP_LeftAutoPose.boolValue = false;
+                }
+
+                if (_rightPhysicsPoser)
+                {
+                    SP_RightAutoPose.boolValue = _rightPhysicsPoser.LiveUpdate;
+                }
+                else
+                {
+                    SP_RightAutoPose.boolValue = false;
+                }
             }
 
-            if (_leftPhysicsPoser)
-            {
-                SP_LeftAutoPose.boolValue = _leftPhysicsPoser.LiveUpdate;
-            }
-            else
-            {
-                SP_LeftAutoPose.boolValue = false;
-            }
-
-            if (_rightPhysicsPoser)
-            {
-                SP_RightAutoPose.boolValue = _rightPhysicsPoser.LiveUpdate;
-            }
-            else
-            {
-                SP_RightAutoPose.boolValue = false;
-            }
 
             serializedObject.ApplyModifiedProperties();
 
@@ -643,6 +683,11 @@ namespace HurricaneVR.Editor
             GetPhysicsPosers();
             if (_rightPhysicsPoser)
             {
+                if (evt.newValue && !_rightPhysicsPoser.Validate())
+                {
+                    return;
+                }
+
                 _rightPhysicsPoser.LiveUpdate = evt.newValue;
             }
         }
@@ -652,35 +697,42 @@ namespace HurricaneVR.Editor
             GetPhysicsPosers();
             if (_leftPhysicsPoser)
             {
+                if (evt.newValue && !_leftPhysicsPoser.Validate())
+                {
+                    return;
+                }
+
                 _leftPhysicsPoser.LiveUpdate = evt.newValue;
             }
         }
 
         private void OnPreviewRightChanged(ChangeEvent<bool> evt)
         {
-            CreatePoseIfNeeded();            
+            CreatePoseIfNeeded();
+
             if (FullBody)
             {
-                UpdateBodyPreview(SelectedPose?.LeftHand, SelectedPose?.RightHand, PreviewLeft, evt.newValue);
+                UpdateBodyPreview(SelectedPose != null ? SelectedPose.LeftHand : null, SelectedPose != null ? SelectedPose.RightHand : null, PreviewLeft, evt.newValue);
+                if (BodyPreview) RightPosableHand = BodyPreview.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => !e.IsLeft);
+                else RightPosableHand = null;
             }
             else
             {
                 //binding multiple editors to this object, they're bouncing off each other.
                 if (evt.newValue && RightHandPreview)
-                {                    
+                {
                     return;
                 }
 
                 if (!evt.newValue && RightHandPreview)
-                {                    
+                {
                     DestroyImmediate(RightHandPreview);
                     RightHandPreview = null;
                     serializedObject.ApplyModifiedProperties();
                 }
                 else
                 {
-                    Debug.Log("What" + SelectedPose?.RightHand);
-                    UpdatePreview(false, evt.newValue, SelectedPose?.RightHand);
+                    UpdatePreview(false, evt.newValue, SelectedPose != null ? SelectedPose.RightHand : null);
                 }
 
                 if (RightHandPreview)
@@ -695,19 +747,18 @@ namespace HurricaneVR.Editor
             if (_rightPhysicsPoser)
             {
                 _rightPhysicsPoser.LiveUpdate = SP_RightAutoPose.boolValue;
-                _rightPhysicsPoser.Setup();
             }
-
         }
 
         private void OnPreviewLeftChanged(ChangeEvent<bool> evt)
-        {
-
+        {            
             CreatePoseIfNeeded();
 
             if (FullBody)
             {                
-                UpdateBodyPreview(SelectedPose?.LeftHand, SelectedPose?.RightHand, evt.newValue, PreviewRight);
+                UpdateBodyPreview(SelectedPose != null ? SelectedPose.LeftHand : null, SelectedPose != null ? SelectedPose.RightHand : null, evt.newValue, PreviewRight);
+                if (BodyPreview) LeftPosableHand = BodyPreview.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => e.IsLeft);
+                else LeftPosableHand = null;
             }
             else
             {
@@ -725,7 +776,7 @@ namespace HurricaneVR.Editor
                 }
                 else
                 {
-                    UpdatePreview(true, evt.newValue, SelectedPose?.LeftHand);
+                    UpdatePreview(true, evt.newValue, SelectedPose != null ? SelectedPose.LeftHand : null);
                 }
 
                 if (LeftHandPreview)
@@ -740,12 +791,24 @@ namespace HurricaneVR.Editor
             if (_leftPhysicsPoser)
             {
                 _leftPhysicsPoser.LiveUpdate = SP_LeftAutoPose.boolValue;
-                _leftPhysicsPoser.Setup();
             }
+        }
+
+        private void CheckRigidBody()
+        {
+            var g = Poser.GetComponentInParent<HVRGrabbable>();
+            Rigidbody rb = null;
+            if (g)
+            {
+                rb = g.gameObject.GetComponent<Rigidbody>();
+            }
+
+            _root.Q("lblAutoPoseWarning").style.display = rb ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private void UpdateBodyPreview(HVRHandPoseData leftpose, HVRHandPoseData rightpose, bool previewLeft, bool previewRight, bool poseChanged = false)
         {
+            
             if (!previewRight && !previewLeft)
             {
                 if (BodyPreview)
@@ -756,12 +819,14 @@ namespace HurricaneVR.Editor
                     SetupIKTarget(previewLeft, "LeftIKTarget", out var dummy);
                     SetupIKTarget(previewRight, "RightIKTarget", out var dummy2);
                 }
+
                 return;
             }
 
             if (!BodyPreview)
-            {
+            {                
                 var body = GameObject.Find(_bodyId);
+                
                 if (body)
                 {                    
                     SP_BodyPreview.objectReferenceValue = body;
@@ -775,10 +840,17 @@ namespace HurricaneVR.Editor
                     BodyPreview.transform.LookAt(Poser.transform.position, Vector3.up);
                     BodyPreview.transform.position -= new Vector3(0, 1.5f, 0);
 
+                    if (!BodyPreview.TryGetComponent(out HVRIKTargets targets))
+                    {                        
+                        targets = BodyPreview.AddComponent<HVRIKTargets>();
+                    }
+
+                    targets.IsPoser = true;
+                    targets.enabled = true;
                 }
             }
 
-            var poser = BodyPreview.GetComponent<HVRIKTargets>();
+            var ikTargets = BodyPreview.GetComponent<HVRIKTargets>();
             var hands = BodyPreview.GetComponentsInChildren<HVRPosableHand>();
             var leftHand = hands.FirstOrDefault(h => h.IsLeft);
             var rightHand = hands.FirstOrDefault(h => h.IsRight);
@@ -786,25 +858,51 @@ namespace HurricaneVR.Editor
             _leftIKTarget = SetupIKTarget(previewLeft, "LeftIKTarget", out var leftExists);
             _rightIKTarget = SetupIKTarget(previewRight, "RightIKTarget", out var rightExists);
 
+            
+
             if (_leftIKTarget)
             {
-                poser.LeftTarget = _leftIKTarget;
+                if (!_map.TryGetValue(_leftInstanceId, out var state))
+                {
+                    state = new PreviewState();
+                }
+
+                _map[_leftInstanceId] = state;
+                state.Body = BodyPreview.transform;
+                state.Hand = leftHand;
+                state.FullBody = true;
+                state.IsLeft = true;
+                state.Target = _leftIKTarget;
+
+                ikTargets.LeftTarget = _leftIKTarget;
 
                 if (leftHand && leftpose != null && (!leftExists || poseChanged))
                 {
-                    leftHand.Pose(leftpose, false);
+                    leftHand.Pose(leftpose, false);                    
                     _leftIKTarget.localPosition = leftpose.Position;
                     _leftIKTarget.localRotation = leftpose.Rotation;
                 }
             }
             else
             {
-                poser.LeftTarget = BodyPreview.transform;
+                ikTargets.LeftTarget = BodyPreview.transform;
             }
 
             if (_rightIKTarget)
             {
-                poser.RightTarget = _rightIKTarget;
+                ikTargets.RightTarget = _rightIKTarget;
+
+                if (!_map.TryGetValue(_rightInstanceId, out var state))
+                {
+                    state = new PreviewState() { Target = _rightIKTarget };
+                }
+
+                _map[_rightInstanceId] = state;
+                state.Body = BodyPreview.transform;
+                state.Hand = rightHand;
+                state.FullBody = true;
+                state.IsLeft = false;
+                state.Target = _rightIKTarget;
 
                 if (rightHand && rightpose != null && (!rightExists || poseChanged))
                 {
@@ -815,9 +913,8 @@ namespace HurricaneVR.Editor
             }
             else
             {
-                poser.RightTarget = BodyPreview.transform;
+                ikTargets.RightTarget = BodyPreview.transform;
             }
-
 
 
             SceneView.RepaintAll();
@@ -847,12 +944,9 @@ namespace HurricaneVR.Editor
 
         private void UpdatePreview(bool isLeft, bool preview, HVRHandPoseData pose, bool poseChange = false)
         {
-
-            
-            var previewHandProperty = isLeft ? SP_LeftHandPreview : SP_RightHandPreview;            
+            var previewHandProperty = isLeft ? SP_LeftHandPreview : SP_RightHandPreview;
             var handPrefab = isLeft ? HVRSettings.Instance.LeftHand : HVRSettings.Instance.RightHand;
 
-            
             if (!preview || !handPrefab)
             {
                 return;
@@ -864,7 +958,7 @@ namespace HurricaneVR.Editor
             }
 
             var previewName = FindPreviewHand(isLeft, out var existing);
-            
+
             //binding multiple editors to this object, they're bouncing off each other.
             //safety net
             if (existing)
@@ -886,17 +980,26 @@ namespace HurricaneVR.Editor
 
             var previewObj = previewHandProperty.objectReferenceValue as GameObject;
             if (!previewObj)
-            {                
-                previewObj = Instantiate(handPrefab, Poser.transform, false);                
+            {
+                previewObj = Instantiate(handPrefab, Poser.transform, false);
                 previewObj.name = previewName;
                 previewHandProperty.objectReferenceValue = previewObj;
+
+                if (!_map.TryGetValue(previewName, out var state))
+                {
+                    state = new PreviewState();
+                }
+
+                _map[previewName] = state;
+                state.FullBody = false;
+                state.Body = null;
+                state.Target = previewObj.transform;
             }
 
             var hand = previewObj.GetComponent<HVRPosableHand>();
             serializedObject.ApplyModifiedProperties();
             if (hand != null && pose != null)
             {
-                Debug.Log("Pose" + pose);
                 hand.Pose(pose);
                 SceneView.RepaintAll();
             }
@@ -908,6 +1011,9 @@ namespace HurricaneVR.Editor
 
         private void OnSelectedPoseChanged(ChangeEvent<Object> evt)
         {
+            if (_inPrefabMode)
+                return;
+
             if (evt.newValue != null)
             {
                 var newPose = evt.newValue as HVRHandPose;
@@ -926,9 +1032,12 @@ namespace HurricaneVR.Editor
                 PreviewLeftToggle.SetValueWithoutNotify(false);
                 PreviewRightToggle.SetValueWithoutNotify(false);
 
-                if (LeftHandPreview) DestroyImmediate(LeftHandPreview);
-                if (RightHandPreview) DestroyImmediate(RightHandPreview);
-                if (BodyPreview) DestroyImmediate(BodyPreview);
+                if (LeftHandPreview)
+                    DestroyImmediate(LeftHandPreview);
+                if (RightHandPreview)
+                    DestroyImmediate(RightHandPreview);
+                if (BodyPreview)
+                    DestroyImmediate(BodyPreview);
             }
 
             _root.schedule.Execute(PopulatePoses);
@@ -1078,13 +1187,14 @@ namespace HurricaneVR.Editor
 
             button.clickable.clicked += () =>
             {
+
                 if (!SelectedPose)
-                {
+                {                    
                     SaveNew();
                     return;
                 }
 
-                var folder = HVRSettings.Instance.PosesDirectory;
+                var folder = HVRSettings.Instance.PosesDirectory;                
                 string path;
 
                 if (string.IsNullOrWhiteSpace(folder))
@@ -1095,9 +1205,9 @@ namespace HurricaneVR.Editor
                 {
                     path = EditorUtility.SaveFilePanelInProject("Save New Pose", "pose", "asset", "Message", folder);
                 }
-
+                
                 if (!string.IsNullOrEmpty(path))
-                {
+                {                    
                     var left = SelectedPose.LeftHand;
                     var right = SelectedPose.RightHand;
 
@@ -1107,12 +1217,12 @@ namespace HurricaneVR.Editor
                     GetHands(ref leftHand, ref rightHand);
 
                     if (leftHand && PreviewLeft)
-                    {
+                    {                        
                         left = leftHand.CreateHandPose(FullBody ? _leftIKTarget : null);
                     }
 
                     if (rightHand && PreviewRight)
-                    {
+                    {                        
                         right = rightHand.CreateHandPose(FullBody ? _rightIKTarget : null);
                     }
 
@@ -1134,8 +1244,9 @@ namespace HurricaneVR.Editor
 
             button.clickable.clicked += () =>
             {
+                Debug.Log("clicked save");
                 if (!SelectedPose)
-                {
+                {                    
                     SaveNew();
                     return;
                 }
@@ -1144,17 +1255,19 @@ namespace HurricaneVR.Editor
                 HVRPosableHand rightHand = null;
 
                 GetHands(ref leftHand, ref rightHand);
-
+                //Debug.Log("left " + PreviewLeft);
                 if (leftHand && PreviewLeft)
-                {
+                {                    
                     var pose = leftHand.CreateHandPose(FullBody ? _leftIKTarget : null);
                     SelectedPose.LeftHand = pose;
+                    Debug.Log("Set Left Hand Selected Pose");
                 }
 
                 if (rightHand && PreviewRight)
                 {
                     var pose = rightHand.CreateHandPose(FullBody ? _rightIKTarget : null);
                     SelectedPose.RightHand = pose;
+                    Debug.Log("Set Right Hand Selected Pose");
                 }
 
                 EditorUtility.SetDirty(SelectedPose);
@@ -1198,21 +1311,6 @@ namespace HurricaneVR.Editor
             };
         }
 
-        private Quaternion MirrorRotation(Quaternion r)
-        {
-            Vector3 forward = r * Vector3.forward;
-            Vector3 up = r * Vector3.up;
-
-            forward.z *= -1;
-            up.z *= -1;
-
-            //forward.y *= -1;
-            //up.y *= -1;
-
-
-            return Quaternion.LookRotation(forward, up);
-        }
-
         private void SetupMirrorButtons()
         {
             var mirrorRight = _root.Q<Button>("ButtonMirrorRight");
@@ -1232,13 +1330,12 @@ namespace HurricaneVR.Editor
 
                     Undo.RegisterFullObjectHierarchyUndo(rightHand.gameObject, "Mirror left to right");
                     rightHand.Pose(right, false);
-                    Undo.RegisterFullObjectHierarchyUndo(_rightIKTarget, "Mirror left to right");
-
-                    //_rightIKTarget.rotation = MirrorRotation(_leftIKTarget.rotation);
-                    //_rightIKTarget.localPosition = right.Position;
-
-                    //_rightIKTarget.localPosition = right.Position;
-                    //_rightIKTarget.localRotation = right.Rotation;
+                    if (HVRSettings.Instance.IKHandMirroring)
+                    {
+                        Undo.RegisterFullObjectHierarchyUndo(_rightIKTarget, "Mirror left to right");
+                        _rightIKTarget.localRotation = right.Rotation;
+                        _rightIKTarget.localPosition = right.Position;
+                    }
                 }
                 else
                 {
@@ -1252,7 +1349,6 @@ namespace HurricaneVR.Editor
                         rightHand.Pose(right);
                     }
                 }
-
             };
 
             var mirrorLeft = _root.Q<Button>("ButtonMirrorLeft");
@@ -1272,9 +1368,12 @@ namespace HurricaneVR.Editor
 
                     Undo.RegisterFullObjectHierarchyUndo(leftHand.gameObject, "Mirror right to left");
                     leftHand.Pose(pose, false);
-                    Undo.RegisterFullObjectHierarchyUndo(_leftIKTarget, "Mirror right to left");
-                    //_leftIKTarget.localPosition = pose.Position;
-                    //_leftIKTarget.localRotation = pose.Rotation;
+                    if (HVRSettings.Instance.IKHandMirroring)
+                    {
+                        Undo.RegisterFullObjectHierarchyUndo(_leftIKTarget, "Mirror right to left");
+                        _leftIKTarget.localPosition = pose.Position;
+                        _leftIKTarget.localRotation = pose.Rotation;
+                    }
                 }
                 else
                 {
@@ -1288,8 +1387,6 @@ namespace HurricaneVR.Editor
                         leftHand.Pose(left);
                     }
                 }
-
-
             };
         }
 
@@ -1316,7 +1413,7 @@ namespace HurricaneVR.Editor
             leftExpand.clickable.clicked += () =>
             {
                 if (LeftHandPreview) LeftHandPreview.SetExpandedRecursive(true);
-                else if (BodyPreview) BodyPreview.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => e.IsLeft)?.gameObject.SetExpandedRecursive(true);
+                else if (LeftPosableHand) LeftPosableHand.gameObject.SetExpandedRecursive(true);
             };
 
             var leftCollapse = _root.Q<Button>("LeftCollapse");
@@ -1324,7 +1421,7 @@ namespace HurricaneVR.Editor
             leftCollapse.clickable.clicked += () =>
             {
                 if (LeftHandPreview) LeftHandPreview.SetExpandedRecursive(false);
-                else if (BodyPreview) BodyPreview.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => e.IsLeft)?.gameObject.SetExpandedRecursive(false);
+                else if (LeftPosableHand) LeftPosableHand.gameObject.SetExpandedRecursive(false);
             };
 
             var rightExpand = _root.Q<Button>("RightExpand");
@@ -1332,7 +1429,7 @@ namespace HurricaneVR.Editor
             rightExpand.clickable.clicked += () =>
             {
                 if (RightHandPreview) RightHandPreview.SetExpandedRecursive(true);
-                else if (BodyPreview) BodyPreview.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => e.IsRight)?.gameObject.SetExpandedRecursive(true);
+                else if (RightPosableHand) RightPosableHand.gameObject.SetExpandedRecursive(true);
             };
 
             var rightCollapse = _root.Q<Button>("RightCollapse");
@@ -1340,7 +1437,7 @@ namespace HurricaneVR.Editor
             rightCollapse.clickable.clicked += () =>
             {
                 if (RightHandPreview) RightHandPreview.SetExpandedRecursive(false);
-                else if (BodyPreview) BodyPreview.GetComponentsInChildren<HVRPosableHand>().FirstOrDefault(e => e.IsRight)?.gameObject.SetExpandedRecursive(false);
+                else if (RightPosableHand) RightPosableHand.gameObject.SetExpandedRecursive(false);
             };
         }
 
@@ -1351,10 +1448,7 @@ namespace HurricaneVR.Editor
             SelectedPoseField.bindingPath = "Pose";
             //SelectedPoseField.RegisterValueChangedCallback(OnSelectedPoseChanged);
             ////unity decide to fk with everything in 2020, hack to handle selected pose field from firing it's change event on enable that didn't happen in 2019..
-            var schedule = container.schedule.Execute(() =>
-            {
-                SelectedPoseField.RegisterValueChangedCallback(OnSelectedPoseChanged);
-            });
+            var schedule = container.schedule.Execute(() => { SelectedPoseField.RegisterValueChangedCallback(OnSelectedPoseChanged); });
             schedule.StartingIn(1000);
         }
 
@@ -1365,17 +1459,27 @@ namespace HurricaneVR.Editor
             PosesListView.makeItem = MakePoseListItem;
             PosesListView.bindItem = BindItem;
             PosesListView.selectionType = SelectionType.Single;
-            PosesListView.onSelectionChange += OnPoseListIndexChange;
+
+#if UNITY_2021_2_OR_NEWER
             PosesListView.fixedItemHeight = (int)EditorGUIUtility.singleLineHeight;
+#else
+            PosesListView.itemHeight = (int)EditorGUIUtility.singleLineHeight;
+#endif
+
             PosesListView.style.height = EditorGUIUtility.singleLineHeight * 5;
             PopulatePoses();
+
+
+#if UNITY_2021_1_OR_NEWER
+            PosesListView.onSelectionChange += OnPoseSelectionChanged;
+#else
+
+            PosesListView.onSelectionChanged += OnPoseListIndexChanged;
+
+#endif
         }
 
-        public ListView BlendListView;
         private BindableElement blendEditorRoot;
-        private SerializedObject blendObj;
-        private bool _leftTracking;
-        private bool _selectedPoseHandled;
 
         public HVRPosableHand LeftPosableHand;
         public HVRPosableHand RightPosableHand;
@@ -1389,28 +1493,8 @@ namespace HurricaneVR.Editor
             return previewName;
         }
 
-
-        private void OnPoseListIndexChange(IEnumerable<object> p)
+        private void OnPoseSelectionChanged(IEnumerable<object> obj)
         {
-            //if (PreviewLeft.value || PreviewRight.value)
-            //{
-            //    if (!EditorUtility.DisplayDialog("Warning!", $"Preview hands are enabled. Switch pose and lose changes?", "Yes", "No"))
-            //    {
-            //        try
-            //        {
-            //            PosesListView.onSelectionChanged -= OnPoseListIndexChanged;
-            //            PosesListView.selectedIndex = _previousIndex;
-            //        }
-            //        finally
-            //        {
-            //            PosesListView.onSelectionChanged += OnPoseListIndexChanged;
-            //        }
-
-
-            //        return;
-            //    }
-            //}
-
             if (PosesListView.selectedIndex >= Poser.PoseNames.Count)
             {
                 PosesListView.selectedIndex = Poser.PoseNames.Count - 1;
@@ -1423,9 +1507,16 @@ namespace HurricaneVR.Editor
             }
 
             SelectedIndex = PosesListView.selectedIndex;
-            _previousIndex = CurrentPoseIndex;
+
+            var poseName = SelectedPose == null ? "None" : SelectedPose.name;
+            blendEditorRoot.Q<Label>("lblSelectedPose").text = $"Selected Pose: {poseName}";
 
             BindBlendContainer();
+        }
+
+        private void OnPoseListIndexChanged(List<object> p)
+        {
+            OnPoseSelectionChanged(p);
         }
 
         private void BindItem(VisualElement visual, int index)
@@ -1434,7 +1525,6 @@ namespace HurricaneVR.Editor
             if (index == PrimaryIndex)
             {
                 label.AddToClassList("primarypose");
-
             }
 
             if (index < Poser.PoseNames.Count)
@@ -1448,12 +1538,13 @@ namespace HurricaneVR.Editor
 
         public void PopulatePoses()
         {
+            Debug.Log("Populating Poses");
             SP_PoseNames.ClearArray();
-            //Poser.PoseNames.Clear();
-            var primaryName = PrimaryPose == null || PrimaryPose.Pose == null ? "Primary Not Set" : "Primary: " + PrimaryPose.Pose.name;            
+            
+            var primaryName = PrimaryPose == null || PrimaryPose.Pose == null ? "Primary Not Set" : "Primary: " + PrimaryPose.Pose.name;
             SP_PoseNames.InsertArrayElementAtIndex(0);
             SP_PoseNames.GetArrayElementAtIndex(0).stringValue = primaryName;
-            //Poser.PoseNames.Add(primaryName);
+
             for (var i = 0; i < SP_Blends.arraySize; i++)
             {
                 string poseName;
@@ -1470,11 +1561,46 @@ namespace HurricaneVR.Editor
                 SP_PoseNames.InsertArrayElementAtIndex(i + 1);
                 SP_PoseNames.GetArrayElementAtIndex(i + 1).stringValue = poseName;
             }
-            //PosesListView.Bind();
+
             serializedObject.ApplyModifiedProperties();
 
 
+#if UNITY_2021_2_OR_NEWER
             PosesListView?.Rebuild();
+#else
+            PosesListView?.Refresh();
+#endif
         }
     }
+
+    //[Serializable]
+    //public class State
+    //{
+    //    //  [SerializeField]
+    //    protected GameObject LeftHandPreview;
+
+    //    // [SerializeField]
+    //    protected GameObject RightHandPreview;
+
+    //    // [SerializeField]
+    //    protected GameObject BodyPreview;
+
+    //    //  [SerializeField]
+    //    protected bool PreviewLeft;
+
+    //    //  [SerializeField]
+    //    protected bool PreviewRight;
+
+    //    //  [SerializeField]
+    //    protected bool LeftAutoPose;
+
+    //    //  [SerializeField]
+    //    protected bool RightAutoPose;
+
+    //    // [SerializeField]
+    //    protected int SelectionIndex;
+
+    //    // [SerializeField]
+    //    public List<string> PoseNames = new List<string>();
+    //}
 }

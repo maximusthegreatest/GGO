@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +12,11 @@ namespace HurricaneVR.Framework.Core.Stabbing
     public class HVRStabber : MonoBehaviour
     {
         [Header("Objects / Components")]
+
+        [Tooltip("Starting tip point of the stabber")]
         public Transform Tip;
+
+        [Tooltip("Base of the stabber, limits the stab depth unless CanRunThrough is set to true.")]
         public Transform Base;
 
         public HVRStabberSettings Settings;
@@ -21,19 +26,24 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
         [Tooltip("Ignores stabbable velocity requirement")]
         public bool IgnoreVelocityCheck;
-        
+
         public HVRStabbableSettings FallbackSettings;
-        
+
+        public JointProjectionMode ProjectionMode = JointProjectionMode.PositionAndRotation;
+        public float ProjectionDistance = .01f;
+        public float ProjectionAngle = 20f;
+
         [Tooltip("Both base and tip can stab something")]
         public bool IsDualStabber;
 
         [Tooltip("If true the stabber can exit through the base")]
         public bool CanRunThrough;
 
-
         [Header("Collision")]
+
         [Tooltip("Colliders to disable collision with the stabbed object")]
         public Collider[] CollidersToIgnore;
+
         [Tooltip("Colliders involved in stab detection")]
         public Collider[] StabbingColliders;
 
@@ -57,7 +67,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
         public HVRStabEvents FullStabbed = new HVRStabEvents();
 
         public Vector3 StabLineWorld => Tip.position - Base.position;
-        public Vector3 StabLineLocal => Tip.localPosition - Base.localPosition;
+        public Vector3 StabLineLocal => Rigidbody.transform.InverseTransformPoint(Tip.position) - Rigidbody.transform.InverseTransformPoint(Base.position);
 
         public float Length => StabLineWorld.magnitude;
 
@@ -73,7 +83,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
         private Vector3 _velocity;
 
 
-        public void Start()
+        protected virtual void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
 
@@ -198,22 +208,15 @@ namespace HurricaneVR.Framework.Core.Stabbing
                 GameObject stabbedObject;
                 HVRStabbable stabbable;
                 HVRNotStabbable notStabbable;
-                Collider[] stabbedColliders;
+
                 var otherRB = contact.otherCollider.attachedRigidbody;
                 if (otherRB)
                 {
                     stabbedObject = otherRB.gameObject;
-                    stabbable = stabbedObject.GetComponent<HVRStabbable>();
-                    notStabbable = stabbedObject.GetComponent<HVRNotStabbable>();
-                    //stabbedColliders = otherRB.GetColliders(otherRB.transform).ToArray();
-                    stabbedColliders = GetColliders(otherRB, otherRB.transform).Where(e => !e.isTrigger).ToArray();
                 }
                 else
                 {
                     stabbedObject = contact.otherCollider.gameObject;
-                    stabbable = stabbedObject.GetComponent<HVRStabbable>();
-                    notStabbable = stabbedObject.GetComponent<HVRNotStabbable>();
-                    stabbedColliders = stabbedObject.GetComponentsInChildren<Collider>().Where(e => !e.isTrigger).ToArray();
                 }
 
                 if (StabbedObjects.Contains(stabbedObject))
@@ -221,8 +224,17 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
                 HVRStabbableSettings settings;
 
+                stabbedObject.TryGetComponent(out stabbable);
+                stabbedObject.TryGetComponent(out notStabbable);
+
+
                 if (stabbable)
                 {
+                    if (!stabbable.enabled)
+                    {
+                        if (VerboseDebugging) Debug.Log($"{stabbable.name} stabbable disabled.");
+                        return;
+                    }
                     settings = stabbable.Settings;
                 }
                 else
@@ -287,6 +299,23 @@ namespace HurricaneVR.Framework.Core.Stabbing
                     StabbedStabbables.Add(stabbable);
                 }
 
+                List<Collider> stabbedColliders;
+                if (stabbable)
+                {
+                    stabbedColliders = stabbable.Ignorecolliders;
+                }
+                else
+                {
+                    if (otherRB)
+                    {
+                        stabbedColliders = otherRB.GetColliders().ToList();
+                    }
+                    else
+                    {
+                        stabbedColliders = contact.otherCollider.gameObject.GetColliders();
+                    }
+                }
+
                 IgnoreCollision(stabbedColliders);
 
                 var tracker = new HVRStabTracker(this,
@@ -300,13 +329,15 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
                 _trackers.Add(tracker);
 
-                OnStabEnter(stabbable, collision);
+                OnStabEnter(stabbable, collision, contact);
             }
         }
 
-        protected internal virtual void OnStabEnter(HVRStabbable stabbable, Collision collision)
+        protected internal virtual void OnStabEnter(HVRStabbable stabbable, Collision collision, ContactPoint contact)
         {
-            Stabbed.Invoke(this, stabbable, collision);
+            var args = new StabArgs(this, stabbable, collision, contact.point, contact.normal);
+
+            Stabbed.Invoke(args);
 
             if (VerboseDebugging)
             {
@@ -315,7 +346,8 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
             if (stabbable)
             {
-                stabbable.OnStabberEnter(this, collision);
+                stabbable.OnStabberEnter(this, collision, contact);
+                stabbable.Stabbed.Invoke(args);
             }
         }
 
@@ -348,12 +380,25 @@ namespace HurricaneVR.Framework.Core.Stabbing
             }
         }
 
-        private ConfigurableJoint SetupStabJoint(HVRStabbableSettings settings, Transform tip, Rigidbody otherRB)
+        protected virtual ConfigurableJoint SetupStabJoint(HVRStabbableSettings settings, Transform tip, Rigidbody otherRB)
         {
             var joint = Rigidbody.gameObject.AddComponent<ConfigurableJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.axis = StabLineLocal.normalized;
             joint.secondaryAxis = HVRUtilities.OrthogonalVector(joint.axis);
+
+            if (settings.OverrideStabberProjection)
+            {
+                joint.projectionMode = settings.ProjectionMode;
+                joint.projectionDistance = settings.ProjectionDistance;
+                joint.projectionAngle = settings.ProjectionAngle;
+            }
+            else
+            {
+                joint.projectionMode = ProjectionMode;
+                joint.projectionDistance = ProjectionDistance;
+                joint.projectionAngle = ProjectionAngle;
+            }
 
             joint.yMotion = ConfigurableJointMotion.Locked;
             joint.zMotion = ConfigurableJointMotion.Locked;
@@ -367,7 +412,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
             //}
             //else
             {
-                joint.anchor = tip.localPosition;
+                joint.anchor = Rigidbody.transform.InverseTransformPoint(tip.position);
                 joint.xMotion = ConfigurableJointMotion.Limited;
             }
 
@@ -402,10 +447,11 @@ namespace HurricaneVR.Framework.Core.Stabbing
             return joint;
         }
 
-        private void IgnoreCollision(IEnumerable<Collider> stabbedColliders, bool ignore = true)
+        private void IgnoreCollision(List<Collider> stabbedColliders, bool ignore = true)
         {
-            foreach (var stabbedCollider in stabbedColliders)
+            for (var i = 0; i < stabbedColliders.Count; i++)
             {
+                var stabbedCollider = stabbedColliders[i];
                 foreach (var stabCollider in StabbingColliders)
                 {
                     if (stabbedCollider)
@@ -518,8 +564,27 @@ namespace HurricaneVR.Framework.Core.Stabbing
     }
 
     [Serializable]
-    public class HVRStabEvent : UnityEvent<HVRStabber, HVRStabbable, Collision>
+    public class HVRStabEvent : UnityEvent<StabArgs>
     {
 
+    }
+
+    public struct StabArgs
+    {
+        public StabArgs(HVRStabber stabber, HVRStabbable stabbable, Collision collision, Vector3 point, Vector3 normal)
+        {
+            Stabber = stabber;
+            Stabbable = stabbable;
+            Collision = collision;
+            Point = point;
+            Normal = normal;
+        }
+
+
+        public HVRStabber Stabber;
+        public HVRStabbable Stabbable;
+        public Collision Collision;
+        public Vector3 Point;
+        public Vector3 Normal;
     }
 }

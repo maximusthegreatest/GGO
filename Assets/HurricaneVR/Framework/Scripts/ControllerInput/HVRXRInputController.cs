@@ -78,99 +78,37 @@ namespace HurricaneVR.Framework.ControllerInput
             {
                 Device.TryGetFeatureValue(JoystickAxisFeature, out JoystickAxis);
                 Device.TryGetFeatureValue(TrackPadAxisFeature, out TrackpadAxis);
-            }
-        }
 
-        protected override void CheckButtonState(HVRButtons button, ref HVRButtonState buttonState)
-        {
-            ResetButton(ref buttonState);
+                Device.TryGetFeatureValue(CommonUsages.grip, out Grip);
+                Device.TryGetFeatureValue(CommonUsages.trigger, out Trigger);
 
-            if (!InputMap)
-                return;
+                PrimaryButton = IsPressed(Device, InputMap.Primary);
+                PrimaryTouch = IsPressed(Device, InputMap.PrimaryTouch);
 
-            var trackPadIsPrimary = InputMap.TrackPadAxis == InputAxes.Primary2DAxis;
+                SecondaryButton = IsPressed(Device, InputMap.Secondary);
+                SecondaryTouch = IsPressed(Device, InputMap.SecondaryTouch);
 
-            switch (button)
-            {
-                case HVRButtons.Grip:
-                    Device.TryGetFeatureValue(CommonUsages.grip, out Grip);
-                    buttonState.Value = Grip;
-                    SetButtonState(button, ref buttonState, Grip >= InputMap.GripThreshold);
-                    break;
-                case HVRButtons.Trigger:
-                    Device.TryGetFeatureValue(CommonUsages.trigger, out Trigger);
-                    buttonState.Value = Trigger;
-                    SetButtonState(button, ref buttonState, Trigger >= InputMap.TriggerThreshold);
-                    break;
-                case HVRButtons.Primary:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.Primary));
-                    PrimaryButton = buttonState.Active;
-                    break;
-                case HVRButtons.PrimaryTouch:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.PrimaryTouch));
-                    PrimaryTouch = buttonState.Active;
-                    break;
-                case HVRButtons.Secondary:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.Secondary));
-                    SecondaryButton = buttonState.Active;
-                    break;
-                case HVRButtons.SecondaryTouch:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.SecondaryTouch));
-                    SecondaryTouch = buttonState.Active;
-                    break;
-                case HVRButtons.Menu:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.Menu));
-                    MenuButton = buttonState.Active;
-                    break;
-                case HVRButtons.JoystickButton:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.JoystickButton));
-                    JoystickClicked = buttonState.Active;
-                    break;
-                case HVRButtons.TrackPadButton:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.TrackPadButton));
-                    TrackPadClicked = buttonState.Active;
-                    break;
-                case HVRButtons.JoystickTouch:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.JoystickTouch));
-                    JoystickTouch = buttonState.Active;
-                    break;
-                case HVRButtons.TrackPadTouch:
-                    SetButtonState(button, ref buttonState, IsPressed(Device, InputMap.TrackPadTouch));
-                    TrackPadTouch = buttonState.Active;
-                    break;
-                case HVRButtons.TriggerTouch:
+                MenuButton = IsPressed(Device, InputMap.Menu);
+
+                JoystickClicked = IsPressed(Device, InputMap.JoystickButton);
+                TrackPadClicked = IsPressed(Device, InputMap.TrackPadButton);
+
+                JoystickTouch = IsPressed(Device, InputMap.JoystickTouch);
+                TrackPadTouch = IsPressed(Device, InputMap.TrackPadTouch);
+
 #if USING_XR_MANAGEMENT
                     Device.TryGetFeatureValue(indexTouch, out  TriggerTouch);
 #else
-                    Device.TryGetFeatureValue(legacyIndexTouch, out var temp);
-                    
-                    TriggerTouch = temp > 0f;
-#endif
+                Device.TryGetFeatureValue(legacyIndexTouch, out var temp);
 
-                    SetButtonState(button, ref buttonState, TriggerTouch);
-                    break;
-                case HVRButtons.TrackPadLeft:
-                    SetButtonState(button,
-                        ref TrackPadLeft,
-                        IsPressed(Device, trackPadIsPrimary ? HVRXRInputFeatures.PrimaryAxis2DLeft : HVRXRInputFeatures.SecondaryAxis2DLeft));
-                    break;
-                case HVRButtons.TrackPadRight:
-                    SetButtonState(button,
-                        ref TrackPadRight,
-                        IsPressed(Device, trackPadIsPrimary ? HVRXRInputFeatures.PrimaryAxis2DRight : HVRXRInputFeatures.SecondaryAxis2DRight));
-                    break;
-                case HVRButtons.TrackPadUp:
-                    SetButtonState(button,
-                        ref TrackPadUp,
-                        IsPressed(Device, trackPadIsPrimary ? HVRXRInputFeatures.PrimaryAxis2DUp : HVRXRInputFeatures.SecondaryAxis2DUp));
-                    break;
-                case HVRButtons.TrackPadDown:
-                    SetButtonState(button,
-                        ref TrackPadDown,
-                        IsPressed(Device, trackPadIsPrimary ? HVRXRInputFeatures.PrimaryAxis2DDown : HVRXRInputFeatures.SecondaryAxis2DDown));
-                    break;
+                TriggerTouch = temp > 0f;
+#endif
             }
         }
+
+
+
+   
 
         private readonly InputFeatureUsage<bool> indexTouch = new InputFeatureUsage<bool>("IndexTouch");
         private static InputFeatureUsage<float> legacyIndexTouch = new InputFeatureUsage<float>("IndexTouch");

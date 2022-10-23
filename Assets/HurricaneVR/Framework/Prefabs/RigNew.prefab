@@ -129,6 +129,39 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1352915576972152872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1760928880840432264}
+  m_Layer: 0
+  m_Name: CameraScale
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1760928880840432264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352915576972152872}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2917040259746140266}
+  - {fileID: 2917040260306004641}
+  - {fileID: 2917040258726646437}
+  m_Father: {fileID: 2917040259896981101}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2917040258726646438
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +192,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7096140408314881885}
-  m_Father: {fileID: 2917040259896981101}
+  m_Father: {fileID: 1760928880840432264}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2917040258726646436
@@ -210,6 +243,7 @@ GameObject:
   - component: {fileID: 3099806390274327551}
   - component: {fileID: 2849229919177730855}
   - component: {fileID: 2159019652014617938}
+  - component: {fileID: 448952085418092941}
   m_Layer: 8
   m_Name: PlayerController
   m_TagString: Untagged
@@ -229,6 +263,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2917040259566489517}
+  - {fileID: 1002213357719460812}
   m_Father: {fileID: 2917040259946689807}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -266,7 +301,8 @@ MonoBehaviour:
   CanSteerWhileJumping: 1
   CanSprint: 1
   CanCrouch: 1
-  WaitForHMDActive: 1
+  DirectionStyle: 0
+  InitialHMDAdjustment: 1
   GroundedLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -281,12 +317,12 @@ MonoBehaviour:
   MaxFallSpeed: 5
   JumpVelocity: 2
   DoubleClickThreshold: 0.25
-  RotationTeleportThreshold: 0.3
   RotationType: 0
   SmoothTurnSpeed: 120
   SmoothTurnThreshold: 0.1
   SnapAmount: 45
   SnapThreshold: 0.75
+  RotateWhileTeleportAiming: 0
   CrouchMinHeight: 1.2
   CrouchHeight: 0.7
   CrouchSpeed: 1.5
@@ -295,6 +331,7 @@ MonoBehaviour:
   FloorOffset: {fileID: 2917040259896981101}
   LeftControllerTransform: {fileID: 2917040260306004641}
   RightControllerTransform: {fileID: 2917040258726646437}
+  CameraScale: {fileID: 0}
   CameraRig: {fileID: 3099806390354382629}
   LeftHand: {fileID: 7139370337389687772}
   RightHand: {fileID: 1697233881667275282}
@@ -307,9 +344,8 @@ MonoBehaviour:
   LimitHeadDistance: 1
   MaxLean: 0.5
   FadeFromLean: 1
-  UseWASD: 0
   MouseTurning: 0
-  MouseSensitivity: {x: 1, y: 1}
+  MouseSensitivityX: 1
   _actualVelocity: 0
 --- !u!114 &3099806390274327551
 MonoBehaviour:
@@ -339,27 +375,106 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcc26ecb5c24116a2b1c03eaeeef771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 2917040259746140266}
+  TeleportLineSourceLeft: {fileID: 7929709561127708135}
+  TeleportLineSourceRight: {fileID: 5498529168752868248}
+  LeftHand: {fileID: 0}
+  RightHand: {fileID: 0}
+  Player: {fileID: 0}
+  PlayerRotateCheck: 1
+  PlayerGroundedCheck: 1
+  PlayerClimbingCheck: 1
+  RotationTeleportThreshold: 0.3
+  ValidColor: {r: 0.006109435, g: 0.8308824, b: 0.7284968, a: 1}
+  InvalidColor: {r: 0.8679245, g: 0.1432894, b: 0.1432894, a: 1}
   LineRenderer: {fileID: 5232575148171352888}
   DownRenderer: {fileID: 7441484093043751154}
+  TeleportMarker: {fileID: 2254574766571103723}
+  DownLineMinLength: 0.2
+  DownLineMaxLength: 0.2
+  DisableMarkerWhenInvalid: 0
+  CurveType: 0
+  MaxAngle: 179
   LineSegments: 200
-  LineSegmentScale: 0.1
-  Strength: 750
-  StartingAngle: 20
+  CollisionBuffer: 0.05
   LayerMask:
     serializedVersion: 2
     m_Bits: 1
-  FloorOffset: 0.05
+  LayerMaskTriggerInteraction: 1
+  Speed: 7.5
+  TimeStep: 0.01
+  BezierAngleOffset: 0.3
+  BezierAngleOffsetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  TeleportDistance: 5
+  DownRayLength: 5
+  DownRayIgnoreMask:
+    serializedVersion: 2
+    m_Bits: 2097152
   Dash: 0
   DashSpeed: 15
-  TeleportLineSourceLeft: {fileID: 7929709561127708135}
-  TeleportLineSourceRight: {fileID: 5498529168752868248}
-  TeleportMarker: {fileID: 9215739799248623428}
+  RequireOriginLineOfSight: 0
+  OriginIgnoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 3145984
+  RequireDestinationLineOfSight: 0
+  DestinationHeight: 1
+  DestinationIntervals: 15
+  DestinationIgnoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 3145984
+  CheckDropDistance: 1
+  MaxDropDistance: 5
+  CheckJumpDistance: 0
+  MaxJumpDistance: 1.5
+  PlayerFitIgnoreLayerMask:
+    serializedVersion: 2
+    m_Bits: 3145984
+  TeleportableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  MaxSurfaceAngle: 45
+  Capsule: {fileID: 0}
   BeforeTeleport:
     m_PersistentCalls:
       m_Calls: []
   AfterTeleport:
     m_PersistentCalls:
       m_Calls: []
+  PositionUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  DownHitNormal: {x: 0, y: 0, z: 0}
+  SurfaceAngle: 0
+  IsDropDistanceValid: 0
+  IsSurfaceAngleValid: 0
+  IsDestinationInLineOfSight: 0
+  IsOnlyDropDistanceInvalid: 0
+  IsOriginInLineOfSight: 0
+  IsJumpDistanceValid: 0
+  TeleportState: 0
 --- !u!114 &2159019652014617938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,12 +525,10 @@ MonoBehaviour:
     JustDeactivated: 0
     Value: 0
   IsLeftGrabActivated: 0
-  IsLeftTriggerGrabActivated: 0
   IsLeftHoldActive: 0
   IsLeftGripHoldActive: 0
   IsLeftTriggerHoldActive: 0
   IsRightGrabActivated: 0
-  IsRightTriggerGrabActivated: 0
   IsRightHoldActive: 0
   IsRightGripHoldActive: 0
   IsRightTriggerHoldActive: 0
@@ -426,6 +539,37 @@ MonoBehaviour:
   IsJumpActivated: 0
   TeleportHandSide: 1
   SwapMovementAxis: 0
+  UseWASD: 0
+  IsMouseDown: 0
+  MouseAxis: {x: 0, y: 0}
+--- !u!114 &448952085418092941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2917040259373967273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f69bcc72f4218bf44a4a7bb55f1efd7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AfterTeleportOption: 1
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  StuckTime: 0.1
+  ResetTarget: {fileID: 1002213357719460812}
+  LeftHand: {fileID: 7139370337389687772}
+  LeftJointHand: {fileID: 8267787630109386924}
+  RightHand: {fileID: 1697233881667275282}
+  RightJointHand: {fileID: 8716711742430449797}
+  GrabbableStuck:
+    m_PersistentCalls:
+      m_Calls: []
+  GrabbableUnstuck:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2917040259566489518
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,13 +616,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 2917040259746140266}
   FloorOffset: {fileID: 2917040259896981101}
+  CameraScale: {fileID: 1760928880840432264}
   CameraYOffset: 0
+  PlayerHeight: 1.66
+  SitStanding: 2
+  DebugKeyboardOffset: 0
+  CalibrateOnHMDDetected: 0
+  CalibrateImmediately: 0
   PlayerControllerYOffset: 0
   AdjustedCameraHeight: 0
-  StartingHeightSpeed: 0.01
-  StartingHeight: 1.5
-  ForceStartingHeight: 0
-  DebugKeyboardOffset: 0
+  SittingOffset: 0
 --- !u!1 &2917040259746140267
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +660,7 @@ Transform:
   m_Children:
   - {fileID: 6030809670658664758}
   - {fileID: 1316413229165342905}
-  m_Father: {fileID: 2917040259896981101}
+  m_Father: {fileID: 1760928880840432264}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2917040259746140279
@@ -646,9 +793,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2917040259746140266}
-  - {fileID: 2917040260306004641}
-  - {fileID: 2917040258726646437}
+  - {fileID: 1760928880840432264}
   m_Father: {fileID: 2917040259566489517}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -676,7 +821,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2917040259946689792}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.479, y: -0.972, z: -6.749}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000004, y: 1, z: 1.0000004}
   m_Children:
   - {fileID: 2917040259373967272}
@@ -717,7 +862,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4319757947152493617}
-  m_Father: {fileID: 2917040259896981101}
+  m_Father: {fileID: 1760928880840432264}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2917040260306004640
@@ -883,6 +1028,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &7127616175516674318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1002213357719460812}
+  m_Layer: 8
+  m_Name: TeleportHandStart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1002213357719460812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7127616175516674318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2917040259373967272}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7215174519778634763
 GameObject:
   m_ObjectHideFlags: 0
@@ -932,6 +1107,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HandSide: 0
+  Teleport: {fileID: 7929709561127708135}
+  GrabPointPositionOffset: {x: 0, y: 0, z: 0}
+  GrabPointRotationOffset: {x: 0, y: 0, z: 0}
+  MiscPositionOffset: {x: 0, y: 0, z: 0}
+  MiscRotationOffset: {x: 0, y: 0, z: 0}
+  LiveUpdateOffsets: 0
 --- !u!54 &4281434063751581001
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1013,6 +1194,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HandSide: 1
+  Teleport: {fileID: 5498529168752868248}
+  GrabPointPositionOffset: {x: 0, y: 0, z: 0}
+  GrabPointRotationOffset: {x: 0, y: 0, z: 0}
+  MiscPositionOffset: {x: 0, y: 0, z: 0}
+  MiscRotationOffset: {x: 0, y: 0, z: 0}
+  LiveUpdateOffsets: 0
 --- !u!54 &4996980067859995087
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1512,12 +1699,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 835295b2d9dd18a4ebc77b7dfc3e5766, type: 3}
---- !u!4 &1316413229165342905 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4739169019503290541, guid: 835295b2d9dd18a4ebc77b7dfc3e5766,
-    type: 3}
-  m_PrefabInstance: {fileID: 6016879222944028692}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2320896053101088908 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8337646630902925464, guid: 835295b2d9dd18a4ebc77b7dfc3e5766,
@@ -1530,6 +1711,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf09ab92679f4a018fef9dba9dc51697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1316413229165342905 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4739169019503290541, guid: 835295b2d9dd18a4ebc77b7dfc3e5766,
+    type: 3}
+  m_PrefabInstance: {fileID: 6016879222944028692}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6893634651481907761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1867,6 +2054,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7695675483005475424}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2254574766571103723 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8468266870615506827, guid: 435f1b08e0f62474baf456e504b11bd8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7695675483005475424}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df8dafe9ffc4293478f87948f6dcba4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!120 &7441484093043751154 stripped
 LineRenderer:
   m_CorrespondingSourceObject: {fileID: 975590409838191250, guid: 435f1b08e0f62474baf456e504b11bd8,
@@ -1876,12 +2075,6 @@ LineRenderer:
 --- !u!120 &5232575148171352888 stripped
 LineRenderer:
   m_CorrespondingSourceObject: {fileID: 2472862449224843608, guid: 435f1b08e0f62474baf456e504b11bd8,
-    type: 3}
-  m_PrefabInstance: {fileID: 7695675483005475424}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &9215739799248623428 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1524585645867896100, guid: 435f1b08e0f62474baf456e504b11bd8,
     type: 3}
   m_PrefabInstance: {fileID: 7695675483005475424}
   m_PrefabAsset: {fileID: 0}

@@ -4,64 +4,65 @@ using System.Collections.Generic;
 using System.Linq;
 using HurricaneVR.Framework.Components;
 using HurricaneVR.Framework.Core.Grabbers;
+using HurricaneVR.Framework.Core.HandPoser;
+using HurricaneVR.Framework.Core.Player;
+using HurricaneVR.Framework.Core.ScriptableObjects;
 using HurricaneVR.Framework.Core.Sockets;
 using HurricaneVR.Framework.Core.Stabbing;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
-using HurricaneVR.Framework.Shared.HandPoser;
 using HurricaneVR.Framework.Shared.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace HurricaneVR.Framework.Core
 {
-
-
     public class HVRGrabbable : MonoBehaviour
     {
         #region Fields
 
         internal const int TrackedVelocityCount = 10;
 
+        [Header("Grab Settings")] [Tooltip("Define grab behaviour, HandGrabber Default, Pull object to hand, Hand goes to the object.")]
+        public GrabBehaviour GrabBehaviour = GrabBehaviour.Default;
 
-        [Header("Grab Settings")]
-        [Tooltip("If in a networked game, can someone take this object from your hand?")]
-        public bool AllowMultiplayerSwap;
+        [FormerlySerializedAs("GrabType")] public PoseType PoseType;
 
-        public HVRGrabType GrabType;
+        [Tooltip("Whether or not the grab uses physics joints with the hand")]
         public HVRGrabTracking TrackingType;
-        public HVRHoldType HoldType = HVRHoldType.AllowSwap;
+
+        [Tooltip("One Hand, Swap hand Allowed, or two hand hold allowed")]
+        public HVRHoldType HoldType = HVRHoldType.Swap;
+
+        [Tooltip("Control whether grip, trigger, or grip and trigger can grab this")]
         public HVRGrabControls GrabControl = HVRGrabControls.GripOrTrigger;
+
+        [Tooltip("By default input to continue holding will use whatever the Hand Grabber is set to, enable this to allow overriding that behaviour.")]
         public bool OverrideGrabTrigger;
-        [DrawIf("OverrideGrabTrigger", true)]
+
+        [DrawIf("OverrideGrabTrigger", true)] [Tooltip("Decide if the grip must be released to drop, toggled off to drop, or manually released in code to drop.")]
         public HVRGrabTrigger GrabTrigger = HVRGrabTrigger.Active;
 
         [Tooltip("Does this grabbable require line of sight to the hand grabber to be grabbed?")]
         public bool RequireLineOfSight = true;
 
-        [Tooltip("If true, the invisible physics hand of the handgrabber is enabled to make sure it doesn't clip through things while you are holding this.")]
-        public bool EnableInvisibleHand = false;
+        [FormerlySerializedAs("ParentHandModelImmediately")] [Tooltip("Should the hand model pose immediately to this upon grabbing. Useful for non physics based grabbing.")]
+        public bool PoseImmediately;
 
-        [Tooltip("If grab type is snap and a pose couldn't resolve, should we try dynamic grabbing.")]
-        public bool PhysicsPoserFallback = true;
+        [Tooltip("Should the hand model parent to the grabbable once close enough?")]
+        public bool ParentHandModel;
 
-        [Tooltip("Should the hand model parent immediately to this upon grabbing.")]
-        public bool ParentHandModelImmediately;
-
-        [Tooltip("Should the hand model parent to the grabbable once close enough? Required for posing.")]
-        public bool ParentHandModel = true;
-
-        [Tooltip("Force dropped if the grabbable exceeds this distance from the grabber.")]
+        [Tooltip("Released if the grabbable exceeds this distance from the grabber.")]
         public float BreakDistance = 1f;
 
-        [Tooltip("If true the object remains kinematic")]
-        public bool RemainsKinematic = true;
+        [Tooltip("The grabbed object will compare it's distance to this when checking BreakDistance release.")]
+        public BreakDistanceSource BreakDistanceSource = BreakDistanceSource.NoDistanceCheck;
 
         [Tooltip("If true the object is static or attached to something else and shouldn't be pulled and rotated to the hand")]
         public bool Stationary;
 
-        [Header("Throwing Settings")]
-        [Tooltip("Factor to apply to the angular to linear calculation.")]
-        public float ReleasedAngularConversionFactor = 1.0f;
+        [Header("Throwing Settings")] [Tooltip("Factor to apply to the angular to linear calculation.")]
+        public float ReleasedAngularConversionFactor;
 
         [Tooltip("Factor to apply to the linear throwing velocity.")]
         public float ReleasedVelocityFactor = 1.0f;
@@ -69,38 +70,27 @@ namespace HurricaneVR.Framework.Core
         [Tooltip("Factor to apply to the angular throwing velocity.")]
         public float ReleasedAngularFactor = 1f;
 
-        [Header("New Grab Indicators")]
-        public HVRGrabbableHoverBase GrabIndicator;
+        [Header("Grab Indicators")] public HVRGrabbableHoverBase GrabIndicator;
         public HVRGrabbableHoverBase ForceGrabIndicator;
         public bool ShowGrabIndicator = true;
         public bool ShowTriggerGrabIndicator = true;
         public bool ShowForceGrabIndicator = true;
 
 
-        [Header("Force Grabbing")]
-        public Transform LeftForceGrabberGrabPoint;
-        public Transform RightForceGrabberGrabPoint;
-        public bool UseDefaultHighlighter = true;
-        public HVRGrabbableHoverBase ForceGrabberHighlighter;
-        public bool ForceGrabbable = true;
+        [Header("Force Grabbing")] public bool ForceGrabbable = true;
+
         [Tooltip("Override for when using Force Pull style distance grabbing. Does not apply to gravity glove style.")]
         public HVRForcePullSettings ForcePullOverride;
 
 
-
-
-
         #region Joint
 
-
-
-        [Header("Configurable Joint Override")]
-        [Tooltip("If set it will override the default joint settings - recommended to override the hand settings instead.")]
+        [Header("Configurable Joint Override")] [Tooltip("If set it will override the default joint settings.")]
         public HVRJointSettings JointOverride;
 
-        [Header("Hand Joint Overrides")]
-        [Tooltip("Applies the joint settings to the hand joint with one hand hold.")]
+        [Header("Hand Joint Overrides")] [Tooltip("Applies the joint settings to the hand joint with one hand hold.")]
         public HVRJointSettings OneHandJointSettings;
+
         [Tooltip("Applies the joint settings to the hand joint with two hand hold.")]
         public HVRJointSettings TwoHandJointSettings;
 
@@ -108,47 +98,44 @@ namespace HurricaneVR.Framework.Core
         public HVRJointSettings PullingSettingsOverride;
 
 
-        [Header("Physics")]
-        [Tooltip("If true the hand palm will become the center of mass on grab, midpoint for 2 handed grabs")]
+        [Header("Physics")] [Tooltip("If true the hand palm will become the center of mass on grab, midpoint for 2 handed grabs")]
         public bool PalmCenterOfMass;
-
-        [Header("Deprecated Fixed Joint Settings")]
-        public bool CanJointBreak;
-        public float JointBreakForce = 2000;
-        public float JointBreakTorque = 2000;
 
         #endregion
 
-        [Header("SFX")]
-        [Tooltip("SFX played when grabbed by a hand.")]
+        [Header("SFX")] [Tooltip("SFX played when grabbed by a hand.")]
         public AudioClip HandGrabbedClip;
 
 
-        [Header("Sockets")]
-        [Tooltip("Socket that this grabbable will start in.")]
+        [Header("Sockets")] [Tooltip("Socket that this grabbable will start in.")]
         public HVRSocket StartingSocket;
+
         [Tooltip("If true this grabbable will be auto grabbed by the StartingSocket whenever it's dropped.")]
         public bool LinkStartingSocket;
 
-        [Header("Misc")] public bool AutoApplyLayer = true;
+        [Tooltip("If provided only these grab points will be considered when an object is removed from a socket, otherwise the closest grab point will be used.")]
+        public HVRPosableGrabPoint[] SocketGrabPoints;
 
-        [Tooltip("If true the hand must not overlap this any longer to re-nable collision")]
+        [Header("Misc")] [Tooltip("RB for hand jointing, majority of grabbables should be on the rigidbody, only assign this for compound objects with secondary grabbables")]
+        public Rigidbody Rigidbody;
+
+        public bool AutoApplyLayer = true;
+
+        [Tooltip("If true the hand must not overlap this any longer to re-enable collision")]
         public bool RequireOverlapClearance;
 
-        [Tooltip("If not requiring overlap clearance, how long to wait to re-enable collision")]
-        public float OverlapTimeout = .5f;
+        [Tooltip("If not requiring overlap clearance, how long to wait to re-enable collision with the hand")]
+        public float OverlapTimeout = .10f;
 
         [Tooltip("Must be below this angle delta from expected hand pose and current hand orientation to create the final joint.")]
-        public float FinalJointMaxAngle = 3f;
+        public float FinalJointMaxAngle = 15f;
 
-        [Tooltip("If the joint target rotation doesn't need to be 0 you can turn this to true. Set to false for guns or items that you will apply force to.")]
-        public bool FinalJointQuick = true;
+        [Tooltip("How long do we try pulling into position before using the final joint settings.")]
+        public float FinalJointTimeout = .25f;
 
-        [Tooltip("If FinalJointQuick - how long do we try pulling into position before using the final joint settings.")]
-        public float FinalJointTimeout = 2f;
-
-        [Tooltip("If assigned, Colliders will populate from these transforms.")]
+        [Tooltip("If assigned, Colliders will populate from these transforms, otherwise all children colliders of the object will be used (until another grabbable is found).")]
         public List<Transform> CollisionParents = new List<Transform>();
+
         [Tooltip("Additional transforms to ignore children colliders when grabbing, helpful for compound objects")]
         public List<Transform> ExtraIgnoreCollisionParents = new List<Transform>();
 
@@ -162,9 +149,30 @@ namespace HurricaneVR.Framework.Core
         public bool UseColliderClosestPoint = true;
 
         [Tooltip("If true, grabbing this object will disable hand collision while held")]
-        public bool DisableHandCollision = false;
+        public bool DisableHandCollision;
 
+        [Tooltip("If in a networked game, can someone take this object from your hand?")]
+        public bool AllowMultiplayerSwap;
+
+        [Tooltip("Used by the HVRTeleportCollisionHandler component for post teleport grabbable movement, set this for compound grabbable objects if teleporting while holding this" +
+                 "is causing issues")]
+        public HVRGrabbable MasterGrabbable;
+
+        [Tooltip("Used to determine a two handed grab across grabbable objects")]
+        public List<HVRGrabbable> LinkedGrabbables = new List<HVRGrabbable>();
+
+        [Tooltip("Rigidbody CD will be set to this while held.")]
         public CollisionDetectionMode CollisionDetection = CollisionDetectionMode.ContinuousDynamic;
+
+        [Tooltip("If grab type is snap and a pose couldn't resolve, should we try dynamic grabbing.")]
+        public bool PhysicsPoserFallback = true;
+
+        [Tooltip("Enable override of max hand to controller distance reached behaviour")]
+        public bool OverrideMaxDistanceBehaviour;
+
+        [Tooltip("Override to change how the hand behaves after reaching max distance from the controller")] [DrawIf("OverrideMaxDistanceBehaviour", true)]
+        public MaxDistanceBehaviour MaxDistanceBehaviour;
+
 
         [Header("Debug")] public bool ShowBoundingBox;
         public bool DrawCenterOfMass;
@@ -192,7 +200,6 @@ namespace HurricaneVR.Framework.Core
         public VRSocketEvent Socketed = new VRSocketEvent();
         public VRSocketEvent UnSocketed = new VRSocketEvent();
 
-
         #endregion
 
         #region Properties
@@ -214,31 +221,31 @@ namespace HurricaneVR.Framework.Core
         /// Used to line of sight checks when grabbing, as well as disabling collision between the hand
         /// and the this object while grabbing.
         /// </summary>
-        public Collider[] Colliders { get; private set; }
+        public List<Collider> Colliders { get; private set; } = new List<Collider>();
 
-        public Collider[] AdditionalIgnoreColliders { get; private set; }
+        public List<Collider> AdditionalIgnoreColliders { get; private set; } = new List<Collider>();
 
         /// <summary>
         /// Used for line of sight checks when grabbing.
         /// </summary>
-        public Collider[] Triggers { get; private set; }
+        public List<Collider> Triggers { get; private set; } = new List<Collider>();
 
-        public CollisionDetectionMode OriginalCollisionMode { get; private set; }
+        public CollisionDetectionMode OriginalCollisionMode { get; set; }
 
-        public float Drag { get; private set; }
-        public bool WasGravity { get; private set; }
+        public bool WasGravity { get; set; }
 
-        public bool WasKinematic { get; private set; }
-
-        public List<GrabPointMeta> GrabPointsMeta = new List<GrabPointMeta>();
+        public List<HVRPosableGrabPoint> GrabPointsMeta = new List<HVRPosableGrabPoint>();
 
         public HVRGrabberBase PrimaryGrabber { get; private set; }
         public HVRSocket SocketHoverer { get; internal set; }
 
-        public Rigidbody Rigidbody { get; set; }
 
         public HVRSocketable Socketable { get; private set; }
-        public HVRSocket LinkedSocket { get; private set; }
+
+        /// <summary>
+        /// The socket this grabbable will return to when it's released.
+        /// </summary>
+        public HVRSocket LinkedSocket { get; set; }
 
         public HVRSocket Socket { get; private set; }
 
@@ -254,6 +261,8 @@ namespace HurricaneVR.Framework.Core
         public bool IsJointGrab => TrackingType == HVRGrabTracking.ConfigurableJoint || TrackingType == HVRGrabTracking.FixedJoint;
 
         public bool HasConcaveColliders { get; private set; }
+
+        public bool HasWheelCollider { get; set; }
 
         /// <summary>
         /// If true will force use the two hand settings regardless of the number of hand grabbers holding
@@ -279,7 +288,6 @@ namespace HurricaneVR.Framework.Core
         public bool GrabRequiredIfReleased => RequiredGrabbableComponent && RequiredGrabbableComponent.GrabRequiredIfReleased;
 
         //serialized for debugging purposes, cleared on Start()
-        [SerializeField]
         public List<HVRGrabberBase> Grabbers = new List<HVRGrabberBase>();
         public List<HVRHandGrabber> HandGrabbers = new List<HVRHandGrabber>();
 
@@ -309,12 +317,11 @@ namespace HurricaneVR.Framework.Core
         private bool _forceTwoHandSettings;
 
         private Vector3 _centerOfMass;
-        private Quaternion _inertiaRotation;
-        private Vector3 _inertiaTensor;
         private RigidbodyInterpolation _rbInterpolation;
         private float _mass;
         private bool _waitingForColDetectionReset;
         private Coroutine _resetCollisionDetectionRoutine;
+        private readonly HashSet<Collider> _ignoredColliders = new HashSet<Collider>();
 
         #endregion
 
@@ -322,14 +329,9 @@ namespace HurricaneVR.Framework.Core
 
         protected virtual void Awake()
         {
-            //if (transform.localScale != Vector3.one)
-            //{
-            //    Debug.LogWarning($"{name} has a scale of {transform.localScale.LogFormat()} when it should be [1,1,1]");
-            //}
+            if (!Rigidbody) TryGetComponent(out Rigidbody);
 
             SetupColliders();
-
-            //VRGrabPoints = GetComponentInChildren<HVRGrabPoints>();
 
             if (GrabPoints.Count == 0)
                 PopulateGrabPoints();
@@ -337,24 +339,6 @@ namespace HurricaneVR.Framework.Core
             LoadGrabPoints();
 
             Socketable = GetComponent<HVRSocketable>();
-            if (Socketable && !Socketable.SocketOrientation)
-            {
-                var orientation = new GameObject("SocketOrientation");
-                orientation.transform.SetParent(this.transform);
-                orientation.transform.localPosition = Vector3.zero;
-                orientation.transform.localRotation = Quaternion.identity;
-                orientation.transform.localScale = Vector3.zero;
-                Socketable.SocketOrientation = orientation.transform;
-            }
-
-            SetupForceGrabberTarget();
-
-            Rigidbody = GetComponent<Rigidbody>();
-
-            if (HVRSettings.Instance.AutoApplyGrabbableLayer && AutoApplyLayer)
-            {
-                transform.SetLayerRecursive(HVRLayers.Grabbable);
-            }
 
             ResetTrackedVelocities();
 
@@ -369,16 +353,20 @@ namespace HurricaneVR.Framework.Core
                 Stabbable = GetComponentInChildren<HVRStabbable>();
             }
 
-            if (IsJointGrab && !Rigidbody)
+            //if (Stationary) Debug.LogWarning($"stationary {name}");
+
+            if (IsJointGrab && (!Rigidbody || Rigidbody.isKinematic))
             {
                 Stationary = true;
             }
 
-            if (GrabColliders != null)
+            if (Stationary)
             {
-                GrabCollidersSet = new HashSet<Collider>(GrabColliders);
-                FilterGrabColliders = GrabColliders.Length > 0;
+                OverrideMaxDistanceBehaviour = true;
+                MaxDistanceBehaviour = MaxDistanceBehaviour.GrabbableDrops;
             }
+
+            SetupGrabColliders();
         }
 
 
@@ -393,28 +381,14 @@ namespace HurricaneVR.Framework.Core
                     LinkedSocket = StartingSocket;
                     LinkedSocket.LinkedGrabbable = this;
                 }
+
                 //let all Starts() go off first
                 StartCoroutine(AttachToStartingSocket());
             }
 
-            
-
-            if (UseDefaultHighlighter && ForceGrabbable && !ForceGrabberHighlighter)
-            {                
-                var parent = RightForceGrabberGrabPoint;
-                if (!parent)
-                {
-                    parent = LeftForceGrabberGrabPoint != null ? LeftForceGrabberGrabPoint : transform;
-                }
-
-                if (parent)
-                {
-                    var obj = HVRManager.Instance?.SetupHighlight(RightForceGrabberGrabPoint);
-                    if (obj)
-                    {                        
-                        ForceGrabberHighlighter = obj.GetComponent<HVRGrabbableHoverBase>();
-                    }
-                }
+            if (HVRSettings.Instance.AutoApplyGrabbableLayer && AutoApplyLayer)
+            {
+                transform.SetLayerRecursiveEx<HVRGrabbable>(HVRLayers.Grabbable, this);
             }
         }
 
@@ -424,6 +398,7 @@ namespace HurricaneVR.Framework.Core
             {
                 DrawBoundingBox();
             }
+
             if (!IsBeingHeld)
                 ElapsedSinceReleased += Time.deltaTime;
 
@@ -449,9 +424,12 @@ namespace HurricaneVR.Framework.Core
 
         protected virtual void FixedUpdate()
         {
-            TrackVelocities();
+            if (HandGrabbers.Count > 0)
+            {
+                TrackVelocities();
+            }
+
             ProcessFixedUpdate();
-            _previousRotation = transform.rotation;
         }
 
         private void OnDestroy()
@@ -467,7 +445,7 @@ namespace HurricaneVR.Framework.Core
             Destroyed.RemoveAllListeners();
         }
 
-        private void OnCollisionEnter(Collision other)
+        protected virtual void OnCollisionEnter(Collision other)
         {
             Collided.Invoke(this);
         }
@@ -498,7 +476,6 @@ namespace HurricaneVR.Framework.Core
         }
 
 
-
 #endif
 
         #endregion
@@ -512,31 +489,117 @@ namespace HurricaneVR.Framework.Core
         /// <param name="other"></param>
         public void IgnoreCollision(HVRGrabbable other, bool ignore = true)
         {
-            foreach (var otherCollider in other.Colliders)
+            for (var i = 0; i < other.Colliders.Count; i++)
             {
-                foreach (var ourCollider in Colliders)
+                var otherCollider = other.Colliders[i];
+                for (var j = 0; j < Colliders.Count; j++)
                 {
+                    var ourCollider = Colliders[j];
                     Physics.IgnoreCollision(otherCollider, ourCollider, ignore);
                 }
             }
         }
 
-        /// <summary>
-        /// Gets the force grabber grab point for high light display for the given hand
-        /// </summary>
-        public Transform GetForceGrabPoint(HVRHandSide hand)
-        {            
-            return hand == HVRHandSide.Left ? LeftForceGrabberGrabPoint : RightForceGrabberGrabPoint;
+        public void IgnoreCollision(Collider other, bool ignore = true)
+        {
+            for (int i = 0; i < Colliders.Count; i++)
+            {
+                Physics.IgnoreCollision(other, Colliders[i], ignore);
+            }
         }
 
-        /// <summary>
-        /// Gets the force grabber grab point hand pose rotation for the given hand
-        /// </summary>
-        public Quaternion GetForceGrabPointRotation(HVRHandSide hand)
+        protected virtual bool GrabPointValid(HVRHandGrabber hand, HVRPosableGrabPoint grabPoint, GrabpointFilter filter)
         {
-            var grabPoint = hand == HVRHandSide.Left ? LeftForceGrabberGrabPoint : RightForceGrabberGrabPoint;
-            var posableGrabPoint = grabPoint.GetComponent<HVRPosableGrabPoint>();
-            return posableGrabPoint ? posableGrabPoint.GetPoseRotation(hand) : grabPoint.rotation;
+            if (grabPoint.PoserIndex != hand.PoserIndex)
+                return false;
+
+            if (!grabPoint.gameObject.activeInHierarchy || !grabPoint.enabled)
+            {
+                return false;
+            }
+
+            if (hand.HandSide == HVRHandSide.Left && !grabPoint.LeftHand ||
+                hand.HandSide == HVRHandSide.Right && !grabPoint.RightHand)
+            {
+                return false;
+            }
+
+            var poseRotation = grabPoint.GetPoseWorldRotation(hand.HandSide);
+            var posePosition = grabPoint.GetPoseWorldPosition(hand.HandSide);
+
+            var angleDelta = Quaternion.Angle(hand.HandWorldRotation, poseRotation);
+            if (angleDelta > grabPoint.AllowedAngleDifference)
+                return false;
+
+            if (grabPoint.CheckDistance && (filter == GrabpointFilter.Normal) &&
+                Vector3.Distance(hand.HandModel.position, posePosition) > grabPoint.MaxDistance)
+                return false;
+
+            if (filter == GrabpointFilter.ForceGrab && !grabPoint.IsForceGrabbable)
+                return false;
+
+            if (grabPoint.OneHandOnly && HeldGrabPoints.Contains(grabPoint.transform))
+                return false;
+
+            if (filter == GrabpointFilter.Socket && SocketGrabPoints != null && SocketGrabPoints.Length > 0 && !SocketGrabPoints.Contains(grabPoint))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public HVRPosableGrabPoint GetGrabPoint(HVRHandGrabber hand, GrabpointFilter filter)
+        {
+            HVRPosableGrabPoint closest = null;
+            var currentDistance = float.MaxValue;
+
+            for (var i = 0; i < GrabPointsMeta.Count; i++)
+            {
+                var grabPoint = GrabPointsMeta[i];
+
+                if (!GrabPointValid(hand, grabPoint, filter))
+                    continue;
+
+                var distance = Vector3.Distance(hand.HandModel.position, grabPoint.GetPoseWorldPosition(hand.HandSide));
+
+                if (distance < currentDistance)
+                {
+                    closest = grabPoint;
+                    currentDistance = distance;
+                }
+            }
+
+            if (closest == null)
+                return null;
+
+            var currentAngle = Quaternion.Angle(hand.HandWorldRotation, closest.GetPoseWorldRotation(hand.HandSide));
+
+            if (!ConsiderGrabPointAngle)
+                return closest;
+
+            for (var i = 0; i < closest.Others.Count; i++)
+            {
+                var gp = closest.Others[i];
+
+                if (!GrabPointValid(hand, gp, filter))
+                    continue;
+
+                var angle = Quaternion.Angle(hand.HandWorldRotation, gp.GetPoseWorldRotation(hand.HandSide));
+                if (angle < currentAngle)
+                {
+                    closest = gp;
+                    currentAngle = angle;
+                }
+            }
+
+            return closest;
+        }
+
+        internal Transform GetGrabPointTransform(HVRHandGrabber hand, GrabpointFilter forceGrab)
+        {
+            var gp = GetGrabPoint(hand, forceGrab);
+            return gp == null ? null : gp.transform;
         }
 
         /// <summary>
@@ -594,8 +657,9 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         public void DisableCollision()
         {
-            foreach (var c in Colliders)
+            for (var i = 0; i < Colliders.Count; i++)
             {
+                var c = Colliders[i];
                 if (c) c.enabled = false;
             }
         }
@@ -605,8 +669,9 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         public void SetAllToTrigger()
         {
-            foreach (var c in Colliders)
+            for (var i = 0; i < Colliders.Count; i++)
             {
+                var c = Colliders[i];
                 if (c) c.isTrigger = true;
             }
         }
@@ -616,8 +681,9 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         public void ResetToNonTrigger()
         {
-            foreach (var c in Colliders)
+            for (var i = 0; i < Colliders.Count; i++)
             {
+                var c = Colliders[i];
                 if (c) c.isTrigger = false;
             }
         }
@@ -627,10 +693,34 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         public void EnableCollision()
         {
-            foreach (var c in Colliders)
+            for (var i = 0; i < Colliders.Count; i++)
             {
+                var c = Colliders[i];
                 if (c) c.enabled = true;
             }
+        }
+
+        public virtual bool HasCollider(Collider c)
+        {
+            for (var k = 0; k < Colliders.Count; k++)
+            {
+                var gc = Colliders[k];
+                if (c == gc)
+                {
+                    return true;
+                }
+            }
+
+            for (var i = 0; i < AdditionalIgnoreColliders.Count; i++)
+            {
+                var gc = AdditionalIgnoreColliders[i];
+                if (c == gc)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -657,15 +747,35 @@ namespace HurricaneVR.Framework.Core
 
                 foreach (Transform c in grabPoints)
                 {
-                    if (c.gameObject.activeSelf)
-                    {
-                        GrabPoints.Add(c);
-                    }
+                    GrabPoints.Add(c);
                 }
             }
         }
 
+        public virtual void LoadGrabPoints()
+        {
+            GrabPointsMeta.Clear();
 
+            foreach (var grabPoint in GrabPoints)
+            {
+                if (!grabPoint || !grabPoint.gameObject.activeInHierarchy)
+                    continue;
+
+                if (!grabPoint.TryGetComponent(out HVRPosableGrabPoint gp))
+                    continue;
+
+                GrabPointsMeta.Add(gp);
+            }
+
+            //caching grouped grab points within themselves
+            foreach (var grabPoint in GrabPointsMeta)
+            {
+                foreach (var groupedPoint in GrabPointsMeta.Where(p => p.Group == grabPoint.Group && p != grabPoint))
+                {
+                    grabPoint.AddGroupedGrabPoint(groupedPoint);
+                }
+            }
+        }
 
 
         /// <summary>
@@ -730,6 +840,20 @@ namespace HurricaneVR.Framework.Core
             _releaseGrabbers.Clear();
         }
 
+        /// <summary>
+        /// Returns true if any linked grabbable is held by a hand
+        /// </summary>
+        public bool AnyLinkedHandHeld()
+        {
+            if (LinkedGrabbables == null) return false;
+
+            for (int i = 0; i < LinkedGrabbables.Count; i++)
+                if (LinkedGrabbables[i].IsHandGrabbed)
+                    return true;
+
+            return false;
+        }
+
         #endregion
 
         #region Protected Methods
@@ -739,7 +863,6 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         protected virtual void ProcessUpdate()
         {
-
         }
 
         /// <summary>
@@ -747,7 +870,6 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         protected virtual void ProcessFixedUpdate()
         {
-
         }
 
         /// <summary>
@@ -761,6 +883,8 @@ namespace HurricaneVR.Framework.Core
 
             foreach (var c in parent.GetComponents<Collider>())
             {
+                if (!c) continue;
+
                 if (c.isTrigger)
                 {
                     triggers.Add(c);
@@ -803,10 +927,6 @@ namespace HurricaneVR.Framework.Core
                 Debug.Log($"{name}:OnBeforeGrabbed");
             }
 
-            if (GrabberCount == 0)
-            {
-                SaveRigidBodyState();
-            }
             AddGrabber(grabber);
         }
 
@@ -819,7 +939,8 @@ namespace HurricaneVR.Framework.Core
             {
                 Debug.Log($"{name}:OnGrabCanceled");
             }
-            ResetRigidBody();
+
+            //ResetRigidBody();
             RemoveGrabber(grabber);
         }
 
@@ -833,14 +954,11 @@ namespace HurricaneVR.Framework.Core
                 Debug.Log($"{name}:OnGrabbed");
             }
 
-            IsSocketed = _distinctGrabbers.Any(e => e is HVRSocket); //really should only be one if socketed...
+            IsSocketed = _distinctGrabbers.Any(e => e.IsSocket); //really should only be one if socketed...
             if (IsSocketed)
-            {                
+            {
                 Socket = Grabbers[0] as HVRSocket;
             }
-
-            if (ForceGrabberHighlighter)
-                ForceGrabberHighlighter.Disable();
 
             Grabbed.Invoke(grabber, this);
             if (grabber.IsHandGrabber)
@@ -876,35 +994,41 @@ namespace HurricaneVR.Framework.Core
 
             RemoveGrabber(grabber);
 
-
+            Socket = null;
             IsBeingForcedGrabbed = false;
+            IsSocketed = false;
 
-            CleanupJoints(grabber);
+            RemoveJoint(grabber);
 
             if (GrabberCount == 0)
             {
                 ElapsedSinceReleased = 0f;
                 if (Rigidbody)
                 {
-                    ResetRigidBody();
-                    if (_resetCollisionDetectionRoutine != null)
+                    if (PalmCenterOfMass) Rigidbody.centerOfMass = _centerOfMass;
+
+                    Rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete; //preventing warnings
+
+                    if (!Rigidbody.isKinematic)
                     {
-                        StopCoroutine(_resetCollisionDetectionRoutine);
+                        Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                        if (_resetCollisionDetectionRoutine != null)
+                        {
+                            StopCoroutine(_resetCollisionDetectionRoutine);
+                        }
+
+                        _resetCollisionDetectionRoutine = StartCoroutine(ResetCollisionMode());
                     }
-                    _resetCollisionDetectionRoutine = StartCoroutine(ResetCollisionMode());
+                    else
+                    {
+                        Rigidbody.collisionDetectionMode = OriginalCollisionMode;
+                    }
                 }
             }
 
-            IsSocketed = _distinctGrabbers.Any(e => e is HVRSocket); //really should only be one if socketed...
-            if (!IsSocketed)
+
+            if (!PrimaryGrabber && LinkedSocket && gameObject.activeInHierarchy)
             {
-                Socket = null;
-            }
-
-            
-
-            if (!PrimaryGrabber && LinkedSocket)
-            {                
                 StartCoroutine(CheckLinkedSocket());
             }
         }
@@ -914,10 +1038,6 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         protected virtual void OnHoverEnter(HVRGrabberBase grabber)
         {
-            //todo make a component for this
-            //if (grabber is HVRForceGrabber)
-            if (grabber is HVRForceGrabber && ForceGrabberHighlighter != null)
-                ForceGrabberHighlighter.Hover();
         }
 
         /// <summary>
@@ -925,8 +1045,6 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         protected virtual void OnHoverExit(HVRGrabberBase grabber)
         {
-            if (grabber is HVRForceGrabber && ForceGrabberHighlighter != null)
-                ForceGrabberHighlighter.Unhover();
         }
 
         /// <summary>
@@ -934,7 +1052,6 @@ namespace HurricaneVR.Framework.Core
         /// </summary>
         protected virtual void OnBeforeHandGrabberRemoved(HVRHandGrabber handGrabber)
         {
-
         }
 
         protected virtual void OnAfterHandGrabberRemoved(HVRHandGrabber handGrabber)
@@ -949,6 +1066,7 @@ namespace HurricaneVR.Framework.Core
                 IsRightHandGrabbed = false;
                 RightHandGrabber = null;
             }
+
             handGrabber.OverrideHandSettings(null);
             handGrabber.UpdateGrabbableCOM(this);
             UpdateHandSettings();
@@ -969,13 +1087,14 @@ namespace HurricaneVR.Framework.Core
                 IsRightHandGrabbed = true;
                 RightHandGrabber = handGrabber;
             }
+
             UpdateHandSettings();
         }
 
         /// <summary>
         /// If provided, will update the hand joint settings depending on one or two handed grabs
         /// </summary>
-        protected virtual void UpdateHandSettings()
+        public virtual void UpdateHandSettings()
         {
             if ((HandGrabbers.Count >= 2 || ForceTwoHandSettings) && TwoHandJointSettings)
             {
@@ -992,7 +1111,6 @@ namespace HurricaneVR.Framework.Core
             }
         }
 
-
         #endregion
 
         #region Private Methods
@@ -1006,29 +1124,15 @@ namespace HurricaneVR.Framework.Core
             }
         }
 
-        private void LoadGrabPoints()
-        {
-            GrabPointsMeta.Clear();
-
-            foreach (var grabPoint in GrabPoints)
-            {
-                if (!grabPoint || !grabPoint.gameObject.activeInHierarchy)
-                    continue;
-                var grabPointMeta = new GrabPointMeta();
-                grabPointMeta.GrabPoint = grabPoint;
-                grabPointMeta.PosableGrabPoint = grabPoint.GetComponent<HVRPosableGrabPoint>();
-                GrabPointsMeta.Add(grabPointMeta);
-            }
-        }
 
         /// <summary>
-        /// Locates colliders that are used for line of sight checking and for collision disabling with the grabbing hand.
+        /// Locates colliders that are used for line of sight checking and for collision disabling with the grabbing hand when held.
         /// </summary>
-        private void SetupColliders()
+        public virtual void SetupColliders()
         {
-            var colliders = new List<Collider>();
-            var extraColliders = new List<Collider>();
-            var triggers = new List<Collider>();
+            Triggers.Clear();
+            Colliders.Clear();
+            AdditionalIgnoreColliders.Clear();
 
             if (CollisionParents.Count > 0)
             {
@@ -1036,14 +1140,14 @@ namespace HurricaneVR.Framework.Core
                 {
                     if (collisionParent)
                     {
-                        colliders.AddRange(collisionParent.gameObject.GetComponentsInChildren<Collider>().Where(c => !c.isTrigger));
-                        triggers.AddRange(collisionParent.gameObject.GetComponentsInChildren<Collider>().Where(c => c.isTrigger));
+                        Colliders.AddRange(collisionParent.gameObject.GetComponentsInChildren<Collider>().Where(c => c && !c.isTrigger));
+                        Triggers.AddRange(collisionParent.gameObject.GetComponentsInChildren<Collider>().Where(c => c && c.isTrigger));
                     }
                 }
             }
             else
             {
-                FindColliders(transform, colliders, triggers);
+                FindColliders(transform, Colliders, Triggers);
             }
 
             if (ExtraIgnoreCollisionParents.Count > 0)
@@ -1052,42 +1156,57 @@ namespace HurricaneVR.Framework.Core
                 {
                     if (collisionParent)
                     {
-                        extraColliders.AddRange(collisionParent.gameObject.GetComponentsInChildren<Collider>().Where(c => !c.isTrigger));
+                        AdditionalIgnoreColliders.AddRange(collisionParent.gameObject.GetComponentsInChildren<Collider>().Where(c => c && !c.isTrigger));
                     }
                 }
             }
 
-            Triggers = triggers.ToArray();
-            Colliders = colliders.ToArray();
-            AdditionalIgnoreColliders = extraColliders.ToArray();
-
-            HasConcaveColliders = triggers.Any(e => { var mesh = e as MeshCollider; return mesh != null && !mesh.convex; });
-            HasConcaveColliders = HasConcaveColliders || colliders.Any(e => { var mesh = e as MeshCollider; return mesh && !mesh.convex; });
+            UpdateIgnoreColliders();
+            HasConcaveColliders = Triggers.Any(e =>
+            {
+                var mesh = e as MeshCollider;
+                return mesh != null && !mesh.convex;
+            });
+            HasConcaveColliders = HasConcaveColliders || Colliders.Any(e =>
+            {
+                var mesh = e as MeshCollider;
+                return mesh && !mesh.convex;
+            });
+            HasWheelCollider = Colliders.Any(e => e is WheelCollider);
         }
 
-        private void SetupForceGrabberTarget()
+        /// <summary>
+        /// Caches GrabColliders array into a hashset for lookup for grab detection
+        /// </summary>
+        public void SetupGrabColliders()
         {
-            if (!LeftForceGrabberGrabPoint || !LeftForceGrabberGrabPoint.gameObject.activeInHierarchy)
+            if (GrabColliders != null)
             {
-                LeftForceGrabberGrabPoint = GrabPointsMeta.FirstOrDefault(e => e.PosableGrabPoint != null && e.PosableGrabPoint.LeftHand)?.GrabPoint;
-                if (!LeftForceGrabberGrabPoint) LeftForceGrabberGrabPoint = GrabPointsMeta.FirstOrDefault()?.GrabPoint;
+                GrabCollidersSet = new HashSet<Collider>(GrabColliders);
+                FilterGrabColliders = GrabColliders.Length > 0;
+            }
+        }
+
+        public void UpdateIgnoreColliders()
+        {
+            _ignoredColliders.Clear();
+
+            for (var i = 0; i < Colliders.Count; i++)
+            {
+                var c = Colliders[i];
+                _ignoredColliders.Add(c);
             }
 
-            if (!LeftForceGrabberGrabPoint)
+            for (var i = 0; i < AdditionalIgnoreColliders.Count; i++)
             {
-                LeftForceGrabberGrabPoint = transform;
+                var c = AdditionalIgnoreColliders[i];
+                _ignoredColliders.Add(c);
             }
+        }
 
-            if (!RightForceGrabberGrabPoint || !RightForceGrabberGrabPoint.gameObject.activeInHierarchy)
-            {
-                RightForceGrabberGrabPoint = GrabPointsMeta.FirstOrDefault(e => e.PosableGrabPoint != null && e.PosableGrabPoint.RightHand)?.GrabPoint;
-                if (!RightForceGrabberGrabPoint) RightForceGrabberGrabPoint = GrabPointsMeta.FirstOrDefault()?.GrabPoint;
-            }
-
-            if (!RightForceGrabberGrabPoint)
-            {
-                RightForceGrabberGrabPoint = transform;
-            }
+        public bool IsIgnoreCollider(Collider col)
+        {
+            return _ignoredColliders.Contains(col);
         }
 
         private IEnumerator AttachToStartingSocket()
@@ -1098,9 +1217,6 @@ namespace HurricaneVR.Framework.Core
 
         private void TrackVelocities()
         {
-            if (HandGrabbers.Count == 0)
-                return;
-
             Quaternion deltaRotation = transform.rotation * Quaternion.Inverse(_previousRotation);
             deltaRotation.ToAngleAxis(out var angle, out var axis);
             angle *= Mathf.Deg2Rad;
@@ -1110,7 +1226,10 @@ namespace HurricaneVR.Framework.Core
             {
                 _recentVelocities.Enqueue(Rigidbody.velocity);
             }
+
             _recentAngularVelocities.Enqueue(angularVelocity);
+
+            _previousRotation = transform.rotation;
         }
 
         private void OnRequiredGrabbableReleased(HVRGrabberBase arg0, HVRGrabbable grabbable)
@@ -1141,72 +1260,35 @@ namespace HurricaneVR.Framework.Core
             }
         }
 
-        private void SaveRigidBodyState()
+        public virtual void SaveRigidBodyState()
         {
             if (!Rigidbody)
                 return;
 
-            Drag = Rigidbody.drag;
             WasGravity = Rigidbody.useGravity;
-            WasKinematic = Rigidbody.isKinematic;
+            
             if (!_waitingForColDetectionReset)
             {
                 OriginalCollisionMode = Rigidbody.collisionDetectionMode;
             }
 
-            _inertiaRotation = Rigidbody.inertiaTensorRotation;
             _centerOfMass = Rigidbody.centerOfMass;
-            _inertiaTensor = Rigidbody.inertiaTensor;
             _mass = Rigidbody.mass;
             _rbInterpolation = Rigidbody.interpolation;
         }
 
-        /// <summary>
-        /// Resets the rigid body state to what it was before it was grabbed
-        /// </summary>
         public virtual void ResetRigidBody()
         {
-            if (!Rigidbody)
-                return;
-
-            Rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
-            Rigidbody.isKinematic = WasKinematic;
-
-            if (Rigidbody.isKinematic)
-            {
-                Rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-            }
-            else if (!Rigidbody.isKinematic)
-            {
-                Rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            }
-
             Rigidbody.useGravity = WasGravity;
-            Rigidbody.drag = Drag;
-            Rigidbody.centerOfMass = _centerOfMass;
-            Rigidbody.inertiaTensorRotation = _inertiaRotation;
-
-            if (Rigidbody.constraints.HasFlag(RigidbodyConstraints.FreezeRotationX))
-            {
-                _inertiaTensor.x = 1f;
-            }
-
-            if (Rigidbody.constraints.HasFlag(RigidbodyConstraints.FreezeRotationY))
-            {
-                _inertiaTensor.y = 1f;
-            }
-
-            if (Rigidbody.constraints.HasFlag(RigidbodyConstraints.FreezeRotationZ))
-            {
-                _inertiaTensor.z = 1f;
-            }
-
-            Rigidbody.inertiaTensor = _inertiaTensor;
             Rigidbody.mass = _mass;
+            Rigidbody.collisionDetectionMode = OriginalCollisionMode;
             Rigidbody.interpolation = _rbInterpolation;
         }
 
-        private void CleanupJoints(HVRGrabberBase grabber)
+        /// <summary>
+        /// Destroys and cleanups reference to the configurable joint attached to this grabber
+        /// </summary>
+        public void RemoveJoint(HVRGrabberBase grabber)
         {
             if (_joints.TryGetValue(grabber, out var joint))
             {
@@ -1225,7 +1307,7 @@ namespace HurricaneVR.Framework.Core
                 _waitingForColDetectionReset = true;
                 yield return new WaitForSeconds(10f);
                 _waitingForColDetectionReset = false;
-                
+
                 if (!IsBeingHeld)
                 {
                     Rigidbody.collisionDetectionMode = OriginalCollisionMode;
@@ -1248,8 +1330,6 @@ namespace HurricaneVR.Framework.Core
                     grabber.ForceRelease();
             }
         }
-
-
 
         #endregion
 
@@ -1339,8 +1419,6 @@ namespace HurricaneVR.Framework.Core
             if (_distinctGrabbers.Count == 0)
             {
                 PrimaryGrabber = null;
-                if (ForceGrabberHighlighter)
-                    ForceGrabberHighlighter.Enable();
             }
             else if (_distinctGrabbers.Count == 1)
             {
@@ -1379,7 +1457,6 @@ namespace HurricaneVR.Framework.Core
         private Vector3 v3BackBottomRight;
 
 
-
         void DrawBoundingBox()
         {
             Bounds bounds = transform.GetRendererBounds(gameObject);
@@ -1387,14 +1464,14 @@ namespace HurricaneVR.Framework.Core
             Vector3 v3Center = bounds.center;
             Vector3 v3Extents = bounds.extents;
 
-            v3FrontTopLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y + v3Extents.y, v3Center.z - v3Extents.z);  // Front top left corner
-            v3FrontTopRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y + v3Extents.y, v3Center.z - v3Extents.z);  // Front top right corner
-            v3FrontBottomLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y - v3Extents.y, v3Center.z - v3Extents.z);  // Front bottom left corner
-            v3FrontBottomRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y - v3Extents.y, v3Center.z - v3Extents.z);  // Front bottom right corner
-            v3BackTopLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y + v3Extents.y, v3Center.z + v3Extents.z);  // Back top left corner
-            v3BackTopRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y + v3Extents.y, v3Center.z + v3Extents.z);  // Back top right corner
-            v3BackBottomLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y - v3Extents.y, v3Center.z + v3Extents.z);  // Back bottom left corner
-            v3BackBottomRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y - v3Extents.y, v3Center.z + v3Extents.z);  // Back bottom right corner
+            v3FrontTopLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y + v3Extents.y, v3Center.z - v3Extents.z); // Front top left corner
+            v3FrontTopRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y + v3Extents.y, v3Center.z - v3Extents.z); // Front top right corner
+            v3FrontBottomLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y - v3Extents.y, v3Center.z - v3Extents.z); // Front bottom left corner
+            v3FrontBottomRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y - v3Extents.y, v3Center.z - v3Extents.z); // Front bottom right corner
+            v3BackTopLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y + v3Extents.y, v3Center.z + v3Extents.z); // Back top left corner
+            v3BackTopRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y + v3Extents.y, v3Center.z + v3Extents.z); // Back top right corner
+            v3BackBottomLeft = new Vector3(v3Center.x - v3Extents.x, v3Center.y - v3Extents.y, v3Center.z + v3Extents.z); // Back bottom left corner
+            v3BackBottomRight = new Vector3(v3Center.x + v3Extents.x, v3Center.y - v3Extents.y, v3Center.z + v3Extents.z); // Back bottom right corner
 
 
             var color = Color.magenta;
@@ -1417,5 +1494,25 @@ namespace HurricaneVR.Framework.Core
         #endregion
     }
 
+    public enum GrabpointFilter
+    {
+        Normal,
+        ForceGrab,
+        Socket
+    }
 
+    public enum GrabBehaviour
+    {
+        Default,
+        PullToHand,
+        HandRetrieves
+    }
+
+
+    public enum BreakDistanceSource
+    {
+        NoDistanceCheck,
+        Hand,
+        Controller,
+    }
 }

@@ -30,10 +30,8 @@ namespace HurricaneVR.Framework.Core.Bags
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(gameObject.transform.parent.name + " grabbable bag is entering trigger area of " + other.gameObject.name );
-
-            var grabbable = other.GetComponent<HVRGrabbable>();
-            var childGrabbable = other.GetComponent<HVRGrabbableChild>();
+            other.TryGetComponent<HVRGrabbable>(out var grabbable);
+            other.TryGetComponent<HVRGrabbableChild>(out var childGrabbable);
 
             if (!grabbable)
             {
@@ -45,7 +43,7 @@ namespace HurricaneVR.Framework.Core.Bags
 
             if (HVRSettings.Instance.UseAttachedRigidBody && !grabbable && other.attachedRigidbody)
             {
-                grabbable = other.attachedRigidbody.GetComponent<HVRGrabbable>();
+                other.attachedRigidbody.TryGetComponent<HVRGrabbable>(out grabbable);
             }
 
             if (HVRSettings.Instance.ComponentInParentFallback && !grabbable)
@@ -55,12 +53,8 @@ namespace HurricaneVR.Framework.Core.Bags
 
             if (grabbable)
             {
-                //Debug.Log(gameObject.transform.parent.name + " grabbable bag is entering trigger area of " + other.gameObject.name + " made it");
                 if (grabbable.FilterGrabColliders && !grabbable.GrabCollidersSet.Contains(other))
-                {                    
                     return;
-                }
-                    
 
                 if (!_map.TryGetValue(grabbable, out var colliders))
                 {
@@ -69,7 +63,7 @@ namespace HurricaneVR.Framework.Core.Bags
                 }
 
                 if (colliders.Count == 0)
-                {                    
+                {
                     AddGrabbable(grabbable);
                 }
 
@@ -80,8 +74,8 @@ namespace HurricaneVR.Framework.Core.Bags
         private void OnTriggerExit(Collider other)
         {
 
-            var grabbable = other.GetComponent<HVRGrabbable>();
-            var childGrabbable = other.GetComponent<HVRGrabbableChild>();
+            other.TryGetComponent<HVRGrabbable>(out var grabbable);
+            other.TryGetComponent<HVRGrabbableChild>(out var childGrabbable);
             if (!grabbable && childGrabbable && childGrabbable.ParentGrabbable)
             {
                 grabbable = childGrabbable.ParentGrabbable;
@@ -89,7 +83,7 @@ namespace HurricaneVR.Framework.Core.Bags
 
             if (HVRSettings.Instance.UseAttachedRigidBody && !grabbable && other.attachedRigidbody)
             {
-                grabbable = other.attachedRigidbody.GetComponent<HVRGrabbable>();
+                other.attachedRigidbody.TryGetComponent<HVRGrabbable>(out grabbable);
             }
 
             if (HVRSettings.Instance.ComponentInParentFallback && !grabbable)

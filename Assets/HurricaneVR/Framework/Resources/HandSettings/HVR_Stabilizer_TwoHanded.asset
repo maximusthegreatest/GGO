@@ -14,19 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XMaster: 1
   XDrive:
-    Spring: 1500
-    Damper: 100
+    Spring: 3000
+    Damper: 300
     MaxForce: 750
   SlerpDrive:
     Spring: 0
     Damper: 0
     MaxForce: 0
+  ApplyMode: 2
   EnableCollision: 0
   EnablePreprocessing: 1
   BreakForce: Infinity
   BreakTorque: Infinity
   MassScale: 1
   ConnectedMassScale: 1
+  ProjectionMode: 0
+  ProjectionDistance: 0.1
+  ProjectionAngle: 180
   CriticalDampPosition: 0
   DampConnectedBody: 0
   RotationDriveMode: 1

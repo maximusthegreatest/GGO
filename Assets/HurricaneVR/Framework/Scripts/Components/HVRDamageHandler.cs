@@ -38,6 +38,7 @@ namespace HurricaneVR.Framework.Components
 
         public override void HandleDamageProvider(HVRDamageProvider damageProvider, Vector3 hitPoint, Vector3 direction)
         {
+            Debug.Log("Override handle damage");
             base.HandleDamageProvider(damageProvider, hitPoint, direction);
 
             if (Rigidbody)

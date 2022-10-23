@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using HurricaneVR.Framework.Shared.HandPoser;
+using HurricaneVR.Framework.Core.Utils;
 using UnityEditor;
 using UnityEngine;
 

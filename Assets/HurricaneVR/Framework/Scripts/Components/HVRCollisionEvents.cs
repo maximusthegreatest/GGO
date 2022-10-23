@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 namespace HurricaneVR.Framework.Components
 {
+    /// <summary>
+    /// Helper component used to propogate a collision if a force or velocity threshold was met.
+    /// </summary>
     public class HVRCollisionEvents : MonoBehaviour
     {
         [Header("Settings")]
@@ -25,7 +28,7 @@ namespace HurricaneVR.Framework.Components
         public float MaxImpulse;
         public float MaxVelocity;
         
-        private void OnCollisionEnter(Collision other)
+        protected virtual void OnCollisionEnter(Collision other)
         {
             LastImpulse = other.impulse.magnitude;
             LastVelocity = other.relativeVelocity.magnitude;

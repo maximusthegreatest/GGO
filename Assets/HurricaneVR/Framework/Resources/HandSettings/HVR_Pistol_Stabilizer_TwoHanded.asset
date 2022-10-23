@@ -56,9 +56,9 @@ MonoBehaviour:
   XMotion: 2
   YMotion: 2
   ZMotion: 2
-  AngularXMotion: 0
-  AngularYMotion: 0
-  AngularZMotion: 0
+  AngularXMotion: 2
+  AngularYMotion: 2
+  AngularZMotion: 2
   LowAngularXLimit:
     Limit: 0
     Bounciness: 0

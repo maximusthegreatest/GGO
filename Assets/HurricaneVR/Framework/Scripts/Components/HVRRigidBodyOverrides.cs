@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace HurricaneVR.Framework.Components
 {
+    /// <summary>
+    /// Helper component to override various rigidbody properties
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class HVRRigidBodyOverrides : MonoBehaviour
     {
@@ -10,23 +13,34 @@ namespace HurricaneVR.Framework.Components
         public bool OverrideCOM;
         public bool OverrideRotation;
         public bool OverrideTensor;
+        public bool OverrideAngularSpeed;
+        public bool OverrideMaxDepenetration;
+
         public Vector3 CenterOfMass;
         public Vector3 InertiaTensorRotation;
         public Vector3 InertiaTensor;
+        public float MaxAngularVelocity;
+        public float MaxDepenetration;
 
         [Header("Debug")]
         public Vector3 COMGizmoSize = new Vector3(.02f, .02f, .02f);
         public bool LiveUpdate;
-
-        private Quaternion _inertiaTensorRotation;
-
-        public Rigidbody Rigidbody { get; private set; }
+        public bool ShowCOMGizmo;
+        public Rigidbody Rigidbody;
 
         void Awake()
         {
-            Rigidbody = GetComponent<Rigidbody>();
-            _inertiaTensorRotation = Quaternion.Euler(InertiaTensorRotation);
+            if (!Rigidbody)
+            {
+                Rigidbody = GetComponent<Rigidbody>();
+            }
+            
             this.ExecuteNextUpdate(ApplyOverrides);
+        }
+
+        protected virtual void OnValidate()
+        {
+            if (!Rigidbody) TryGetComponent(out Rigidbody);
         }
 
         public void ApplyOverrides()
@@ -43,8 +57,15 @@ namespace HurricaneVR.Framework.Components
 
             if (OverrideRotation)
             {
-                Rigidbody.inertiaTensorRotation = _inertiaTensorRotation;
+                Rigidbody.inertiaTensorRotation = Quaternion.Euler(InertiaTensorRotation);
             }
+
+            if (OverrideAngularSpeed)
+            {
+                Rigidbody.maxAngularVelocity = MaxAngularVelocity;
+            }
+
+            if (OverrideMaxDepenetration) Rigidbody.maxDepenetrationVelocity = MaxDepenetration;
         }
 
         void FixedUpdate()
@@ -57,10 +78,18 @@ namespace HurricaneVR.Framework.Components
 
         void OnDrawGizmosSelected()
         {
-            if (OverrideCOM)
+            if (ShowCOMGizmo)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawCube(transform.TransformPoint(CenterOfMass), COMGizmoSize);
+                if (OverrideCOM)
+                {
+                    Gizmos.DrawCube(transform.TransformPoint(CenterOfMass), COMGizmoSize);
+                }
+                else if(Rigidbody)
+                {
+                    Gizmos.DrawCube(Rigidbody.worldCenterOfMass, COMGizmoSize);
+                }
+                
             }
         }
     }

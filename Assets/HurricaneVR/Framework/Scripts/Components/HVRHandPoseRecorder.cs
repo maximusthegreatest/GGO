@@ -1,17 +1,30 @@
 ﻿using System;
 using System.Collections;
 using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.HandPoser;
 using HurricaneVR.Framework.Shared;
-using HurricaneVR.Framework.Shared.HandPoser;
-using HurricaneVR.Framework.Shared.HandPoser.Data;
 using UnityEngine;
+
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace HurricaneVR.Framework.Components
 {
     public class HVRHandPoseRecorder : MonoBehaviour
     {
+#if ENABLE_LEGACY_INPUT_MANAGER
         public KeyCode LeftHandSaveKey = KeyCode.L;
         public KeyCode RightHandSaveKey = KeyCode.R;
+#endif
+
+#if ENABLE_INPUT_SYSTEM
+
+        public Key LeftSaveKey = Key.L;
+        public Key RightSaveKey = Key.R;
+
+#endif
+
 
         public HVRPosableHand LeftHand;
         public HVRPosableHand RightHand;
@@ -33,10 +46,10 @@ namespace HurricaneVR.Framework.Components
         {
             Folder = DateTime.Now.ToString("yyyyMMdd_HH_mm");
         }
-
+#if UNITY_EDITOR
         void Update()
         {
-#if UNITY_EDITOR
+
 
             if (DisablePhysics && !_previousDisable)
             {
@@ -66,13 +79,14 @@ namespace HurricaneVR.Framework.Components
             _previousDisable = DisablePhysics;
 
             CheckSnapshot();
-#endif
-        }
 
+        }
+#endif
         private void CheckSnapshot()
         {
-            HVRPosableHand hand;
+            HVRPosableHand hand = null;
 
+#if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKeyDown(LeftHandSaveKey))
             {
                 hand = LeftHand;
@@ -83,6 +97,19 @@ namespace HurricaneVR.Framework.Components
             }
             else
                 return;
+#elif ENABLE_INPUT_SYSTEM
+
+            if (Keyboard.current[LeftSaveKey].wasPressedThisFrame)
+            {
+                hand = LeftHand;
+            }
+            else if (Keyboard.current[RightSaveKey].wasPressedThisFrame)
+            {
+                hand = RightHand;
+            }
+            else
+                return;
+#endif
 
             if (!hand)
                 return;

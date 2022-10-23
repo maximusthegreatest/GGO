@@ -3,22 +3,21 @@ using HurricaneVR.Framework.ControllerInput;
 using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Shared;
+using HurricaneVR.Framework.Weapons.Guns;
 using UnityEngine;
-
 
 namespace HurricaneVR.Framework.Weapons
 {
-    [RequireComponent(typeof(HVRRayCastGun))]
+    
     public class HVRAmmoReleaseAction : HVRInputAction
     {
-        public HVRRayCastGun HVRRayCastGun { get; private set; }
+        public HVRGunBase Gun { get; private set; }
 
-        
 
         protected override void Awake()
         {
             base.Awake();
-            HVRRayCastGun = GetComponent<HVRRayCastGun>();
+            Gun = GetComponent<HVRGunBase>();
         }
 
 
@@ -40,13 +39,9 @@ namespace HurricaneVR.Framework.Weapons
                 release = controller.PrimaryButtonState.JustActivated;
             }
 
-            if (release)
+            if (release && Gun)
             {
-                //access the pistol reload timer here, make sure enough time has passed
-                if(HVRRayCastGun.autoReloadTime + HVRRayCastGun.magSpawnTime < Time.time)
-                {
-                    HVRRayCastGun.ReleaseAmmo();
-                }                        
+                Gun.ReleaseAmmo();
             }
         }
     }

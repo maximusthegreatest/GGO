@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7584928358568488872}
   - component: {fileID: 4618313970602886800}
   - component: {fileID: 3355607765739509422}
+  - component: {fileID: 4155288793748400523}
+  - component: {fileID: 6640711198480386702}
   m_Layer: 10
   m_Name: mine
   m_TagString: Untagged
@@ -121,8 +123,11 @@ MonoBehaviour:
     type: 3}
   bombShatterParticleRed: {fileID: 7921749426694240875, guid: cf5fa78238d9eb349982d4de7c7b1e38,
     type: 3}
+  bombDestroy: {fileID: 6640711198480386702}
   rotSpeed: {x: 0, y: 20, z: 0}
+  hitPlayer: 0
   bombExplosionSound: {fileID: 8300000, guid: 7218dd6949b2be442bb9fff9cabbdcbb, type: 3}
+  laserRound: {fileID: 0}
 --- !u!54 &4618313970602886800
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -154,3 +159,53 @@ MonoBehaviour:
   Life: 10
   Damageable: 1
   Desctructible: {fileID: 0}
+--- !u!114 &4155288793748400523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991562056821980296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f0a0ab295247a681b1b569944a2bf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyedVersion: {fileID: 0}
+  ExplosionRadius: 0.1
+  ExplosionPower: 1
+  ExplosionUpwardsPower: 1
+  RemoveDebris: 1
+  RemoveDebrisTimerUpper: 10
+  RemoveDebrisTimerLower: 5
+  IgnorePlayerCollision: 1
+--- !u!114 &6640711198480386702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991562056821980296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a9642a22210eb49b908f0ff156c97d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyedVersion: {fileID: 0}
+  ExplosionRadius: 0.1
+  ExplosionPower: 1
+  ExplosionUpwardsPower: 1
+  RemoveDebris: 1
+  RemoveDebrisTimerUpper: 10
+  RemoveDebrisTimerLower: 5
+  IgnorePlayerCollision: 1
+  bomb: {fileID: 7584928358568488872}
+  bombShatterTriangleParticle: {fileID: 5773060181680586705, guid: f45e60855a99fee46aeb9a2b20a9b6fe,
+    type: 3}
+  bombShatterParticle: {fileID: 7921749426694240875, guid: ac4a36bd324a9384bbf3b72c8f89212e,
+    type: 3}
+  bombShatterTriangleParticleRed: {fileID: 5773060181680586705, guid: 353765e5c09588843a8cf9e8c9cd4c72,
+    type: 3}
+  bombShatterParticleRed: {fileID: 7921749426694240875, guid: cf5fa78238d9eb349982d4de7c7b1e38,
+    type: 3}
+  bombExplosionSound: {fileID: 8300000, guid: 7218dd6949b2be442bb9fff9cabbdcbb, type: 3}

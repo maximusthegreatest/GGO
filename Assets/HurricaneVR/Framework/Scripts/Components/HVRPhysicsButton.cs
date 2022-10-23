@@ -1,4 +1,5 @@
 ﻿using System;
+using HurricaneVR.Framework.Core.ScriptableObjects;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
@@ -6,15 +7,26 @@ using UnityEngine.Events;
 
 namespace HurricaneVR.Framework.Components
 {
+    /// <summary>
+    /// Creates a joint constrained along one axis with limits based on start and end points defined in the inspector editor.
+    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class HVRPhysicsButton : MonoBehaviour
     {
         [Header("Settings")]
+
+        [Tooltip("Axis the button will travel on in local space.")]
         public HVRAxis Axis;
+
+        [Tooltip("Rigidbody this button will connect to with a joint.")]
         public Rigidbody ConnectedBody;
+
+        [Tooltip("Spring value of the joint")]
         public float Spring = 1000f;
+
+        [Tooltip("Damper of the joint")]
         public float Damper = 50f;
-        
+
 
 
         [Header("Button Positions")]
@@ -41,7 +53,7 @@ namespace HurricaneVR.Framework.Components
 
         [Header("Debug")]
         public bool IsPressed = false;
-
+        public bool InvokeButtonDown;
         public bool UpdateSpring;
 
         public Rigidbody Rigidbody { get; private set; }
@@ -62,11 +74,6 @@ namespace HurricaneVR.Framework.Components
 
         private void SetupJoint()
         {
-            _joint = gameObject.AddComponent<ConfigurableJoint>();
-            _joint.connectedBody = ConnectedBody;
-            //_joint.anchor = StartPosition;
-            _joint.autoConfigureConnectedAnchor = false;
-
             var worldStartPosition = StartPosition;
             if (transform.parent)
                 worldStartPosition = transform.parent.TransformPoint(StartPosition);
@@ -74,6 +81,12 @@ namespace HurricaneVR.Framework.Components
             var worldEndPosition = EndPosition;
             if (transform.parent)
                 worldEndPosition = transform.parent.TransformPoint(EndPosition);
+
+            _joint = gameObject.AddComponent<ConfigurableJoint>();
+            _joint.autoConfigureConnectedAnchor = false;
+            _joint.connectedBody = ConnectedBody;
+            _joint.anchor = Vector3.zero;
+            
 
 
             if (ConnectedBody)
@@ -96,9 +109,10 @@ namespace HurricaneVR.Framework.Components
             _joint.SetLinearLimit(Vector3.Distance(StartPosition, EndPosition));
 
             _limitJoint = gameObject.AddComponent<ConfigurableJoint>();
-            _limitJoint.connectedBody = ConnectedBody;
-            //_limitJoint.anchor = EndPosition;
             _limitJoint.autoConfigureConnectedAnchor = false;
+            _limitJoint.connectedBody = ConnectedBody;
+            _limitJoint.anchor = Vector3.zero;
+            
 
             if (ConnectedBody)
             {
@@ -124,11 +138,12 @@ namespace HurricaneVR.Framework.Components
                 _joint.SetXDrive(Spring, Damper, Spring);
                 UpdateSpring = false;
             }
-            
-            var distance = (StartPosition - transform.localPosition).magnitude;
 
-            if (!IsPressed && distance >= DownThreshold)
+            var distance = Mathf.Abs(GetDistance());
+
+            if (!IsPressed && distance >= DownThreshold || InvokeButtonDown)
             {
+                InvokeButtonDown = false;
                 IsPressed = true;
                 OnButtonDown();
             }
@@ -139,12 +154,29 @@ namespace HurricaneVR.Framework.Components
             }
         }
 
+        private float GetDistance()
+        {
+            switch (Axis)
+            {
+                case HVRAxis.X:
+                case HVRAxis.NegX:
+                    return transform.localPosition.x - StartPosition.x;
+                case HVRAxis.Y:
+                case HVRAxis.NegY:
+                    return transform.localPosition.y - StartPosition.y;
+                case HVRAxis.Z:
+                case HVRAxis.NegZ:
+                    return transform.localPosition.z - StartPosition.z;
+            }
+
+            return 0f;
+        }
 
         protected virtual void OnButtonDown()
         {
             if (SFXButtonDown)
             {
-                SFXPlayer.Instance?.PlaySFX(SFXButtonDown, transform.position);
+                if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFX(SFXButtonDown, transform.position);
             }
 
             ButtonDown.Invoke(this);
@@ -154,7 +186,7 @@ namespace HurricaneVR.Framework.Components
         {
             if (SFXButtonUp)
             {
-                SFXPlayer.Instance?.PlaySFX(SFXButtonUp, transform.position);
+                if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFX(SFXButtonUp, transform.position);
             }
             ButtonUp.Invoke(this);
         }

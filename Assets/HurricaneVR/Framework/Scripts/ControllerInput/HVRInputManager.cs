@@ -3,13 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.HurricaneVR.Framework.Shared.Utilities;
+using HurricaneVR.Framework.Components;
 using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.XR;
 
 
+#if USING_OPENXR
+using UnityEngine.XR.OpenXR;
+#endif
 
 #if USING_XR_MANAGEMENT
 using UnityEngine.XR.Management;
@@ -66,10 +72,13 @@ namespace HurricaneVR.Framework.ControllerInput
 
 
         [Header("Oculus - Requires Oculus Asset + Integration")]
+
         [Tooltip("If true ovrinputs will be used")]
         public bool UseOVRInputs;
+
         [Tooltip("If set to true, OVRManager is required to be in your scene")]
         public bool OVRHaptics;
+
         [Tooltip("If using OVRInput for Oculus devices without OVRManager in the scene then set this to true.")]
         public bool ForceOVRInputUpdate;
 
@@ -78,6 +87,7 @@ namespace HurricaneVR.Framework.ControllerInput
         public bool InitializeSteamVRActions = true;
 
         [Header("Input Settings")]
+
         [Tooltip("If true uses the new input system bindings")]
         public bool UseNewInputSystem;
 
@@ -87,14 +97,17 @@ namespace HurricaneVR.Framework.ControllerInput
         [Tooltip("Finger Curl Settings, defaults created if not supplied")]
         public HVRFingerSettings FingerSettings;
 
+        [Tooltip("Device / SDK controller offsets")]
+        public HVRControllerOffsets ControllerOffsets;
+
+        [Tooltip("Haptics Settings")]
+        public HVRGrabHaptics GrabHaptics;
+
         [Header("Device Specific Settings")]
         public HVRInputSettings WMRInputMap;
-        public HVRInputSettings WMROpenVRInputMap;
-        public HVRInputSettings WMRWithButtonsInputMap;
-
+        [FormerlySerializedAs("WMRWithButtonsInputMap")]
+        public HVRInputSettings ReverbG2InputMap;
         public HVRInputSettings OculusInputMap;
-        public HVRInputSettings OculusOpenVRInputMap;
-
         public HVRInputSettings ViveInputMap;
         public HVRInputSettings KnucklesInputMap;
         public HVRInputSettings CosmosInputMap;
@@ -105,10 +118,13 @@ namespace HurricaneVR.Framework.ControllerInput
         [Header("Deadzones")]
         [Tooltip("WMR device deadzone, if any.")]
         public Vector2 WMRDeadzone = new Vector2(.15f, .15f);
+
         [Tooltip("Oculus device deadzone, if any.")]
         public Vector2 OculusDeadzone = new Vector2(.15f, .15f);
+
         [Tooltip("Vive device deadzone, if any.")]
         public Vector2 ViveDeadzone = new Vector2(0f, 0f);
+
         [Tooltip("Knuckles device deadzone, if any.")]
         public Vector2 KnucklesDeadzone = new Vector2(0f, 0f);
 
@@ -125,11 +141,33 @@ namespace HurricaneVR.Framework.ControllerInput
         [Header("Debugging")]
         public InputSDK CurrentSDK = InputSDK.None;
 
-        public string XRPluginLoader;
+        [SerializeField]
+        private string _xrPlugin;
+
+        public string XRPluginLoader
+        {
+            get { return _xrPlugin; }
+            set
+            {
+                _xrPlugin = value;
+
+                if (IsOpenXR)
+                {
+#if USING_OPENXR
+                    Debug.Log($"OpenXR Runtime: {OpenXRRuntime.name}");
+#endif
+                }
+            }
+        }
+
         public bool LegacyActive;
         public bool XRPluginActive;
         public VRMode VRPlugin;
         public bool IsVRInitialized => LegacyActive || XRPluginActive;
+
+        public bool IsOpenXR => XRPluginLoader != null && XRPluginLoader == OpenXRLoader;
+
+        public bool IsSteamVR { get; private set; }
 
         public string HMDManufacturer;
         public string HMDName;
@@ -140,8 +178,8 @@ namespace HurricaneVR.Framework.ControllerInput
         public string RightManufacturer;
         public string RightControllerName;
 
-        [SerializeField] private XRInputSystem LeftXRInputSystem = XRInputSystem.None;
-        [SerializeField] private XRInputSystem RightXRInputSystem = XRInputSystem.None;
+        [SerializeField] private HVRControllerType LeftXRInputSystem = HVRControllerType.None;
+        [SerializeField] private HVRControllerType RightControllerType = HVRControllerType.None;
 
         public List<string> LeftFeatures = new List<string>();
         public List<string> RightFeatures = new List<string>();
@@ -175,7 +213,6 @@ namespace HurricaneVR.Framework.ControllerInput
         private readonly List<XRDisplaySubsystem> _displaySubsystems = new List<XRDisplaySubsystem>();
         private bool _applicationExiting;
         private InputDevice _hmdDevice;
-        private TrackingOriginModeFlags _previousTrackingSpace;
 
         public InputDevice HMDDevice
         {
@@ -298,7 +335,17 @@ namespace HurricaneVR.Framework.ControllerInput
 
             if (!FingerSettings)
             {
+                Debug.LogWarning($"HVRInputManager.FingerSettings not assigned, creating defaults.");
+
                 FingerSettings = ScriptableObject.CreateInstance<HVRFingerSettings>();
+                FingerSettings.Reset();
+            }
+
+            if (!GrabHaptics)
+            {
+                Debug.LogWarning($"HVRInputManager.GrabHaptics not assigned.");
+                //GrabHaptics = ScriptableObject.CreateInstance<HVRGrabHaptics>();
+                //GrabHaptics.Reset();
             }
 
             CheckXRStatus();
@@ -345,7 +392,7 @@ namespace HurricaneVR.Framework.ControllerInput
 
 #if HVR_OCULUS
 
-            if (UseOVRInputs && ForceOVRInputUpdate && (LeftXRInputSystem == XRInputSystem.Oculus || RightXRInputSystem == XRInputSystem.Oculus))
+            if (UseOVRInputs && ForceOVRInputUpdate && (LeftXRInputSystem == HVRControllerType.Oculus || RightControllerType == HVRControllerType.Oculus))
             {
                 HVROculusController.UpdateOVRInput();
             }
@@ -501,8 +548,8 @@ namespace HurricaneVR.Framework.ControllerInput
                 }
             }
 
-            RightXRInputSystem = GetController(RightDevice.manufacturer?.ToLower(), RightDevice.name?.ToLower());
-            RightController = UpdateController(RightXRInputSystem, device, HVRHandSide.Right);
+            RightControllerType = GetController(RightDevice.manufacturer?.ToLower(), RightDevice.name?.ToLower());
+            RightController = UpdateController(RightControllerType, device, HVRHandSide.Right);
             if (device.isValid)
                 RightControllerConnected.Invoke(RightController);
 
@@ -533,11 +580,10 @@ namespace HurricaneVR.Framework.ControllerInput
                 LeftControllerConnected.Invoke(LeftController);
         }
 
-        private HVRController UpdateController(XRInputSystem sdk, InputDevice device, HVRHandSide side)
+        private HVRController UpdateController(HVRControllerType controllerType, InputDevice device, HVRHandSide side)
         {
             HVRInputSettings inputMap = null;
-            Vector2 deadZone = Vector2.zero;
-            HVRControllerType controllerType;
+            Vector2 deadZone;
 
             //var hasTrackPad = side == HVRHandSide.Left ? LeftHasTrackPad : RightHasTrackPad;
             var wasNone = CurrentSDK == InputSDK.None;
@@ -557,56 +603,35 @@ namespace HurricaneVR.Framework.ControllerInput
                 Debug.Log($"InputSDK : {CurrentSDK}");
             }
 
-            switch (sdk)
+            switch (controllerType)
             {
-                case XRInputSystem.WMROpenVR:
-                    inputMap = WMROpenVRInputMap;
+                case HVRControllerType.ReverbG2:
                     deadZone = WMRDeadzone;
-                    controllerType = HVRControllerType.WMR;
+                    inputMap = ReverbG2InputMap;
                     break;
-                case XRInputSystem.ReverbG2:
-                    deadZone = WMRDeadzone;
-                    inputMap = WMRWithButtonsInputMap;
-                    controllerType = HVRControllerType.WMRButtons;
-                    break;
-                case XRInputSystem.WMR:
+                case HVRControllerType.WMR:
                     inputMap = WMRInputMap;
                     deadZone = WMRDeadzone;
-                    controllerType = HVRControllerType.WMR;
                     break;
-                case XRInputSystem.OculusOpenVR:
-                    inputMap = OculusOpenVRInputMap;
-                    deadZone = OculusDeadzone;
-                    controllerType = HVRControllerType.Oculus;
-                    break;
-                case XRInputSystem.Oculus:
+                case HVRControllerType.Oculus:
                     inputMap = OculusInputMap;
                     deadZone = OculusDeadzone;
-                    controllerType = HVRControllerType.Oculus;
                     break;
-                case XRInputSystem.Vive:
+                case HVRControllerType.Vive:
                     deadZone = ViveDeadzone;
                     inputMap = ViveInputMap;
-                    controllerType = HVRControllerType.Vive;
                     break;
-                case XRInputSystem.Knuckles:
+                case HVRControllerType.Knuckles:
                     deadZone = KnucklesDeadzone;
                     inputMap = KnucklesInputMap;
-                    controllerType = HVRControllerType.Knuckles;
                     break;
-                case XRInputSystem.Cosmos:
+                case HVRControllerType.Cosmos:
                     inputMap = CosmosInputMap;
                     deadZone = CosmosDeadzone;
-                    controllerType = HVRControllerType.Cosmos;
-                    break;
-                case XRInputSystem.None:
-                    inputMap = OculusInputMap;
-                    controllerType = HVRControllerType.None;
                     break;
                 default:
                     inputMap = OculusInputMap;
                     deadZone = OculusDeadzone;
-                    controllerType = HVRControllerType.Oculus;
                     break;
             }
 
@@ -704,6 +729,7 @@ namespace HurricaneVR.Framework.ControllerInput
                     if (!controller)
                     {
                         var inputSystemController = gameObject.AddComponent<HVRInputSystemController>();
+                        inputSystemController.IsOpenXR = IsOpenXR;
                         controller = inputSystemController;
                         if (side == HVRHandSide.Left)
                         {
@@ -751,71 +777,62 @@ namespace HurricaneVR.Framework.ControllerInput
             return RightDevice;
         }
 
-        private XRInputSystem GetController(string manufacturer, string controllerName)
+        private HVRControllerType GetController(string manufaturerToLower, string nameToLower)
         {
-            if (string.IsNullOrWhiteSpace(manufacturer) && string.IsNullOrWhiteSpace(controllerName))
-                return XRInputSystem.None;
+            if (string.IsNullOrWhiteSpace(manufaturerToLower) && string.IsNullOrWhiteSpace(nameToLower))
+                return HVRControllerType.None;
 
-            if (manufacturer == null)
+            if (manufaturerToLower == null)
             {
-                manufacturer = "";
+                manufaturerToLower = "";
             }
 
-            if (controllerName == null)
+            if (nameToLower == null)
             {
-                controllerName = "";
+                nameToLower = "";
             }
 
-            manufacturer = manufacturer.ToLower();
-            controllerName = controllerName.ToLower();
+            manufaturerToLower = manufaturerToLower.ToLower();
+            nameToLower = nameToLower.ToLower();
 
-            if (IsKnuckles(manufacturer, controllerName))
+            if (IsKnuckles(manufaturerToLower, nameToLower))
             {
-                return XRInputSystem.Knuckles;
+                return HVRControllerType.Knuckles;
             }
 
 
 
-            if (manufacturer.Contains(Oculus))
+            if (manufaturerToLower.Contains(Oculus))
             {
-                if (controllerName.Contains(OpenVRController))
-                {
-                    return XRInputSystem.OculusOpenVR;
-                }
-                return XRInputSystem.Oculus;
+                return HVRControllerType.Oculus;
             }
 
-            if (controllerName.Contains(Cosmos))
-                return XRInputSystem.Cosmos;
+            if (nameToLower.Contains(Cosmos))
+                return HVRControllerType.Cosmos;
 
-            if (manufacturer.Contains(HTC) || controllerName.Contains(Vive))
-                return XRInputSystem.Vive;
+            if (manufaturerToLower.Contains(HTC) || nameToLower.Contains(Vive))
+                return HVRControllerType.Vive;
 
-            var isWindowsMixedReality = manufacturer.Contains(WindowsMR) || controllerName.Contains(WMRController) || controllerName.Contains(WindowsMROpenXR.ToLower()) ||
-                                        controllerName.Contains(OpenXR_G2);
+            var isWindowsMixedReality = manufaturerToLower.Contains(WindowsMR) || nameToLower.Contains(WMRController) || nameToLower.Contains(WindowsMROpenXR.ToLower()) ||
+                                        nameToLower.Contains(OpenXR_G2);
 
             if (isWindowsMixedReality)
             {
-                if (controllerName.Contains(ReverbG2.ToLower()) || controllerName.Contains(OpenXR_G2.ToLower()))
+                if (nameToLower.Contains(ReverbG2.ToLower()) || nameToLower.Contains(OpenXR_G2.ToLower()))
                 {
-                    return XRInputSystem.ReverbG2;
+                    return HVRControllerType.ReverbG2;
                 }
 
                 var hmd = HMDName.ToLower();
                 if (hmd.Contains(Reverb) && hmd.Contains(G2))
                 {
-                    return XRInputSystem.ReverbG2;
+                    return HVRControllerType.ReverbG2;
                 }
 
-                if (controllerName.Contains(OpenVRController))
-                {
-                    return XRInputSystem.WMROpenVR;
-                }
-
-                return XRInputSystem.WMR;
+                return HVRControllerType.WMR;
             }
 
-            return XRInputSystem.None;
+            return HVRControllerType.None;
         }
 
         private bool IsKnuckles(string manufacturer, string controllerName)
@@ -827,40 +844,6 @@ namespace HurricaneVR.Framework.ControllerInput
             return false;
         }
 
-        public void Recenter()
-        {
-
-#if USING_XR_MANAGEMENT
-
-            var subsystems = new List<XRInputSubsystem>();
-            SubsystemManager.GetInstances<XRInputSubsystem>(subsystems);
-
-            for (int i = 0; i < subsystems.Count; i++)
-            {
-                var currentInputSubsystem = subsystems[i];
-                if (currentInputSubsystem != null)
-                {
-                    if (!currentInputSubsystem.TryRecenter())
-                    {
-                        Debug.Log($"Failed to recenter.");
-                    }
-
-                }
-            }
-
-#elif !UNITY_2020_1_OR_NEWER
-
-#pragma warning disable 0618
-            InputTracking.Recenter();
-#pragma warning restore 0618
-
-#endif
-
-            this.ExecuteNextUpdate(() => HMDRecentered.Invoke());
-        }
-
-
-
         public void GetSDK()
         {
             if (!IsVRInitialized)
@@ -869,11 +852,11 @@ namespace HurricaneVR.Framework.ControllerInput
                 return;
             }
 
-            if (CurrentSDK != InputSDK.None)
+            if (CurrentSDK != InputSDK.None && !UseOVRInputs)
                 return;
 
             var isXRPlugin = VRPlugin == VRMode.XRPlugin;
-            var steamvrFound = IsSteamVR();
+            var steamvrFound = CheckForSteamVR();
             var isLegacy = !isXRPlugin;
 
             if (steamvrFound && isLegacy)
@@ -892,22 +875,22 @@ namespace HurricaneVR.Framework.ControllerInput
 
             if (isXRPlugin)
             {
-                XRPluginLoader = XRPluginLoader.ToLower();
-                if (XRPluginLoader == OculusLoader.ToLower())
+                var loader = XRPluginLoader.ToLower();
+                if (loader == OculusLoader.ToLower())
                 {
                     CurrentSDK = UseOVRInputs ? InputSDK.Oculus : InputSDK.XRInput;
                     return;
                 }
 
 #if ENABLE_INPUT_SYSTEM
-                if (XRPluginLoader == OpenXRLoader.ToLower())
+                if (loader == OpenXRLoader.ToLower())
                 {
                     CurrentSDK = InputSDK.InputSystem;
                     return;
                 }
 #endif
 
-                if (XRPluginLoader == OpenVRLoader.ToLower())
+                if (loader == OpenVRLoader.ToLower())
                 {
                     if (!steamvrFound)
                     {
@@ -923,7 +906,7 @@ namespace HurricaneVR.Framework.ControllerInput
             }
 
             //legacy vr
-            if (LeftXRInputSystem == XRInputSystem.Oculus || RightXRInputSystem == XRInputSystem.Oculus)
+            if (LeftXRInputSystem == HVRControllerType.Oculus || RightControllerType == HVRControllerType.Oculus)
             {
                 CurrentSDK = UseOVRInputs ? InputSDK.Oculus : InputSDK.XRInput;
                 return;
@@ -932,7 +915,7 @@ namespace HurricaneVR.Framework.ControllerInput
             CurrentSDK = InputSDK.XRInput;
         }
 
-        private bool IsSteamVR()
+        private bool CheckForSteamVR()
         {
 #if !HVR_STEAMVR
             return false;
@@ -1145,7 +1128,7 @@ namespace HurricaneVR.Framework.ControllerInput
 
         private void InitSteamVR()
         {
-            if (!InitializeSteamVR || !IsSteamVR())
+            if (!InitializeSteamVR || !CheckForSteamVR())
                 return;
 
 #if !HVR_STEAMVR
@@ -1166,6 +1149,8 @@ namespace HurricaneVR.Framework.ControllerInput
                 var actionSet = SteamVR_Input.GetActionSet(@"\actions\HVR");
                 actionSet.Activate();
             }
+
+            IsSteamVR = true;
 #endif
 
         }

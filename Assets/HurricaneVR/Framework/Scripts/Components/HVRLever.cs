@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace HurricaneVR.Framework.Components
 {
-
+    /// <summary>
+    /// Depecrecated and left in for older projects, superceded by HVRPhysicsLever and HVRRotationTracker
+    /// </summary>
     [RequireComponent(typeof(HVRGrabbable))]
     [RequireComponent(typeof(HingeJoint))]
     public class HVRLever : MonoBehaviour
@@ -230,7 +232,7 @@ namespace HurricaneVR.Framework.Components
         protected virtual void OnStepChanged(int step, bool raiseEvents = true)
         {
             if (AudioClip)
-                SFXPlayer.Instance.PlaySFXRandomPitch(AudioClip, transform.position, .9f, 1.1f);
+                if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFXRandomPitch(AudioClip, transform.position, .9f, 1.1f);
             if (raiseEvents)
                 Stepped.Invoke(step);
         }

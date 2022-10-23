@@ -2,14 +2,22 @@
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 namespace HurricaneVR.Framework.ControllerInput
 {
+    /// <summary>
+    /// Used by the player controller, teleporter, and hand grabbing systems to drive their actions.
+    /// Subclass and override the virtual methods if you wish to customize inputs per device.
+    /// </summary>
     public class HVRPlayerInputs : MonoBehaviour
     {
         [Header("Grab Settings")]
         public bool CanDistanceGrab = true;
         public bool CanTriggerGrab;
-        
+
         [Tooltip("For non flick style force grabber")]
         public HVRForceGrabActivation ForceGrabActivation = HVRForceGrabActivation.Grip;
 
@@ -57,6 +65,13 @@ namespace HurricaneVR.Framework.ControllerInput
         public HVRHandSide TeleportHandSide = HVRHandSide.Right;
         public bool SwapMovementAxis;
 
+
+        [Header("Debugging")]
+        public bool UseWASD;
+
+        public bool IsMouseDown;
+        public Vector2 MouseAxis;
+
         public bool UpdateInputs { get; set; } = true;
 
         public HVRController RightController => HVRInputManager.Instance.RightController;
@@ -102,6 +117,7 @@ namespace HurricaneVR.Framework.ControllerInput
 
             IsJumpActivated = GetIsJumpActivated();
             IsStandActivated = GetStand();
+            MouseAxis = GetMouse(out IsMouseDown);
 
             ResetState(ref CrouchState);
             ResetState(ref StandState);
@@ -178,8 +194,8 @@ namespace HurricaneVR.Framework.ControllerInput
             }
             else
             {
-                left = LeftController.GripButtonState.Active && LeftController.TriggerButtonState.JustActivated;
-                right = RightController.GripButtonState.Active && RightController.TriggerButtonState.JustActivated;
+                left = LeftController.GripButtonState.Active && LeftController.TriggerButtonState.JustActivated || LeftController.TriggerButtonState.Active && LeftController.GripButtonState.JustActivated;
+                right = RightController.GripButtonState.Active && RightController.TriggerButtonState.JustActivated || RightController.TriggerButtonState.Active && RightController.GripButtonState.JustActivated;
             }
         }
 
@@ -272,6 +288,13 @@ namespace HurricaneVR.Framework.ControllerInput
 
         protected virtual Vector2 GetMovementAxis()
         {
+            if (UseWASD)
+            {
+                var wasd = CheckWASD();
+                if (wasd.sqrMagnitude > 0f)
+                    return wasd;
+            }
+
             if (SwapMovementAxis)
             {
                 if (RightController.ControllerType == HVRControllerType.Vive)
@@ -292,6 +315,34 @@ namespace HurricaneVR.Framework.ControllerInput
             }
 
             return LeftController.JoystickAxis;
+        }
+
+        private Vector2 CheckWASD()
+        {
+            var x = 0f;
+            var y = 0f;
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            if (Input.GetKey(KeyCode.W))
+                y += 1f;
+            if (Input.GetKey(KeyCode.S))
+                y -= 1f;
+            if (Input.GetKey(KeyCode.A))
+                x += -1f;
+            if (Input.GetKey(KeyCode.D))
+                x += 1f;
+#elif ENABLE_INPUT_SYSTEM
+            if (Keyboard.current[Key.W].isPressed)
+                y += 1f;
+            if (Keyboard.current[Key.S].isPressed)
+                y -= 1f;
+            if (Keyboard.current[Key.A].isPressed)
+                x += -1f;
+            if (Keyboard.current[Key.D].isPressed)
+                x += 1f;
+#endif
+
+            return new Vector2(x, y);
         }
 
         protected virtual Vector2 GetTurnAxis()
@@ -380,6 +431,27 @@ namespace HurricaneVR.Framework.ControllerInput
             }
 
             return RightController.SecondaryButtonState.JustActivated;
+        }
+
+        protected virtual Vector2 GetMouse(out bool mouseDown)
+        {
+            mouseDown = false;
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            if (Input.GetMouseButton(1))
+            {
+                mouseDown = true;
+                return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            }
+#elif ENABLE_INPUT_SYSTEM
+            if (Mouse.current.rightButton.isPressed)
+            {
+                mouseDown = true;
+                return Mouse.current.delta.ReadValue();
+            }
+#endif
+
+            return Vector2.zero;
         }
     }
 

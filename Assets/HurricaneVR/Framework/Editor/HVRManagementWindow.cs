@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.HandPoser;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
-using HurricaneVR.Framework.Shared.HandPoser;
 using HurricaneVR.Framework.Shared.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -24,6 +25,7 @@ namespace HurricaneVR.Editor
         private VisualElement _poserRoot;
         private TextField _recordedPrefixTextBox;
         private VisualElement _root;
+        private ScrollView _scrollView;
 
         [MenuItem("Tools/HurricaneVR/Posing")]
         public static void ShowExample()
@@ -69,6 +71,8 @@ namespace HurricaneVR.Editor
             _root = rootVisualElement;
             var visualTree = UnityEngine.Resources.Load<VisualTreeAsset>("HVRManagementWindow");
             _root.Add(visualTree.CloneTree());
+
+            _scrollView =  _root.Q<ScrollView>("ScrollView"); 
 
             SetupObjectFields(_root);
             SetupFocusButtons(_root);
@@ -437,7 +441,8 @@ namespace HurricaneVR.Editor
 
             _poserEditor = UnityEditor.Editor.CreateEditor(poser);
             _poserRoot = _poserEditor.CreateInspectorGUI();
-            root.Add(_poserRoot);
+            //root.Add(_poserRoot);
+            _scrollView.Add(_poserRoot);
             _poserRoot.Unbind();
             _poserRoot.Bind(_poserEditor.serializedObject);
         }

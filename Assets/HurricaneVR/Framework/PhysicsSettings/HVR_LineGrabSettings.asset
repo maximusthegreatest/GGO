@@ -21,12 +21,16 @@ MonoBehaviour:
     Spring: 0
     Damper: 0
     MaxForce: 0
+  ApplyMode: 0
   EnableCollision: 0
   EnablePreprocessing: 1
   BreakForce: Infinity
   BreakTorque: Infinity
   MassScale: 1
   ConnectedMassScale: 1
+  ProjectionMode: 1
+  ProjectionDistance: 0.01
+  ProjectionAngle: 0.01
   CriticalDampPosition: 0
   DampConnectedBody: 0
   RotationDriveMode: 0

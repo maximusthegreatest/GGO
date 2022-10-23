@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using HurricaneVR.Samples;
 using HurricaneVR.Framework.Core;
+using HurricaneVR.TechDemo.Scripts;
 
 public class ReturnWeapon : MonoBehaviour
 {
-    public List<Holster> holsters = new List<Holster>();
+    public List<DemoHolster> holsters = new List<DemoHolster>();
     public bool returnWepRunning;
     private IEnumerator _coroutine;
     [SerializeField]
@@ -39,9 +39,9 @@ public class ReturnWeapon : MonoBehaviour
         returnWepRunning = true;
         yield return new WaitForSeconds(waitTime);
 
-        Holster emptyHolster = null;
+        DemoHolster emptyHolster = null;
         //return this gameobject to an open holster
-        foreach (Holster holster in holsters)
+        foreach (DemoHolster holster in holsters)
         {
             //check if holster has an item already
             if (!holster.hasItem)

@@ -8,7 +8,9 @@ namespace HurricaneVR.Framework.Core.Stabbing
         [Header("Stab Settings")]
 
         [Range(0, 1f)]
+        [Tooltip("Dot product of the stab collision direction must be greater than this.")]
         public float AngleThreshold = .5f;
+        
         [Range(0f, 1f)]
         [Tooltip("Joint damper modifier, 1 will have no friction, 0 has max friction")]
         public float Sharpness = .3f;

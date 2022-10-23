@@ -16,7 +16,8 @@ namespace HurricaneVR.Framework.Core.Bags
         [Header("Settings")]
         [Tooltip("If true, grabbed objects will be penalized with the sorting.")]
         public bool PenalizeGrabbed = true;
-        public HVRSortMode hvrSortMode;
+
+        public HVRSortMode hvrSortMode = HVRSortMode.SquareMagnitude;
         public float MaxDistanceAllowed;
 
         [Header("Transforms")] 
@@ -30,8 +31,8 @@ namespace HurricaneVR.Framework.Core.Bags
         
         public List<HVRGrabbable> IgnoredGrabbables = new List<HVRGrabbable>();
         
-
-        private readonly List<HVRGrabbable> _allGrabbables = new List<HVRGrabbable>();
+        [SerializeField]
+        private List<HVRGrabbable> _allGrabbables = new List<HVRGrabbable>();
         private readonly HashSet<HVRGrabbable> _distinctGrabbables = new HashSet<HVRGrabbable>();
         private readonly List<HVRGrabbable> _grabbablesToRemove = new List<HVRGrabbable>(1000);
 
@@ -56,19 +57,12 @@ namespace HurricaneVR.Framework.Core.Bags
         protected void AddGrabbable(HVRGrabbable grabbable)
         {
             if (_distinctGrabbables.Contains(grabbable))
-            {                
+            {
                 return;
             }
             _distinctGrabbables.Add(grabbable);
-            _allGrabbables.Add(grabbable);            
-            grabbable.Destroyed.AddListener(OnGrabbableDestroyed);
+            _allGrabbables.Add(grabbable);
         }
-
-        private void OnGrabbableDestroyed(HVRGrabbable grabbable)
-        {
-            RemoveGrabbable(grabbable);
-        }
-
 
         protected virtual void RemoveGrabbable(HVRGrabbable grabbable)
         {
@@ -77,7 +71,6 @@ namespace HurricaneVR.Framework.Core.Bags
                 _allGrabbables.Remove(grabbable);
             }
             _distinctGrabbables.Remove(grabbable);
-            grabbable.Destroyed.RemoveListener(OnGrabbableDestroyed);
             GrabbableRemoved.Invoke(grabbable);
         }
 
@@ -92,8 +85,7 @@ namespace HurricaneVR.Framework.Core.Bags
             for (var i = 0; i < _allGrabbables.Count; i++)
             {
                 var grabbable = _allGrabbables[i];
-                Debug.Log("From all grab bag, name: " + grabbable.gameObject.name);
-                if (!grabbable || !grabbable.gameObject.activeSelf || !grabbable.enabled)
+                if (!grabbable || !grabbable.gameObject.activeInHierarchy || !grabbable.enabled)
                 {
                     anyDestroyedOrDisabled = true;
                     continue;
@@ -101,27 +93,25 @@ namespace HurricaneVR.Framework.Core.Bags
 
                 sorter.DistanceMap[grabbable] = DistanceToGrabbable(grabbable);
 
-               
-
                 if (!grabbable.HasConcaveColliders && sorter.DistanceMap[grabbable] > MaxDistanceAllowed)
-                {                    
+                {
                     _grabbablesToRemove.Add(grabbable);
                 }
                 else if (IsValid(grabbable))
-                {                    
+                {
                     if (PenalizeGrabbed && grabbable.IsBeingHeld)
                     {
                         sorter.DistanceMap[grabbable] += 1000f;
                     }
 
-                    ValidGrabbables.Add(grabbable);                    
+                    ValidGrabbables.Add(grabbable);
                 }
             }
 
             if (anyDestroyedOrDisabled)
             {
-                _distinctGrabbables.RemoveWhere(e => e == null || !e.gameObject.activeSelf || !e.enabled);
-                _allGrabbables.RemoveAll(e => e == null || !e.gameObject.activeSelf || !e.enabled);
+                _distinctGrabbables.RemoveWhere(e => e == null || !e.gameObject.activeInHierarchy || !e.enabled);
+                _allGrabbables.RemoveAll(e => e == null || !e.gameObject.activeInHierarchy || !e.enabled);
             }
 
             for (var index = 0; index < _grabbablesToRemove.Count; index++)
@@ -145,17 +135,14 @@ namespace HurricaneVR.Framework.Core.Bags
         }
 
         protected virtual bool IsValid(HVRGrabbable grabbable)
-        {            
-            
+        {
             if (grabbable.RequiresGrabbable)
-            {                
+            {
                 if (!grabbable.RequiredGrabbable || !grabbable.RequiredGrabbable.IsBeingHeld)
-                {                    
+                {
                     return false;
                 }
             }
-
-
             return grabbable.CanBeGrabbed && !_ignoredGrabbables.Contains(grabbable);
         }
     }

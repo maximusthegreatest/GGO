@@ -2,13 +2,14 @@
     "name": "HurricaneVR.Framework",
     "references": [
         "Hurricane.Shared",
-        "HurricaneVR.Oculus",
-        "HurricaneVR.SteamVR",
         "UnityEngine.SpatialTracking",
         "Unity.InputSystem",
         "SteamVR",
         "Unity.XR.Management",
-        "Unity.XR.OpenVR"
+        "Unity.XR.OpenVR",
+        "Unity.XR.OpenXR",
+        "Oculus.VR",
+        "SteamVR_Actions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -42,6 +43,16 @@
             "name": "com.unity.xr.management",
             "expression": "4.0.0",
             "define": "USING_XR_MANAGEMENT_V4"
+        },
+        {
+            "name": "com.unity.xr.openxr",
+            "expression": "",
+            "define": "USING_OPENXR"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "",
+            "define": "HVR_INPUT_SYSTEM"
         }
     ],
     "noEngineReferences": false

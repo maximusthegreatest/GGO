@@ -16,7 +16,10 @@ namespace HurricaneVR.Framework.Core.Player
             {
                 HVRManager.Instance.Camera = transform;
             }
-            gameObject.layer = LayerMask.NameToLayer(HVRLayers.Player.ToString());
+
+            var layer = LayerMask.NameToLayer(HVRLayers.Player.ToString());
+            if (layer > -1)
+                gameObject.layer = layer;
         }
     }
 }

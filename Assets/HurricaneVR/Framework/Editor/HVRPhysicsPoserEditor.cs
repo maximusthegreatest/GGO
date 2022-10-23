@@ -1,7 +1,7 @@
 ﻿using System;
+using HurricaneVR.Framework.Core.HandPoser;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
-using HurricaneVR.Framework.Shared.HandPoser;
 using HurricaneVR.Framework.Shared.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -59,7 +59,7 @@ namespace HurricaneVR.Editor
 
             _root.Q<Button>("SetupButton").clickable.clicked += () =>
             {
-                PhysicsPoser.Setup();
+                if(PhysicsPoser.Validate()) PhysicsPoser.Setup();
                 serializedObject.ApplyModifiedProperties();
             };
 

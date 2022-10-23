@@ -84,7 +84,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974498550018646168}
   m_LocalRotation: {x: -0.12494221, y: 0.10156694, z: 0.036008704, w: 0.98629457}
-  m_LocalPosition: {x: 0.0137940515, y: 0.0016955651, z: 0.07840718}
+  m_LocalPosition: {x: -0.0183, y: -0.0013, z: 0.002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3974498551220278636}
@@ -114,7 +114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974498550589118554}
   m_LocalRotation: {x: -0.050966945, y: 0.068160765, z: -0.03575474, w: 0.9957299}
-  m_LocalPosition: {x: 0.015527026, y: -0.003402517, z: 0.04324223}
+  m_LocalPosition: {x: -0.0236, y: 0.0019, z: 0.0032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3974498551220278626}
@@ -144,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974498550648822625}
   m_LocalRotation: {x: -0.6325719, y: -0.028620776, z: -0.22414145, w: 0.7408066}
-  m_LocalPosition: {x: -0.056715567, y: -0.016190106, z: 0.06709938}
+  m_LocalPosition: {x: -0.024, y: 0.0024, z: 0.0006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3974498551220278550}
@@ -174,7 +174,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974498551048820843}
   m_LocalRotation: {x: -0.28923956, y: 0.14362642, z: 0.21038668, w: 0.92274016}
-  m_LocalPosition: {x: 0.009913875, y: 0.013610587, z: 0.1145675}
+  m_LocalPosition: {x: -0.0171, y: -0.0098, z: 0.0018}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3974498551220278646}
@@ -204,7 +204,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974498551163983761}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.0197, y: -0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3974498551220278544}
@@ -987,7 +987,7 @@ Animator:
   m_GameObject: {fileID: 3974498551220504838}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 7a2e6c216d01d1649b50691291befc2d, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 78f02360f31c1a547b937559d34b03b1, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1043,33 +1043,38 @@ MonoBehaviour:
     spine:
       bones: []
       headTarget: {fileID: 0}
-      pelvisTarget: {fileID: 0}
       positionWeight: 1
       rotationWeight: 1
+      headClampWeight: 0.6
+      minHeadHeight: 0.8
+      useAnimatedHeadHeightWeight: 0
+      useAnimatedHeadHeightRange: 0.1
+      animatedHeadHeightBlend: 0.3
+      pelvisTarget: {fileID: 0}
       pelvisPositionWeight: 0
       pelvisRotationWeight: 0
+      maintainPelvisPosition: 0.2
       chestGoal: {fileID: 0}
       chestGoalWeight: 0
-      minHeadHeight: 0.8
+      chestClampWeight: 0.5
+      rotateChestByHands: 1
       bodyPosStiffness: 0.55
       bodyRotStiffness: 0.1
       neckStiffness: 0.2
-      rotateChestByHands: 1
-      chestClampWeight: 0.5
-      headClampWeight: 0.6
       moveBodyBackWhenCrouching: 0.5
-      maintainPelvisPosition: 0.2
       maxRootAngle: 25
       rootHeadingOffset: 0
     leftArm:
       bones: []
       target: {fileID: 0}
-      bendGoal: {fileID: 0}
       positionWeight: 1
       rotationWeight: 1
-      shoulderRotationMode: 0
       shoulderRotationWeight: 1
+      shoulderRotationMode: 0
       shoulderTwistWeight: 1
+      shoulderYawOffset: 45
+      shoulderPitchOffset: -30
+      bendGoal: {fileID: 0}
       bendGoalWeight: 0
       swivelOffset: 0
       wristToPalmAxis: {x: -1, y: -0, z: -0}
@@ -1111,12 +1116,14 @@ MonoBehaviour:
     rightArm:
       bones: []
       target: {fileID: 0}
-      bendGoal: {fileID: 0}
       positionWeight: 1
       rotationWeight: 1
-      shoulderRotationMode: 0
       shoulderRotationWeight: 1
+      shoulderRotationMode: 0
       shoulderTwistWeight: 1
+      shoulderYawOffset: 45
+      shoulderPitchOffset: -30
+      bendGoal: {fileID: 0}
       bendGoalWeight: 0
       swivelOffset: 0
       wristToPalmAxis: {x: -1, y: -0, z: -0}
@@ -1158,9 +1165,9 @@ MonoBehaviour:
     leftLeg:
       bones: []
       target: {fileID: 0}
-      bendGoal: {fileID: 0}
       positionWeight: 0
       rotationWeight: 0
+      bendGoal: {fileID: 0}
       bendGoalWeight: 0
       swivelOffset: 0
       bendToTargetWeight: 0.5
@@ -1175,9 +1182,9 @@ MonoBehaviour:
     rightLeg:
       bones: []
       target: {fileID: 0}
-      bendGoal: {fileID: 0}
       positionWeight: 0
       rotationWeight: 0
+      bendGoal: {fileID: 0}
       bendGoalWeight: 0
       swivelOffset: 0
       bendToTargetWeight: 0.5
@@ -1190,7 +1197,23 @@ MonoBehaviour:
         m_RotationOrder: 4
       useAnimatedBendNormal: 0
     locomotion:
+      mode: 1
       weight: 1
+      moveThreshold: 0.3
+      animationHeader: 0
+      minAnimationSpeed: 0.2
+      maxAnimationSpeed: 3
+      animationSmoothTime: 0.1
+      rootPositionHeader: 0
+      standOffset: {x: 0, y: 0}
+      rootLerpSpeedWhileMoving: 30
+      rootLerpSpeedWhileStopping: 30
+      rootLerpSpeedWhileTurning: 30
+      maxRootOffset: 0.5
+      rootRotationHeader: 0
+      maxRootAngleMoving: 10
+      maxRootAngleStanding: 25
+      stepLengthMlp: 1
       footDistance: 0.3
       stepThreshold: 0.4
       angleThreshold: 60
@@ -1961,8 +1984,13 @@ MonoBehaviour:
   Preview: {fileID: 0}
   DoPreview: 0
   SelectedPose: {fileID: 0}
-  MirrorAxis: 0
   IsLeft: 0
+  MirrorAxis: 0
+  UseMatchRotation: 1
+  Forward: 1
+  Up: 2
+  OtherForward: 1
+  OtherUp: 5
   ThumbRoot: {fileID: 3974498551220278546}
   ThumbTip: {fileID: 3974498550648822624}
   IndexRoot: {fileID: 3974498551220278628}
@@ -2031,7 +2059,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PosePosAndRot: 0
-  FingerCurlSpeed: 16
   PhysicsPoser: {fileID: 0}
   Hand: {fileID: 0}
   DefaultPoser: {fileID: 0}
@@ -2063,12 +2090,12 @@ MonoBehaviour:
     Pose: {fileID: 11400000, guid: cbf2b05c170abb2498defaf1b7c05537, type: 2}
     Weight: 1
     Mask: 0
-    Disabled: 0
     Type: 0
     Speed: 16
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
+    Disabled: 0
     ThumbType: 1
     IndexType: 1
     MiddleType: 1
@@ -2083,12 +2110,12 @@ MonoBehaviour:
   - Pose: {fileID: 11400000, guid: 7cb811c1b948490418bac14f71702f98, type: 2}
     Weight: 1
     Mask: 0
-    Disabled: 0
     Type: 0
     Speed: 16
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
+    Disabled: 0
     ThumbType: 1
     IndexType: 1
     MiddleType: 1
@@ -2129,8 +2156,8 @@ MonoBehaviour:
   CurrentMask:
     serializedVersion: 2
     m_Bits: 0
-  _collidedBoneTracker: 
-  _fingerIndices: 
+  _collidedBoneTracker: 000000000000000000000000000000
+  _fingerIndices: 000000000300000006000000090000000c000000
   LiveUpdate: 0
   FingerBends: 0000000000000000000000000000000000000000
 --- !u!1 &3974498551220504914
@@ -2522,8 +2549,13 @@ MonoBehaviour:
   Preview: {fileID: 0}
   DoPreview: 0
   SelectedPose: {fileID: 0}
-  MirrorAxis: 0
   IsLeft: 1
+  MirrorAxis: 0
+  UseMatchRotation: 1
+  Forward: 1
+  Up: 5
+  OtherForward: 1
+  OtherUp: 2
   ThumbRoot: {fileID: 3974498551220278574}
   ThumbTip: {fileID: 4155863986387694725}
   IndexRoot: {fileID: 3974498551220278568}
@@ -2592,7 +2624,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PosePosAndRot: 0
-  FingerCurlSpeed: 16
   PhysicsPoser: {fileID: 0}
   Hand: {fileID: 870341211848796197}
   DefaultPoser: {fileID: 6412419984488659265}
@@ -2624,12 +2655,12 @@ MonoBehaviour:
     Pose: {fileID: 11400000, guid: cbf2b05c170abb2498defaf1b7c05537, type: 2}
     Weight: 1
     Mask: 0
-    Disabled: 0
     Type: 0
     Speed: 16
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
+    Disabled: 0
     ThumbType: 1
     IndexType: 1
     MiddleType: 1
@@ -2644,12 +2675,12 @@ MonoBehaviour:
   - Pose: {fileID: 11400000, guid: 7cb811c1b948490418bac14f71702f98, type: 2}
     Weight: 1
     Mask: 0
-    Disabled: 0
     Type: 0
     Speed: 16
     AnimationParameter: None
     ButtonParameter: 0
     Button: 0
+    Disabled: 0
     ThumbType: 1
     IndexType: 1
     MiddleType: 1
@@ -2690,8 +2721,8 @@ MonoBehaviour:
   CurrentMask:
     serializedVersion: 2
     m_Bits: 4292870143
-  _collidedBoneTracker: 
-  _fingerIndices: 
+  _collidedBoneTracker: 000000000000000000000000000000
+  _fingerIndices: 000000000300000006000000090000000c000000
   LiveUpdate: 0
   FingerBends: 0000000000000000000000000000000000000000
 --- !u!1 &3974498551220504934

@@ -1,4 +1,4 @@
-﻿using HurricaneVR.Framework.Shared.HandPoser;
+﻿using HurricaneVR.Framework.Core.Utils;
 using UnityEngine;
 
 namespace HurricaneVR.Framework.Core.Stabbing
@@ -7,6 +7,7 @@ namespace HurricaneVR.Framework.Core.Stabbing
     public class HVRStabbableSettings : ScriptableObject
     {
         [Header("Settings")]
+        
         [Tooltip("If true depth and unstab checks will use raycasts on the stabbable colliders")]
         public bool CanBeImpaled = false;
 
@@ -14,8 +15,10 @@ namespace HurricaneVR.Framework.Core.Stabbing
         public float RequiredVelocity = 1f;
 
         [Header("Friction")]
+        
         [Tooltip("Joint Friction In effect until OuterShellDepth is breached by the stabber")]
         public float OuterShellDamper = 5000;
+        
         [Tooltip("How thick is the outer shell (like a skull or box)")]
         public float OuterShellThickness = .025f; // default 1 inch?
 
@@ -24,23 +27,41 @@ namespace HurricaneVR.Framework.Core.Stabbing
 
         [Tooltip("If true uses the damper curve against depth / blade length, otherwise flat damper will be used")]
         public bool UseDamperCurve = true;
+
         [Tooltip("Joint Damper curve that takes over once the outer shell is breached, defaults to 1 if not provided")]
         public AnimationCurve InnerDamperCurve;
 
+        [Header("Joint")] public bool OverrideStabberProjection;
+        public JointProjectionMode ProjectionMode = JointProjectionMode.PositionAndRotation;
+        public float ProjectionDistance = .01f;
+        public float ProjectionAngle = 20f;
 
         [Header("Limits")]
+        
         public bool LimitStabDepth;
+
         [DrawIf("LimitStabDepth", true)]
         public float StabDepthLimit;
 
         [Header("Locking")]
+
+        [Tooltip("If true the stabber will lock into place if the velocity drops below the LockVelocity threshold, once locked a force of 'UnlockForce' must be" +
+                 "exerted to unlock the stabber")]
         public bool CanLock = true;
+
+        [Tooltip("Stabber locks into place if it's velocity drops below this threshold")]
         public float LockVelocity = .1f;
+
+        [Tooltip("Force must be over the unlock force threshold for this amount of time to unlock the stabber")]
         public float LockTime = .25f;
+
+        [Tooltip("Force required to unlock the stabber once it is locked.")]
         public float UnlockForce = 300;
 
         [Header("Full Stab Settings")]
+        
         [Tooltip("Can FullStabbed event be executed many times")]
+        
         public bool ManyFullStabs = true;
         [Tooltip("Distance Required to execute the FullStabbed event")]
         

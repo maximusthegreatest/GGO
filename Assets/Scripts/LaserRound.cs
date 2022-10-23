@@ -57,10 +57,11 @@ public class LaserRound : MonoBehaviour
         laserMaxSpawnTime = laserRoundSettings[currentRound].maxSpawnTime;
         laserMinSpawnTime = laserRoundSettings[currentRound].minSpawnTime;
         hasSpawnedAllLasers = false;
-        
+
 
 
         startLaserSpawning = true;
+        
 
         myCurrentRound = currentRound;
 

@@ -11,7 +11,6 @@ namespace HurricaneVR.Framework.Core
 
         public HVRGrabberManager GrabberManager;
         public HVRPlayerController PlayerController;
-        public GameObject HighlightPrefab;
         public Transform Camera;
         public HVRScreenFade ScreenFader { get; private set; }
 
@@ -59,17 +58,6 @@ namespace HurricaneVR.Framework.Core
             }
         }
 
-        public GameObject SetupHighlight(Transform target)
-        {
-            if (!HighlightPrefab)
-                return null;
-
-            var obj = Instantiate(HighlightPrefab);
-            obj.transform.SetParent(target.transform, false);
-            obj.transform.localPosition = Vector3.zero;
-            obj.transform.localRotation = Quaternion.identity;
-            return obj;
-        }
 
         public void IgnorePlayerCollision(IEnumerable<Collider> colliders)
         {

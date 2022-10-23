@@ -1,6 +1,7 @@
 ﻿using HurricaneVR.Framework.Components;
 using HurricaneVR.Framework.Components.Creators;
 using HurricaneVR.Framework.Core;
+using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared.Utilities;
 using UnityEditor;
 using UnityEngine;

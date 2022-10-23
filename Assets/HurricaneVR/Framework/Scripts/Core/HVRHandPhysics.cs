@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using HurricaneVR.Framework.Core.Utils;
 using UnityEngine;
 
@@ -7,24 +8,17 @@ namespace HurricaneVR.Framework.Core
     [RequireComponent(typeof(Rigidbody))]
     public class HVRHandPhysics : MonoBehaviour
     {
-        public HVRHandPhysics OtherHand;
-        public Transform PhysicsHand;
-        public Collider[] HandColliders { get; private set; }
+        public Collider[] HandColliders;// { get; private set; }
         public Rigidbody Rigidbody { get; private set; }
 
         void Awake()
         {
-            SetupColliders();
-
             Rigidbody = gameObject.GetRigidbody();
         }
 
         public void SetupColliders()
         {
-            if (PhysicsHand)
-            {
-                HandColliders = PhysicsHand.gameObject.GetComponentsInChildren<Collider>().Where(e => !e.isTrigger).ToArray();
-            }
+            HandColliders = GetComponentsInChildren<Collider>().Where(e => !e.isTrigger && e.enabled).ToArray();
         }
 
         public void DisableCollision()
@@ -53,7 +47,7 @@ namespace HurricaneVR.Framework.Core
             Rigidbody.detectCollisions = true;
         }
 
-        public void IgnoreCollision(Collider[] colliders, bool ignore)
+        public void IgnoreCollision(List<Collider> colliders, bool ignore)
         {
             if (HandColliders == null || colliders == null)
             {

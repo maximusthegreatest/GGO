@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace HurricaneVR.Framework.Components
 {
+    /// <summary>
+    /// Deprecated and left in for older projects. Superceded by HVRPhysicsDial and HVRRotationTracker
+    /// </summary>
     [RequireComponent(typeof(HVRGrabbable))]
     public class HVRDial : MonoBehaviour
     {
@@ -74,10 +77,6 @@ namespace HurricaneVR.Framework.Components
                     return;
 
                 var currentVector = transform.localRotation * LocalAxisStart;
-                Debug.Log("loc rot " + transform.localRotation);    
-                Debug.Log("current vector " + currentVector);
-                //Debug.Break();
-
                 var rotationAxis = LocalRotationAxis;
 
                 var controllerRotation = new Vector3(
@@ -85,19 +84,13 @@ namespace HurricaneVR.Framework.Components
                     PrimaryGrabber.HVRTrackedController.DeltaEulerZ,
                     PrimaryGrabber.HVRTrackedController.DeltaEulerZ);
 
-                
-
                 controllerRotation.Scale(-rotationAxis);
 
                 var rotation = Quaternion.Euler(controllerRotation);
-                
 
                 var newRotation = transform.localRotation * rotation;
 
-                
                 var newVector = newRotation * LocalAxisStart;
-
-                Debug.Log("Controller rotation " + newVector);
 
                 var delta = -PrimaryGrabber.HVRTrackedController.DeltaEulerZ;
 
@@ -232,7 +225,7 @@ namespace HurricaneVR.Framework.Components
         protected virtual void OnStepChanged(int step, bool raiseEvents)
         {
             if (AudioClip)
-                SFXPlayer.Instance.PlaySFXRandomPitch(AudioClip, transform.position, .9f, 1.1f);
+                if(SFXPlayer.Instance) SFXPlayer.Instance.PlaySFXRandomPitch(AudioClip, transform.position, .9f, 1.1f);
             if (raiseEvents)
                 DialStepChanged.Invoke(step);
         }

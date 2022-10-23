@@ -1,6 +1,6 @@
 ﻿using System;
 using HurricaneVR.Framework.Core.Grabbers;
-using HurricaneVR.Framework.Shared.HandPoser;
+using HurricaneVR.Framework.Core.HandPoser;
 using UnityEngine.Events;
 
 namespace HurricaneVR.Framework.Core

@@ -9,9 +9,8 @@ namespace HurricaneVR.Framework.Core.UI
     [RequireComponent(typeof(Camera))]
     public class HVRUIPointer : MonoBehaviour
     {
-
         public HVRHandSide HandSide;
-        public float DefaultLength = 3f;
+
         public HVRInputModule InputModule;
         public Camera Camera { get; private set; }
         public LineRenderer Pointer { get; private set; }
@@ -19,15 +18,15 @@ namespace HurricaneVR.Framework.Core.UI
         public PointerEventData PointerEventData { get; internal set; }
 
         public HVRController Controller => HVRInputManager.Instance.GetController(HandSide);
-        public GameObject CurrentUIElement { get; internal set; }
+        public GameObject CurrentUIElement;// { get; internal set; }
 
-        private void Start()
+        protected virtual void Start()
         {
             Camera = GetComponent<Camera>();
             Pointer = GetComponent<LineRenderer>();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             Pointer.enabled = CurrentUIElement;
             if (Pointer.enabled)
@@ -37,11 +36,11 @@ namespace HurricaneVR.Framework.Core.UI
             }
         }
 
-        internal void Process()
+        public virtual void Process()
         {
             PointerEventData.Reset();
             PointerEventData.position = new Vector2(Camera.pixelWidth / 2, Camera.pixelHeight / 2);
-
+            PointerEventData.scrollDelta = Vector2.zero;
         }
     }
 }

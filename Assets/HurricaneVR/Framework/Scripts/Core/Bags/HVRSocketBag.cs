@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace HurricaneVR.Framework.Core.Bags
 {
+    /// <summary>
+    /// Used by the hand to detect sockets for removing objects from them
+    /// </summary>
     public class HVRSocketBag : MonoBehaviour, IComparer<HVRSocket>
     {
         private readonly Dictionary<HVRSocket, HashSet<Collider>> _map = new Dictionary<HVRSocket, HashSet<Collider>>();
@@ -16,6 +19,10 @@ namespace HurricaneVR.Framework.Core.Bags
         public float MaxDistanceAllowed;
         public HVRSortMode hvrSortMode = HVRSortMode.SquareMagnitude;
         public HVRSocket[] IgnoredSockets;
+
+        [Header("Transforms")]
+        [Tooltip("If assigned, the position of this transform will be used to calculate the distance.")]
+        public Transform DistanceSource;
 
         protected virtual void Start()
         {
@@ -37,20 +44,21 @@ namespace HurricaneVR.Framework.Core.Bags
 
         [Header("Debugging")]
         public HVRSocket ClosestSocket;
-        internal readonly HashSet<HVRSocket> AllSockets = new HashSet<HVRSocket>();
+        public readonly HashSet<HVRSocket> AllSockets = new HashSet<HVRSocket>();
         private readonly List<HVRSocket> _allSockets = new List<HVRSocket>(20);
         public List<HVRSocket> ValidSockets = new List<HVRSocket>(1000);
         private readonly List<HVRSocket> SocketsToRemove = new List<HVRSocket>(1000);
         private Dictionary<HVRSocket, float> DistanceMap = new Dictionary<HVRSocket, float>();
         private HashSet<HVRSocket> _ignoredSockets;
 
-        private Collider[] _colliders = new Collider[1000];
-
         private void FixedUpdate()
         {
             Calculate();
         }
 
+        /// <summary>
+        /// Causes the bag to ignore the provided socket when it's trigger collider overlaps ours.
+        /// </summary>
         public void IgnoreSocket(HVRSocket socket)
         {
             if (_ignoredSockets == null)
@@ -60,7 +68,15 @@ namespace HurricaneVR.Framework.Core.Bags
 
             _ignoredSockets.Add(socket);
         }
-        
+
+        /// <summary>
+        /// Stops ignoring the provided socket
+        /// </summary>
+        public void UnIgnoreSocket(HVRSocket socket)
+        {
+            _ignoredSockets.Remove(socket);
+        }
+
         protected void AddSocket(HVRSocket socket)
         {
             if (AllSockets.Contains(socket))
@@ -97,22 +113,17 @@ namespace HurricaneVR.Framework.Core.Bags
             for (var i = 0; i < _allSockets.Count; i++)
             {
                 var socket = _allSockets[i];
-                if (!socket || !socket.gameObject.activeSelf || !socket.enabled)
+                if (!socket || !socket.gameObject.activeInHierarchy || !socket.enabled)
                 {
                     anyDestroyedOrDisabled = true;
                     continue;
                 }
 
-                if (hvrSortMode == HVRSortMode.Distance)
-                {
-                    DistanceMap[socket] = Vector3.Distance(socket.transform.position, Grabber.transform.position);
-                }
-                else if (hvrSortMode == HVRSortMode.SquareMagnitude)
-                {
-                    DistanceMap[socket] = (socket.transform.position - Grabber.transform.position).sqrMagnitude;
-                }
+                var distance = DistanceToSocket(socket);
 
-                if (DistanceMap[socket] > MaxDistanceAllowed)
+                DistanceMap[socket] = distance;
+
+                if (distance > MaxDistanceAllowed)
                 {
                     SocketsToRemove.Add(socket);
                 }
@@ -124,8 +135,8 @@ namespace HurricaneVR.Framework.Core.Bags
 
             if (anyDestroyedOrDisabled)
             {
-                AllSockets.RemoveWhere(socket => !socket || !socket.gameObject.activeSelf || !socket.enabled);
-                _allSockets.RemoveAll(socket => !socket || !socket.gameObject.activeSelf || !socket.enabled);
+                AllSockets.RemoveWhere(socket => !socket || !socket.gameObject.activeInHierarchy || !socket.enabled);
+                _allSockets.RemoveAll(socket => !socket || !socket.gameObject.activeInHierarchy || !socket.enabled);
             }
 
             for (var index = 0; index < SocketsToRemove.Count; index++)
@@ -135,9 +146,19 @@ namespace HurricaneVR.Framework.Core.Bags
             }
 
             // x->y ascending sort
-            ValidSockets.Sort(this);
+            //ValidSockets.Sort(this);
+            SortHelper.Sort(ValidSockets, 0, ValidSockets.Count, this);
 
             ClosestSocket = ValidSockets.FirstOrDefault();
+        }
+
+        public virtual float DistanceToSocket(HVRSocket socket)
+        {
+            var point = DistanceSource ? DistanceSource.position : Grabber.transform.position;
+
+            if (hvrSortMode == HVRSortMode.Distance)
+                return socket.GetDistanceToGrabber(point);
+            return socket.GetSquareDistanceToGrabber(point);
         }
 
         protected bool IsValid(HVRSocket Socket)

@@ -15,45 +15,40 @@ MonoBehaviour:
   LocalEditorRootDirectory: Assets\HurricaneVR\Framework\Editor\
   LocalRootDirectory: Assets\HurricaneVR\Framework\
   LocalResourcesDirectory: Assets\HurricaneVR\Framework\Resources\
-  LocalReferencePoseDirectory: Assets\HurricaneVR\Framework\Resources\ReferencePoses\
   LocalRuntimePosesDirectory: Assets\HurricaneVR\Framework\Resources\RuntimePoses\
-  LocalPosesDirectory: 
-  AutoApplyGrabbableLayer: 0
-  LeftHand: {fileID: 1955108703661978300, guid: 207815370f9b52b4da03135a44dbf5f9,
+  LocalPosesDirectory: Assets/Poses
+  AutoApplyGrabbableLayer: 1
+  DefaultSocketableTags: {fileID: 0}
+  LeftHand: {fileID: 4172465882228960903, guid: 8beaacf77ac8d0d49a9b4284dc399aaf,
     type: 3}
-  RightHand: {fileID: 5556361224903991071, guid: 489f8eed2528ee54b85f62a37e528215,
+  RightHand: {fileID: 5317784970213213621, guid: 08a9044b5c065044ab67f546bf6b04e9,
     type: 3}
   InverseKinematics: 1
-  FullBody: {fileID: 8409295368899590559, guid: 2bccd5e497686fe4da93d77a46cdaefb,
+  IKHandMirroring: 1
+  FullBody: {fileID: 6193083224641842953, guid: 48c82487f2113144a8c867f93de96142,
     type: 3}
   HandPoseHandleOffset: {x: 0, y: 0.08, z: 0}
-  OpenHandPose: {fileID: 0}
+  OpenHandPose: {fileID: 11400000, guid: 5997437d2ff28b14e99e8de70718120f, type: 2}
   PoserShowsOneFinger: 0
-  ThumbCurlType: 1
-  IndexCurlType: 1
-  MiddleCurlType: 1
-  RingCurlType: 1
-  PinkyCurlType: 1
-  ThumbStart: 0.75
+  ThumbCurlType: 0
+  IndexCurlType: 0
+  MiddleCurlType: 0
+  RingCurlType: 0
+  PinkyCurlType: 0
+  ThumbStart: 1
   IndexStart: 1
-  MiddleStart: 0
-  RingStart: 0
-  PinkyStart: 0
+  MiddleStart: 1
+  RingStart: 1
+  PinkyStart: 1
   UseAttachedRigidBody: 0
   ComponentInParentFallback: 0
   LineGrabTriggerLoose: 0
-  AnimationParameters:
-  - A_Press
-  - 
-  - 
-  - 
-  - 
   DefaultJointSettings: {fileID: 11400000, guid: d420bd8890e2c264eb9ec97c4963f6ce,
     type: 2}
   LineGrabSettings: {fileID: 11400000, guid: 203d545f2b6cc724aa3a0d6e4fafd082, type: 2}
-  VerboseGrabbableEvents: 1
+  VerboseGrabbableEvents: 0
   VerboseHandGrabberEvents: 0
+  DisableHaptics: 0
   ChosePosesDirectory: Choose Pose Directory
-  ChoseReferencePosesDirectory: Choose Reference Poses Directory
   ChoseRunTimePosesDirectory: Choose RunTime Poses Directory
   ReloadGlobals: Reload Globals

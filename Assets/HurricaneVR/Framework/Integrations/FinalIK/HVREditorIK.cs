@@ -1,7 +1,9 @@
-﻿using RootMotion.FinalIK;
+﻿using HurricaneVR.Framework.Core.HandPoser;
+using HurricaneVR.Framework.Shared;
+using RootMotion.FinalIK;
 using UnityEngine;
 
-namespace HurricaneVR.Framework.Shared.HandPoser
+namespace HurricaneVR.Framework.Integrations.FinalIK
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(VRIK))]
@@ -13,6 +15,8 @@ namespace HurricaneVR.Framework.Shared.HandPoser
 
         public HVRIKTargets Targets;
 
+        public bool ForceEditorIK;
+
         private VRIK ik;
 
         void Start()
@@ -20,8 +24,23 @@ namespace HurricaneVR.Framework.Shared.HandPoser
             ik = GetComponent<VRIK>();
             Targets = GetComponent<HVRIKTargets>();
 
-            ik.solver.SetToReferences(ik.references);
-            ik.solver.Initiate(ik.transform);
+            if (Application.isPlaying)
+            {
+                ForceEditorIK = false;
+                enabled = false;
+                return;
+            }
+
+
+            if (Targets.IsPoser)
+            {
+                ik.solver.SetToReferences(ik.references);
+                ik.solver.Initiate(ik.transform);
+                ik.solver.locomotion.weight = 0f;
+                ik.solver.spine.positionWeight = 0f;
+                ik.solver.spine.rotationWeight = 0f;
+                ik.solver.spine.headTarget = null;
+            }
         }
 
         void OnEnable()
@@ -31,16 +50,52 @@ namespace HurricaneVR.Framework.Shared.HandPoser
 
         void Update()
         {
-            if (ik == null) return;
+            if (Application.isPlaying || !Targets || !Targets.IsPoser)
+            {
+                if (!ForceEditorIK)
+                    return;
+            }
 
-            if (ik.fixTransforms) ik.solver.FixTransforms();
+            if (!Targets)
+            {
+                if (!TryGetComponent(out Targets))
+                    return;
+            }
 
-            // Apply animation here if you want
-            ik.solver.leftArm.target = LeftTarget;
+            if (ik.fixTransforms)
+                ik.solver.FixTransforms();
 
-            ik.solver.rightArm.target = RightTarget;
+            if (!ik.solver.initiated)
+            {
+                ik.solver.SetToReferences(ik.references);
+                ik.solver.Initiate(ik.transform);
+            }
+
+            if (Targets.IsPoser)
+            {
+                ik.solver.leftArm.target = LeftTarget;
+                ik.solver.rightArm.target = RightTarget;
+            }
 
             ik.solver.Update();
         }
+
+#if UNITY_EDITOR
+
+        [InspectorButton("HandToTarget")]
+        public string SolveHands;
+
+        public void HandToTarget()
+        {
+            if (!ik.solver.initiated)
+            {
+                ik.solver.SetToReferences(ik.references);
+                ik.solver.Initiate(ik.transform);
+            }
+
+            ik.solver.Update();
+        }
+
+#endif
     }
 }

@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SnappedLeft: 0
   LeftHand:
-    Side: 0
-    Position: {x: 0, y: -0, z: 0}
-    Rotation: {x: -0.14097445, y: -0.018509874, z: 0.6929114, w: 0.7068645}
+    Position: {x: 0, y: -0, z: -0.03}
+    Rotation: {x: -0.061628442, y: 0.06162845, z: 0.70441616, w: 0.704416}
     Thumb:
       Bones:
       - Position: {x: 0.026298406, y: -0.041470297, z: 0.020564148}
@@ -60,9 +59,8 @@ MonoBehaviour:
       - Position: {x: -0.017418223, y: 1.3322676e-16, z: 7.105427e-17}
         Rotation: {x: 0.0026065244, y: -0.0394676, z: -0.58453983, w: 0.8104004}
   RightHand:
-    Side: 0
-    Position: {x: -0, y: -0, z: 0}
-    Rotation: {x: -0.14097445, y: 0.018509869, z: -0.6929114, w: 0.7068645}
+    Position: {x: -0, y: -0, z: -0.03}
+    Rotation: {x: -0.06162845, y: -0.06162845, z: -0.70441604, w: 0.70441604}
     Thumb:
       Bones:
       - Position: {x: -0.026298406, y: 0.041470297, z: -0.020564148}

@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SFXReferenceSource: {fileID: 4183768154327135795}
   SFXSourceCount: 100
+  SetClipName: 0
 --- !u!1 &4013254746517429689
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +225,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GrabberManager: {fileID: 0}
   PlayerController: {fileID: 0}
-  HighlightPrefab: {fileID: 0}
   Camera: {fileID: 0}
 --- !u!114 &8289038245742653683
 MonoBehaviour:
@@ -249,14 +249,12 @@ MonoBehaviour:
   InitializeSteamVRActions: 1
   UseNewInputSystem: 0
   TrackingSpace: 2
-  FingerSettings: {fileID: 0}
+  FingerSettings: {fileID: 11400000, guid: 09c84620c15a89048b2784a87bec8194, type: 2}
+  ControllerOffsets: {fileID: 11400000, guid: 59fc82dc1cb718745ac93844b67b3644, type: 2}
+  GrabHaptics: {fileID: 11400000, guid: 4253c613ebc69fa439e509571ef54d42, type: 2}
   WMRInputMap: {fileID: 11400000, guid: 124009afce8494b46b50a7b8e468ed5b, type: 2}
-  WMROpenVRInputMap: {fileID: 11400000, guid: 73f6a87a93c783d4c9388abfdbe5c0af, type: 2}
-  WMRWithButtonsInputMap: {fileID: 11400000, guid: 5b2559fbaa8c2904186757782b3c8fce,
-    type: 2}
+  ReverbG2InputMap: {fileID: 11400000, guid: 5b2559fbaa8c2904186757782b3c8fce, type: 2}
   OculusInputMap: {fileID: 11400000, guid: dcf21fbd7ffd7f947b782b608806c6c4, type: 2}
-  OculusOpenVRInputMap: {fileID: 11400000, guid: f7c2d96778c503b46966cfb5b4adf828,
-    type: 2}
   ViveInputMap: {fileID: 11400000, guid: fe1ab9350dfac0141ae1397f20750127, type: 2}
   KnucklesInputMap: {fileID: 11400000, guid: c916ec0ed5099a6488a2c81fae5ef2f3, type: 2}
   CosmosInputMap: {fileID: 11400000, guid: 94eb4525b569d404b84cd4f580f7ffae, type: 2}
@@ -268,7 +266,7 @@ MonoBehaviour:
   DeadzoneOverride: {x: 0, y: 0}
   OverrideDeadzone: 0
   CurrentSDK: 4
-  XRPluginLoader: 
+  _xrPlugin: 
   LegacyActive: 0
   XRPluginActive: 0
   VRPlugin: 0
@@ -279,7 +277,7 @@ MonoBehaviour:
   RightManufacturer: 
   RightControllerName: 
   LeftXRInputSystem: 0
-  RightXRInputSystem: 0
+  RightControllerType: 0
   LeftFeatures: []
   RightFeatures: []
   HMDFeatures: []

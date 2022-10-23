@@ -1858,14 +1858,14 @@ MonoBehaviour:
   MirrorAxis: 0
   IsLeft: 1
   ThumbRoot: {fileID: 7050223168620652862}
-  ThumbTip: {fileID: 2600787815926742044}
   IndexRoot: {fileID: 7050223168511522061}
-  IndexTip: {fileID: 101429949728611638}
   MiddleRoot: {fileID: 7050223167903203141}
-  MiddleTip: {fileID: 6783610355955654590}
   RingRoot: {fileID: 7050223168409987362}
-  RingTip: {fileID: 771168579719175478}
   PinkyRoot: {fileID: 7050223169032865360}
+  ThumbTip: {fileID: 2600787815926742044}
+  IndexTip: {fileID: 101429949728611638}
+  MiddleTip: {fileID: 6783610355955654590}
+  RingTip: {fileID: 771168579719175478}
   PinkyTip: {fileID: 6816978496656598408}
   Thumb:
     Root: {fileID: 7050223168620652862}
@@ -1903,16 +1903,7 @@ MonoBehaviour:
     - Transform: {fileID: 7050223167641128587}
     - Transform: {fileID: 7050223168636586004}
     - Transform: {fileID: 7050223168886707833}
-  MirrorSettings: {fileID: 0}
-  CapsuleRadius: 0.01
-  CapsuleDirection: 0
-  CapsuleAddRadius: 1
-  SetupFingers: 
-  AddThumbCapsules: 
-  AddIndexCapsules: 
-  AddMiddleCapsules: 
-  AddRingCapsules: 
-  AddPinkyCapsules: 
+  SetupFingersB: Setup Fingers
 --- !u!114 &-4378113697911721321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1925,26 +1916,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afd8501793f4c08903068b0bdc79809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Iterations: 100
-  RaysPerBone: 3
-  SphereRadius: 0.007
-  FingerTipOnly: 0
   Hand: {fileID: 1596500242942430993}
   OpenPose: {fileID: 11400000, guid: 73d3bd0553ee13543b2c0a0f7ff2b7ef, type: 2}
   ClosedPose: {fileID: 11400000, guid: f6a50a26271c0f44cbbcbc7307260d31, type: 2}
   Palm: {fileID: 2028626336460972885}
+  RaysPerBone: 3
+  SphereRadius: 0.007
   DrawSpheres: 1
   DrawTips: 1
-  DrawCollisionPoints: 0
-  LogHitColliderNames: 0
+  MaxFingerBend: 1
+  CollisionPoints: []
+  CurrentIteration: 0
+  FingerBends: 0000000000000000000000000000000000000000
   _fingerIndex: 0
+  _currentFinger:
+    Root: {fileID: 0}
+    Tip: {fileID: 0}
+    Bones: []
+  Iterations: 100
   CurrentMask:
     serializedVersion: 2
     m_Bits: 0
-  _collidedBoneTracker: 
-  _fingerIndices: 
-  LiveUpdate: 0
-  FingerBends: 0000000000000000000000000000000000000000
 --- !u!1 &7050223169501305210
 GameObject:
   m_ObjectHideFlags: 0

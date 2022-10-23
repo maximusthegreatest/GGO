@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SnappedLeft: 0
   LeftHand:
-    Position: {x: -0.0402, y: -0.0573, z: -0.0496}
-    Rotation: {x: -0.1110576, y: 0.9081281, z: 0.047887776, w: 0.4008445}
+    Position: {x: -0.040200233, y: -0.057299923, z: -0.08673722}
+    Rotation: {x: -0.1110576, y: 0.90812814, z: 0.047887776, w: 0.40084454}
     Thumb:
       Bones:
       - Position: {x: -0.009992885, y: 0.014168052, z: -0.032520752}

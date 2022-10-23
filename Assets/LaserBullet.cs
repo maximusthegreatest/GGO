@@ -254,10 +254,7 @@ public class LaserBullet : MonoBehaviour
     {
         if (other.gameObject.name == "BulletSoundCollider")
         {
-            
-            
-            
-                
+    
                 //get it off of the collider
                 BulletSound sound = other.gameObject.GetComponent<BulletSound>();
                 //distance from this to left and then right

@@ -1,4 +1,5 @@
 ﻿using System;
+using HurricaneVR.Framework.Core.ScriptableObjects;
 using HurricaneVR.Framework.Shared;
 using UnityEditor;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace HurricaneVR.Editor
         {
             value = EditorGUILayout.IntField(label, value);
         }
-        
+
         public static void FloatField(string label, ref float value)
         {
             value = EditorGUILayout.FloatField(label, value);
@@ -24,9 +25,9 @@ namespace HurricaneVR.Editor
 
         public static void EnumField<T>(string label, ref T value) where T : Enum
         {
-            value = (T) EditorGUILayout.EnumPopup(label, value);
+            value = (T)EditorGUILayout.EnumPopup(label, value);
         }
-        
+
         public static void ObjectField(string label, ref GameObject value, bool allowSceneObjects = true)
         {
             value = EditorGUILayout.ObjectField(label, value, typeof(GameObject), allowSceneObjects) as GameObject;

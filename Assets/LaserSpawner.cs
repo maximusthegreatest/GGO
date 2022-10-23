@@ -146,7 +146,7 @@ public class LaserSpawner : MonoBehaviour
 
     public int Spawn(int currentLaserCount , float minSpawnTime, float maxSpawnTime)
     {
-        
+        return ++currentLaserCount;
         if (lastSpawnTime + laserCooldownTime <= Time.time)
         {
             ClearGlobalVertices();

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace HurricaneVR.Framework.Core.Player
 {
@@ -11,8 +12,11 @@ namespace HurricaneVR.Framework.Core.Player
         public float FadeInSpeed = 5f;
         public float FadeOutSpeed = 5f;
 
-        private Coroutine _coroutine;
+        public UnityEvent FadeStart = new UnityEvent();
+        public UnityEvent FadeEnd = new UnityEvent();
 
+        private Coroutine _coroutine;
+        
         public abstract float CurrentFade { get; }
 
         public float FadeLevel
@@ -44,6 +48,8 @@ namespace HurricaneVR.Framework.Core.Player
 
         protected virtual IEnumerator FadeRoutine(float fadeLevel, float speed)
         {
+            FadeStart.Invoke();
+
             fadeLevel = Mathf.Clamp(fadeLevel, 0f, 1f);
             var alpha = CurrentFade;
             var sign = Mathf.Sign(fadeLevel - CurrentFade);
@@ -68,6 +74,8 @@ namespace HurricaneVR.Framework.Core.Player
                 }
                 yield return new WaitForEndOfFrame();
             }
+
+            FadeEnd.Invoke();
         }
     }
 }

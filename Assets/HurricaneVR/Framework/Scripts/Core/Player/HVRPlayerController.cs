@@ -7,6 +7,10 @@ using HurricaneVR.Framework.Core.Grabbers;
 using UnityEngine;
 //using UnityEngine.SpatialTracking;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 namespace HurricaneVR.Framework.Core.Player
 {
     public class HVRPlayerController : MonoBehaviour
@@ -16,8 +20,15 @@ namespace HurricaneVR.Framework.Core.Player
         public bool CanSteerWhileJumping = true;
         public bool CanSprint = true;
         public bool CanCrouch = true;
+        public PlayerDirectionMode DirectionStyle = PlayerDirectionMode.Camera;
+
+        [Tooltip("If true the player will ignore the first HMD movement on detection. " +
+                 "If the HMD is not centered the player would move away from it's placed position to where the HMD is.")]
+        public bool InitialHMDAdjustment = true;
 
         public LayerMask GroundedLayerMask;
+        public float GroundedDistance = .02f;
+
         [Tooltip("Minimum Player Capsule Height.")]
         public float MinHeight = .3f;
 
@@ -30,34 +41,39 @@ namespace HurricaneVR.Framework.Core.Player
         public float SprintAcceleration = 20f;
         [Tooltip("Sprinting speed in m/s.")]
         public float RunSpeed = 3.5f;
-        public float Gravity = 2.50f;
+        public float Gravity = 9.81f;
         public float MaxFallSpeed = 2f;
         public float JumpVelocity = 5f;
         [Tooltip("Double click timeout for sprinting.")]
         public float DoubleClickThreshold = .25f;
-        [Tooltip("If turning how long of a timeout to wait before allowing joystick teleporting to prevent accidental teleporting when turning with the same joystick")]
-        public float RotationTeleportThreshold = .3f;
+
 
         [Header("Turning")]
         public RotationType RotationType;
         public float SmoothTurnSpeed = 90f;
         public float SmoothTurnThreshold = .1f;
         public float SnapAmount = 45f;
+
         [Tooltip("Axis threshold to be considered valid for snap turning.")]
         public float SnapThreshold = .75f;
 
+        [Tooltip("If true you can turn the player while aiming the teleporter, false by default")]
+        public bool RotateWhileTeleportAiming;
+
         [Header("Crouching")]
+        
         [Tooltip("Player height must be above this to toggle crouch.")]
         public float CrouchMinHeight = 1.2f;
+        
         [Tooltip("Player height after toggling a crouch via controller.")]
         public float CrouchHeight = 0.7f;
+        
         [Tooltip("Speed at which toggle crouch moves the player up and down.")]
         public float CrouchSpeed = 1.5f;
 
-        
-
         [Header("Transforms")]
         public Transform Camera;
+        public Transform NeckPivot;
         public Transform Root;
         public Transform FloorOffset;
         public Transform LeftControllerTransform;
@@ -87,25 +103,35 @@ namespace HurricaneVR.Framework.Core.Player
 
 
         [Header("Debugging")]
-        public bool UseWASD;
         public bool MouseTurning;
-        public Vector2 MouseSensitivity = new Vector2(1f, 1f);
+        public float MouseSensitivityX = 1f;
+
+
 
         public Rigidbody RigidBody { get; private set; }
         public CharacterController CharacterController { get; private set; }
         public HVRTeleporter Teleporter { get; private set; }
 
-        public float Height => CharacterController.height;
-        public bool IsCrouching => Height < CrouchMinHeight;
+        public virtual float CameraHeight
+        {
+            get
+            {
+                return CameraRig.AdjustedCameraHeight;
+            }
+        }
+
+        public bool IsCrouching => CameraHeight < CrouchMinHeight;
 
         public bool IsClimbing => LeftHand && LeftHand.IsClimbing || RightHand && RightHand.IsClimbing;
 
         public bool Sprinting { get; set; }
 
-        public bool IsGrounded { get; set; }
+        public bool IsGrounded;// { get; set; }
 
         public bool MovementEnabled { get; set; } = true;
         public bool RotationEnabled { get; set; } = true;
+
+        public Transform Neck { get; private set; }
 
         public HVRPlayerInputs Inputs { get; private set; }
 
@@ -114,19 +140,9 @@ namespace HurricaneVR.Framework.Core.Player
         private Vector3 _previousLeftControllerPosition;
         private Vector3 _previousRightControllerPosition;
 
-        private bool _waitingForHMDActive;
         private bool _waitingForCameraMovement;
-        private float _timeSinceLastRotation;
-        private Quaternion _previousRotation;
+        private Vector3 _cameraStartingPosition;
 
-        private Transform _leftParent;
-        private Transform _rightParent;
-
-        private Transform _leftGrabbableParent;
-        private Transform _rightGrabbableParent;
-
-        private HVRGrabbable _leftTeleportGrabbable;
-        private HVRGrabbable _rightTeleportGrabbable;
 
         private float _timeSinceLastPress;
         private bool _awaitingSecondClick;
@@ -143,10 +159,9 @@ namespace HurricaneVR.Framework.Core.Player
         private float yVelocity;
         private Vector3 xzVelocity;
 
-
         [SerializeField] private float _actualVelocity;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             RigidBody = GetComponent<Rigidbody>();
             CharacterController = GetComponent<CharacterController>();
@@ -156,11 +171,12 @@ namespace HurricaneVR.Framework.Core.Player
                 _hasTeleporter = true;
             }
 
-            if (_hasTeleporter)
-            {
-                Teleporter.BeforeTeleport.AddListener(OnBeforeTeleport);
-                Teleporter.AfterTeleport.AddListener(OnAfterTeleport);
-            }
+            if (NeckPivot)
+                Neck = NeckPivot;
+            else
+                Neck = Camera;
+
+            _cameraStartingPosition = Camera.localPosition;
 
             Inputs = GetComponent<HVRPlayerInputs>();
 
@@ -172,13 +188,16 @@ namespace HurricaneVR.Framework.Core.Player
                     ScreenFader = finder.gameObject.GetComponent<HVRScreenFade>();
                 }
             }
+
+            PreviousPosition = transform.position;
         }
+
 
         private IEnumerator CorrectCamera()
         {
             _isCameraCorrecting = true;
 
-            var delta = transform.position - Camera.position;
+            var delta = transform.position - Neck.position;
             delta.y = 0f;
 
             if (!ScreenFader)
@@ -195,7 +214,7 @@ namespace HurricaneVR.Framework.Core.Player
                 yield return null;
             }
 
-            delta = transform.position - Camera.position;
+            delta = transform.position - Neck.position;
             delta.y = 0f;
             CameraRig.transform.position += delta;
 
@@ -209,89 +228,8 @@ namespace HurricaneVR.Framework.Core.Player
             _isCameraCorrecting = false;
         }
 
-        private void OnAfterTeleport()
-        {
-            try
-            {
-                if (LeftJointHand)
-                {
-                    LeftJointHand.Enable();
-                }
 
-                if (RightJointHand)
-                {
-                    RightJointHand.Enable();
-                }
-
-                if (_leftParent)
-                    LeftHand.transform.SetParent(_leftParent, true);
-                else
-                    LeftHand.transform.parent = null;
-
-                if (_rightParent)
-                    RightHand.transform.SetParent(_leftParent, true);
-                else
-                    RightHand.transform.parent = null;
-
-                if (_leftTeleportGrabbable)
-                {
-                    if (_leftGrabbableParent)
-                        _leftTeleportGrabbable.transform.SetParent(_leftGrabbableParent, true);
-                    else
-                        _leftTeleportGrabbable.transform.parent = null;
-                }
-
-                if (_leftTeleportGrabbable != _rightTeleportGrabbable && _rightTeleportGrabbable)
-                {
-                    if (_rightGrabbableParent)
-                        _rightTeleportGrabbable.transform.SetParent(_rightGrabbableParent, true);
-                    else
-                        _rightTeleportGrabbable.transform.parent = null;
-                }
-            }
-            finally
-            {
-                _leftGrabbableParent = null;
-                _rightGrabbableParent = null;
-                _leftTeleportGrabbable = null;
-                _rightTeleportGrabbable = null;
-            }
-        }
-
-        private void OnBeforeTeleport()
-        {
-            if (LeftJointHand)
-            {
-                LeftJointHand.Disable();
-            }
-
-            if (RightJointHand)
-            {
-                RightJointHand.Disable();
-            }
-
-            _leftParent = LeftHand.transform.parent;
-            _rightParent = RightHand.transform.parent;
-
-            LeftHand.transform.SetParent(transform, true);
-            RightHand.transform.SetParent(transform, true);
-
-            if (LeftHand.GrabbedTarget)
-            {
-                _leftTeleportGrabbable = LeftHand.GrabbedTarget;
-                _leftGrabbableParent = _leftTeleportGrabbable.transform.parent;
-                _leftTeleportGrabbable.transform.SetParent(LeftHand.transform, true);
-            }
-
-            if (LeftHand.GrabbedTarget != RightHand.GrabbedTarget && RightHand.GrabbedTarget)
-            {
-                _rightTeleportGrabbable = RightHand.GrabbedTarget;
-                _rightGrabbableParent = _rightTeleportGrabbable.transform.parent;
-                _rightTeleportGrabbable.transform.SetParent(RightHand.transform, true);
-            }
-        }
-
-        private void Start()
+        protected virtual void Start()
         {
             Reset();
         }
@@ -299,7 +237,7 @@ namespace HurricaneVR.Framework.Core.Player
 
         public virtual void Reset()
         {
-            _waitingForCameraMovement = true;
+            _waitingForCameraMovement = InitialHMDAdjustment;
         }
 
         protected virtual void Update()
@@ -321,16 +259,14 @@ namespace HurricaneVR.Framework.Core.Player
 
         protected virtual void FixedUpdate()
         {
-            if (!CheckCameraMovement())
-            {
-                return;
-            }
+            if (_waitingForCameraMovement)
+                CheckCameraMovement();
 
             if (CharacterController.enabled)
             {
                 HandleMovement();
 
-                if (RotationEnabled)
+                if (CanRotate())
                 {
                     HandleRotation();
                 }
@@ -339,113 +275,96 @@ namespace HurricaneVR.Framework.Core.Player
             CheckLean();
             CheckGrounded();
 
-            if (Quaternion.Angle(transform.rotation, _previousRotation) > 1f)
-            {
-                _timeSinceLastRotation = 0f;
-            }
-            else
-            {
-                _timeSinceLastRotation += Time.deltaTime;
-            }
 
-            if (_hasTeleporter)
-            {
-                if (_timeSinceLastRotation < RotationTeleportThreshold && !Teleporter.IsAiming ||
-                    IsClimbing || !IsGrounded)
-                {
-                    Teleporter.Disable();
-                }
-                else
-                {
-                    Teleporter.Enable();
-                }
-            }
 
             _actualVelocity = ((transform.position - PreviousPosition) / Time.deltaTime).magnitude;
 
             _previousLeftControllerPosition = LeftControllerTransform.position;
             _previousRightControllerPosition = RightControllerTransform.position;
-            _previousRotation = transform.rotation;
+
             PreviousPosition = transform.position;
         }
 
-        protected virtual bool CheckCameraMovement()
+        protected virtual bool CanRotate()
         {
-            if (_waitingForCameraMovement)
-            {
-                if (Camera.localPosition == Vector3.zero)
-                {
-                    return false;
-                }
+            if (!RotationEnabled)
+                return false;
 
-                var delta = Camera.transform.position - CharacterController.transform.position;
-                delta.y = 0f;
-                CameraRig.transform.position -= delta;
-                _waitingForCameraMovement = false;
+            if (_hasTeleporter && Teleporter.IsAiming && !RotateWhileTeleportAiming)
+            {
+                return false;
             }
 
             return true;
         }
 
-        protected virtual bool CheckHMDActive()
+        protected virtual void CheckCameraMovement()
         {
-            if (_waitingForHMDActive)
+            if (Vector3.Distance(_cameraStartingPosition, Camera.transform.localPosition) < .05f)
             {
-                _waitingForHMDActive = !HVRInputManager.Instance.HMDActive;
-                return !_waitingForHMDActive;
+                return;
             }
 
-            return true;
+            var delta = Camera.transform.position - CharacterController.transform.position;
+            delta.y = 0f;
+            CameraRig.transform.position -= delta;
+            _waitingForCameraMovement = false;
+            PreviousPosition = transform.position;
         }
 
-        private void CheckGrounded()
+        protected virtual void CheckGrounded()
         {
-            IsGrounded = Physics.SphereCast(transform.TransformPoint(CharacterController.center), CharacterController.radius, Vector3.down, out var hit, CharacterController.center.y + .01f, GroundedLayerMask, QueryTriggerInteraction.Ignore);
+            var origin = CharacterController.center - Vector3.up * (.5f * CharacterController.height - CharacterController.radius);
+            IsGrounded = Physics.SphereCast(
+                transform.TransformPoint(origin) + Vector3.up * CharacterController.contactOffset, 
+                CharacterController.radius,
+                Vector3.down,
+                out var hit,
+                GroundedDistance + CharacterController.contactOffset,
+                GroundedLayerMask, QueryTriggerInteraction.Ignore);
         }
 
-        private void CheckLean()
+        protected virtual void CheckLean()
         {
             if (_isCameraCorrecting || !LimitHeadDistance)
                 return;
 
-            var delta = Camera.transform.position - CharacterController.transform.position;
+            var delta = Neck.transform.position - CharacterController.transform.position;
             delta.y = 0;
-            if (delta.magnitude > MaxLean)
-            {
-                if (FadeFromLean)
-                {
-                    StartCoroutine(CorrectCamera());
-                    return;
-                }
 
-                var allowedPosition = CharacterController.transform.position + delta.normalized * MaxLean;
-                var difference = allowedPosition - Camera.transform.position;
-                difference.y = 0f;
-                CameraRig.transform.position += difference;
+            if (delta.sqrMagnitude < .01f || delta.magnitude < MaxLean) return;
+            
+            if (FadeFromLean)
+            {
+                StartCoroutine(CorrectCamera());
+                return;
             }
+
+            var allowedPosition = CharacterController.transform.position + delta.normalized * MaxLean;
+            var difference = allowedPosition - Neck.transform.position;
+            difference.y = 0f;
+            CameraRig.transform.position += difference;
         }
 
-        private void UpdateHeight()
+        protected virtual void UpdateHeight()
         {
             CharacterController.height = Mathf.Clamp(CameraRig.AdjustedCameraHeight, MinHeight, CameraRig.AdjustedCameraHeight);
             CharacterController.center = new Vector3(0, CharacterController.height * .5f + CharacterController.skinWidth, 0f);
         }
 
-
-
-        private void HandleHMDMovement()
+        protected virtual void HandleHMDMovement()
         {
             var originalCameraPosition = CameraRig.transform.position;
             var originalCameraRotation = CameraRig.transform.rotation;
 
-            var delta = Camera.transform.position - CharacterController.transform.position;
+            var delta = Neck.transform.position - CharacterController.transform.position;
             delta.y = 0f;
             if (delta.magnitude > 0.0f && CharacterController.enabled)
             {
                 CharacterController.Move(delta);
             }
 
-            transform.rotation = Quaternion.Euler(0.0f, Camera.rotation.eulerAngles.y, 0.0f);
+            transform.rotation = Quaternion.Euler(0.0f, Neck.rotation.eulerAngles.y, 0.0f);
 
             CameraRig.transform.position = originalCameraPosition;
             var local = CameraRig.transform.localPosition;
@@ -454,13 +373,8 @@ namespace HurricaneVR.Framework.Core.Player
             CameraRig.transform.rotation = originalCameraRotation;
         }
 
-        private void HandleRotation()
+        protected virtual void HandleRotation()
         {
-            if (_hasTeleporter && Teleporter.IsAiming)
-            {
-                return;
-            }
-
             if (RotationType == RotationType.Smooth)
             {
                 HandleSmoothRotation();
@@ -469,24 +383,31 @@ namespace HurricaneVR.Framework.Core.Player
             {
                 HandleSnapRotation();
             }
-#if ENABLE_LEGACY_INPUT_MANAGER
-            if (Input.GetMouseButton(1))
-            {
-                var offset = Quaternion.Euler(new Vector3(0, Input.GetAxis("Mouse X") * MouseSensitivity.x, 0));
-                transform.rotation *= offset;
 
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
-#endif
+            HandlMouseRotation();
 
             _previousTurnAxis = GetTurnAxis().x;
         }
 
-        private void HandleSnapRotation()
+        protected virtual void HandlMouseRotation()
+        {
+            if (MouseTurning)
+            {
+                if (Inputs.IsMouseDown)
+                {
+                    var offset = Quaternion.Euler(new Vector3(0, Inputs.MouseAxis.x * MouseSensitivityX, 0));
+                    transform.rotation *= offset;
+
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                }
+            }
+        }
+
+        protected virtual void HandleSnapRotation()
         {
             var input = GetTurnAxis().x;
             if (Math.Abs(input) < SnapThreshold || Mathf.Abs(_previousTurnAxis) > SnapThreshold)
@@ -496,7 +417,7 @@ namespace HurricaneVR.Framework.Core.Player
             transform.rotation *= rotation;
         }
 
-        private void HandleSmoothRotation()
+        protected virtual void HandleSmoothRotation()
         {
             var input = GetTurnAxis().x;
             if (Math.Abs(input) < SmoothTurnThreshold)
@@ -508,7 +429,6 @@ namespace HurricaneVR.Framework.Core.Player
         }
 
 
-
         protected virtual void HandleMovement()
         {
             if (IsClimbing)
@@ -517,23 +437,65 @@ namespace HurricaneVR.Framework.Core.Player
                 return;
             }
 
-            HandleHMDMovement();
+            if (!_waitingForCameraMovement)
+            {
+                HandleHMDMovement();
+            }
             HandleHorizontalMovement();
             HandleVerticalMovement();
             AdjustHandAcceleration();
+        }
+
+        protected virtual void GetMovementDirection(out Vector3 forwards, out Vector3 right)
+        {
+            var t = transform;
+
+            switch (DirectionStyle)
+            {
+                case PlayerDirectionMode.Camera:
+                    if (Camera)
+                        t = Camera;
+                    break;
+                case PlayerDirectionMode.LeftController:
+                    if (LeftControllerTransform)
+                        t = LeftControllerTransform;
+                    break;
+                case PlayerDirectionMode.RightController:
+                    if (RightControllerTransform)
+                        t = RightControllerTransform;
+                    break;
+            }
+
+            forwards = t.forward;
+            right = t.right;
+            forwards.y = 0;
+            forwards.Normalize();
+            right.y = 0;
+            right.Normalize();
         }
 
         protected virtual void HandleVerticalMovement()
         {
             Vector3 velocity = xzVelocity;
 
-            if (IsGrounded && Inputs.IsJumpActivated && CanJump && MovementEnabled)
+            if (IsGrounded)
             {
-                yVelocity = JumpVelocity;
-            }
+                if (Inputs.IsJumpActivated && CanJump && MovementEnabled)
+                {
+                    yVelocity = JumpVelocity;
+                }
+                else
+                {
+                    yVelocity += -Gravity * Time.deltaTime;
+                }
 
-            yVelocity += -Gravity * Time.deltaTime;
-            yVelocity = Mathf.Clamp(yVelocity, -MaxFallSpeed, yVelocity);
+                yVelocity = Mathf.Clamp(yVelocity, -Gravity * Time.deltaTime, yVelocity);
+            }
+            else
+            {
+                yVelocity += -Gravity * Time.deltaTime;
+                yVelocity = Mathf.Clamp(yVelocity, -MaxFallSpeed, yVelocity);
+            }
 
             velocity.y = yVelocity;
 
@@ -549,16 +511,14 @@ namespace HurricaneVR.Framework.Core.Player
                 speed = runSpeed;
 
             var movement = GetMovementAxis();
-            var wasd = CheckWASD();
-
-            movement += wasd;
 
             if (!MovementEnabled)
             {
                 movement = Vector2.zero;
             }
 
-            var direction = (transform.forward * movement.y + transform.right * movement.x);
+            GetMovementDirection(out var forward, out var right);
+            var direction = (forward * movement.y + right * movement.x);
 
             if (IsGrounded || CanSteerWhileJumping)
             {
@@ -601,8 +561,18 @@ namespace HurricaneVR.Framework.Core.Player
             LeftJointHand.RigidBody.AddForce(acceler * LeftJointHand.RigidBody.mass, ForceMode.Force);
             RightJointHand.RigidBody.AddForce(acceler * RightJointHand.RigidBody.mass, ForceMode.Force);
 
-            var leftRB = LeftHand.GrabbedTarget?.Rigidbody;
-            var rightRb = RightHand.GrabbedTarget?.Rigidbody;
+            Rigidbody leftRB = null;
+            Rigidbody rightRb = null;
+
+            if (LeftHand.GrabbedTarget && LeftHand.GrabbedTarget.Rigidbody)
+            {
+                leftRB = LeftHand.GrabbedTarget.Rigidbody;
+            }
+
+            if (RightHand.GrabbedTarget && RightHand.GrabbedTarget.Rigidbody)
+            {
+                rightRb = RightHand.GrabbedTarget.Rigidbody;
+            }
 
             if (leftRB && rightRb && leftRB == rightRb)
             {
@@ -621,29 +591,6 @@ namespace HurricaneVR.Framework.Core.Player
                     RightJointHand.RigidBody.AddForce(acceler * rightRb.mass, ForceMode.Force);
                 }
             }
-        }
-
-        private Vector2 CheckWASD()
-        {
-            if (!UseWASD)
-                return Vector2.zero;
-
-            var x = 0f;
-            var y = 0f;
-
-#if ENABLE_LEGACY_INPUT_MANAGER
-
-            if (Input.GetKey(KeyCode.W))
-                y += 1f;
-            if (Input.GetKey(KeyCode.S))
-                y -= 1f;
-            if (Input.GetKey(KeyCode.A))
-                x += -1f;
-            if (Input.GetKey(KeyCode.D))
-                x += 1f;
-#endif
-
-            return new Vector2(x, y);
         }
 
         protected virtual void HandleClimbing()
@@ -726,7 +673,7 @@ namespace HurricaneVR.Framework.Core.Player
             if (!CanCrouch)
                 return;
 
-            if (!_crouchInProgress && Height >= CrouchMinHeight)
+            if (!_crouchInProgress && CameraHeight >= CrouchMinHeight)
             {
                 if (Inputs.IsCrouchActivated)
                 {
@@ -744,11 +691,11 @@ namespace HurricaneVR.Framework.Core.Player
 
             if (IsCrouching && _isCrouchingToggled)
             {
-                if (_cameraBelowCrouchHeight && CameraRig.AdjustedCameraHeight > CrouchHeight)
+                if (_cameraBelowCrouchHeight && CameraHeight > CrouchHeight)
                 {
                     StopCrouching();
                 }
-                else if (CameraRig.AdjustedCameraHeight < (CrouchHeight - MinHeight) / 2f)
+                else if (CameraHeight < (CrouchHeight - MinHeight) / 2f)
                 {
                     _cameraBelowCrouchHeight = true;
                 }
@@ -756,17 +703,17 @@ namespace HurricaneVR.Framework.Core.Player
 
         }
 
-        private void Crouch()
+        protected virtual void Crouch()
         {
             _isCrouchingToggled = true;
-            var target = CrouchHeight - Height;
+            var target = CrouchHeight - CameraHeight;
             _cameraBelowCrouchHeight = false;
             if (_crouchRoutine != null)
                 StopCoroutine(_crouchRoutine);
             _crouchRoutine = StartCoroutine(CrouchRoutine(target, true));
         }
 
-        private void StopCrouching()
+        protected virtual void StopCrouching()
         {
             _isCrouchingToggled = false;
             _cameraBelowCrouchHeight = false;
@@ -817,7 +764,7 @@ namespace HurricaneVR.Framework.Core.Player
         {
             foreach (var otherCollider in colliders)
             {
-                if (otherCollider)
+                if (otherCollider && CharacterController)
                     Physics.IgnoreCollision(CharacterController, otherCollider, true);
             }
         }
@@ -845,13 +792,44 @@ namespace HurricaneVR.Framework.Core.Player
             }
 
         }
+
+        public void SetTurnType(RotationType rotationType)
+        {
+            RotationType = rotationType;
+        }
+
+        public void SetSnapAmount(float snapAmount)
+        {
+            SnapAmount = snapAmount;
+        }
+
+        public void SetSmoothTurnSpeed(float speed)
+        {
+            SmoothTurnSpeed = speed;
+        }
+
+        public void FaceDirection(Vector3 forward)
+        {
+            var f = Camera.forward;
+            f.y = 0f;
+            forward.y = 0f;
+            transform.rotation = Quaternion.FromToRotation(f, forward) * transform.rotation;
+        }
     }
 
+    public enum PlayerDirectionMode
+    {
+        Camera,
+        LeftController,
+        RightController
+    }
 
     public enum RotationType
     {
         Smooth,
         Snap
     }
+
+
 
 }

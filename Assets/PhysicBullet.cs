@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using HurricaneVR.Framework.Weapons.Guns;
 
 public class PhysicBullet : MonoBehaviour
 {
 
     public float raycastLength;
-    public float bulletVelocity;
-    public HVRRayCastGun gun;
+    private float bulletVelocity;
+    public HVRGunBase gun;
     
     
     public float bulletAliveTime;
@@ -24,7 +25,7 @@ public class PhysicBullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bulletVelocity = gun.BulletTrailSpeed;
+        bulletVelocity = gun.BulletSpeed;
         rb = GetComponent<Rigidbody>();
         myCollider = GetComponent<Collider>();
         
