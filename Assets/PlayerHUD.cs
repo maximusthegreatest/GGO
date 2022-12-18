@@ -56,7 +56,7 @@ public class PlayerHUD : MonoBehaviour
 
         weaponHuds = new Dictionary<string, GameObject>();
         weaponHuds.Add("PhotonSwordParent", saberUI);
-        weaponHuds.Add("MadsonD9", pistolUI);
+        weaponHuds.Add("FN", pistolUI);
 
     }
 
@@ -123,7 +123,6 @@ public class PlayerHUD : MonoBehaviour
 
         if (weaponHuds.ContainsKey(itemName))
         {
-            //Debug.Log("here bro");
             //get the game HUD
             GameObject wepHUD = weaponHuds[itemName];
             RectTransform hudTransform = wepHUD.GetComponent<RectTransform>();
@@ -163,8 +162,7 @@ public class PlayerHUD : MonoBehaviour
     }
 
     void MoveUIUp()
-    {
-        Debug.Log("moving on up");
+    {        
         if(_weaponSlots.Count > 0)
         {            
                 //Debug.Log("moving on up inside");                                                
@@ -177,10 +175,4 @@ public class PlayerHUD : MonoBehaviour
         }
         
     }
-
-
-    //when a hand is equipped, check both hands for whats equipped and send them in an array
-    //if it is 
-
-
 }

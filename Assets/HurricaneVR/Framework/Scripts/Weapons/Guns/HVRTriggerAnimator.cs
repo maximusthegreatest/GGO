@@ -26,9 +26,10 @@ namespace HurricaneVR.Framework.Weapons.Guns
         }
 
         public virtual void Animate(float trigger)
-        {
+        {            
             if (Rotate)
             {
+                Debug.Log("rotating trigger");
                 transform.localRotation = Quaternion.Lerp(StartRotation, EndRotation, trigger);
             }
 

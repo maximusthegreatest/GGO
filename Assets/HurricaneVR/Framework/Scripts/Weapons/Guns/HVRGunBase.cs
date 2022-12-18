@@ -649,7 +649,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
             if (Grabbable.HandGrabbers.Count == 1)
             {
-                var controller = Grabbable.HandGrabbers[0].Controller;
+                var controller = Grabbable.HandGrabbers[0].Controller;                
                 TriggerAnimator.Animate(controller.Trigger);
             }
             else

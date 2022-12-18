@@ -154,12 +154,12 @@ namespace HurricaneVR.Framework.Weapons
 
             if (BackRecoil)
             {
-                Rigidbody.AddForceAtPosition(BackRecoil.forward * CurrentForce.z, BackRecoil.position, ForceMode.Force);
+                //Rigidbody.AddForceAtPosition(BackRecoil.forward * CurrentForce.z, BackRecoil.position, ForceMode.Force);
             }
         }
 
         private void ApplyImpulseRecoil(float upForce, float backForce)
-        {
+        {            
             if (UpRecoilType == Weapons.UpRecoilType.UpRecoil)
             {
                 if (UpRecoil)

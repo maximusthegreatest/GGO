@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd81e9e4d5c74d6e99fd2fadd5e6c0f0, type: 3}
   m_Name: HVR_Recoil_Pistol
   m_EditorClassIdentifier: 
-  UpForce: 0.6
-  BackwardsForce: 10
+  UpForce: 5
+  BackwardsForce: 5
   TwoHandUpForce: 0.2
-  TwoHandBackwardsForce: 0
+  TwoHandBackwardsForce: 1
   UseTwoHandRecoilForce: 1
   ImpulseForce: 1
   RandomSideToSideRecoil: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
   MaxUpForce: 36
   UseTwoHandMaxUpforce: 0
   UseTwoHandMaxSideForce: 0
-  MaxBackForce: 0
+  MaxBackForce: 10
   TwoHandMaxUpForce: 200
   MaxSideForce: 12
   TwoHandMaxSideForce: 0
