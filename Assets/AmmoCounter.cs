@@ -4,59 +4,62 @@ using UnityEngine;
 using HurricaneVR.Framework.Weapons.Guns;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
+using HurricaneVR.Framework.Weapons;
+using HurricaneVR.Framework.Core.Grabbers;
+
 
 public class AmmoCounter : MonoBehaviour
 {
-    int _ammoCount;
+    
 
     public HVRPistol pistol;
     public Text ammoCountText;
 
-    private bool _isReloading;
+    [SerializeField]
+    private GameObject _ammoSocket;
+    private HVRAmmo _currentAmmo;   
+    private bool hasAmmo = false;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        pistol.autoLoadEvent.AddListener(ShowReloadGraphic);
-    }
 
-    void ShowReloadGraphic(float reloadTimer)
+    public void SetCurrentAmmo() 
     {
-        ammoCountText.text = "00";
-        ammoCountText.color = Color.red;
-        _isReloading = true;        
-        StartCoroutine(ReloadDone(reloadTimer));
-    }
+        hasAmmo = !hasAmmo;
+        //get ammo (grabbable from ammo socket
+        //_ammoSocket
+        //look in children for object with script type of HVRAmmo
 
-    IEnumerator ReloadDone(float reloadTimer)
-    {
-        yield return new WaitForSeconds(reloadTimer);
-        _isReloading = false;
+        if(hasAmmo)
+        {
+            _currentAmmo = _ammoSocket.GetComponentInChildren<HVRAmmo>();
+        } else
+        {
+            _currentAmmo = null;
+        }
 
     }
+    
 
     // Update is called once per frame
     void Update()
     {
-                
-        if(!_isReloading)
-        {
-            //get ammo and set the text
-            _ammoCount = pistol.Ammo.CurrentCount;
-            if(pistol.IsBulletChambered)
-            {
-                _ammoCount++;
-            }
-            
-            ammoCountText.text = _ammoCount.ToString();
+        
+        if(_currentAmmo)
+        {  
+            //get ammo read from clip
+            ammoCountText.text = _currentAmmo.CurrentCount.ToString();
             ammoCountText.color = Color.white;
 
-            if (_ammoCount == 0)
+            if (_currentAmmo.CurrentCount == 0)
             {
                 ammoCountText.text = "00";
                 ammoCountText.color = Color.red;
             }
+
+        } else
+        {            
+            ammoCountText.text = "00";
+            ammoCountText.color = Color.red;
         }
-        
+
     }
 }

@@ -7,6 +7,7 @@ using HurricaneVR.Framework.Core;
 using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
+using HurricaneVR.Framework.Core.Sockets;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -15,6 +16,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
 {
     public class HVRGunBase : HVRDamageProvider
     {
+
+        
 
         public HVRGrabbable Grabbable { get; private set; }
 
@@ -34,6 +37,10 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         [Tooltip("Does this gun require ammo inserted to shoot")]
         public bool RequiresAmmo = true;
+
+        public bool autoLoad = false;
+        public float autoLoadCooldownTime = 5f;
+
 
         [Tooltip("Is chambering required to shoot")]
         public bool RequiresChamberedBullet = true;
@@ -183,7 +190,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
         protected int RoundsFired { get; set; }
 
         protected virtual void Awake()
-        {
+        {            
             Grabbable = GetComponent<HVRGrabbable>();
 
             Grabbable.HandReleased.AddListener(OnHandReleased);
@@ -499,6 +506,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         public virtual void ReleaseAmmo()
         {
+            
             if (!AmmoSocket || !AmmoSocket.IsGrabbing)
             {
                 return;
@@ -511,7 +519,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
             AmmoSocket.ForceRelease();
 
             if (ammoGrabbable)
-            {
+            {                
                 EjectAmmo(ammoGrabbable);
                 AfterAmmoReleased(ammoGrabbable, releasedAmmo);
             }
@@ -522,24 +530,24 @@ namespace HurricaneVR.Framework.Weapons.Guns
             var direction = -AmmoSocket.transform.up;
             if (AmmoEjectDirection)
             {
-                direction = AmmoEjectDirection.forward;
+                direction = AmmoEjectDirection.forward;                
             }
 
             if (ammoGrabbable.Rigidbody)
-            {
+            {                
                 ammoGrabbable.Rigidbody.velocity = direction.normalized * AmmoEjectVelocity;
             }
         }
 
         protected virtual void AfterAmmoReleased(HVRGrabbable ammoGrabbable, HVRAmmo releasedAmmo)
-        {
+        {            
             var hand = Grabbable.PrimaryGrabber as HVRHandGrabber;
             if (hand)
             {
                 hand.HandPhysics.IgnoreCollision(ammoGrabbable.Colliders, true);
             }
 
-            if (!releasedAmmo.HasAmmo && releasedAmmo.DestroyIfEmpty)
+            if (!releasedAmmo.HasAmmo && releasedAmmo.DestroyIfEmpty || releasedAmmo.destroyIfReleased)
             {
                 releasedAmmo.StartDestroy();
             }
@@ -547,6 +555,30 @@ namespace HurricaneVR.Framework.Weapons.Guns
             {
                 StartCoroutine(RenablePhysics(ammoGrabbable, hand));
             }
+
+            
+            if(autoLoad)
+            {
+                //disable collision on any ejected mags
+                //make the ammo not grabbable anymore
+                HVRTagSocketable tagSocketable = ammoGrabbable.gameObject.GetComponent<HVRTagSocketable>();
+                Destroy(tagSocketable);
+                Destroy(ammoGrabbable);
+                //Make sure that they can't manually pick up a mag from the ground and load the gun in this time period                
+                
+                //Start a corutine
+                StartCoroutine(AutoLoadGun());
+            }
+
+        }
+
+        private IEnumerator AutoLoadGun()
+        {
+            //wait for autoreload time
+            yield return new WaitForSeconds(autoLoadCooldownTime);
+            AmmoSocket.CheckInitalSpawn();            
+            //then call CheckInitalSpawn on AmmoSocket, that will reload
+
         }
 
         public virtual void TriggerPulled()

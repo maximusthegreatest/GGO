@@ -13,8 +13,11 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public float MagazineTravel = .1f;
         public bool AnimateEject;
         public float EjectTime = .2f;
+        
 
         public Transform MagazineAxis;
+
+       
 
         protected Vector3 MagazineDirection => MagazineAxis ? MagazineAxis.forward : -transform.up;
 
@@ -83,12 +86,13 @@ namespace HurricaneVR.Framework.Weapons.Guns
         }
 
         protected override void OnReleased(HVRGrabbable grabbable)
-        {
+        {            
             base.OnReleased(grabbable);
             if (AnimateEject && gameObject.activeInHierarchy)
             {
                 StartCoroutine(EjectAnimationRoutine(grabbable));
             }
+
         }
     }
 }

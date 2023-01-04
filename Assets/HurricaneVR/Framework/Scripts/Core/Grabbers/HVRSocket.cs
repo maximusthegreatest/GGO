@@ -33,6 +33,10 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
         [Tooltip("If supplied, this object will be cloned when one is removed.")]
         public GameObject AutoSpawnPrefab;
+        
+        public GameObject AutoSpawnOnDelayPrefab;
+
+        public GameObject InitialSpawnPrefab;
 
         [Tooltip("If > 0 the last object released cannot be grabbed again until the timeout is reached")]
         public float GrabTimeout;
@@ -177,6 +181,21 @@ namespace HurricaneVR.Framework.Core.Grabbers
                 HoverActions = GetComponents<HVRSocketHoverAction>();
 
             StartCoroutine(WaitForUpdate(CheckAutoSpawn));
+            if(!AutoSpawnPrefab && InitialSpawnPrefab)
+            {
+                CheckInitalSpawn();
+            }
+        }
+
+        public void CheckInitalSpawn()
+        {            
+            var clone = Instantiate(InitialSpawnPrefab);
+            var cloneGrabbable = clone.GetComponent<HVRGrabbable>();
+            if (cloneGrabbable)
+            {
+                TryGrab(cloneGrabbable, true, true);                
+            }
+            
         }
 
         private void SetupParentDisablesGrab()
@@ -721,9 +740,28 @@ namespace HurricaneVR.Framework.Core.Grabbers
 
             CheckAutoSpawn();
 
+            //could do the check autospawnondelay
+            CheckAutoSpawnOnDelay();
+
             if (GrabTimeout > .00001f)
             {
                 StartCoroutine(GrabTimeoutRoutine(grabbable));
+            }
+        }
+
+        private void CheckAutoSpawnOnDelay()
+        {
+            if (AutoSpawnOnDelayPrefab)
+            {
+                var clone = Instantiate(AutoSpawnOnDelayPrefab);
+                var cloneGrabbable = clone.GetComponent<HVRGrabbable>();
+                if (cloneGrabbable)
+                {
+                    TryGrab(cloneGrabbable, true, true);
+                    SpawnedPrefab.Invoke(this, clone);
+                }
+                else
+                    Debug.Log($"Socket {name} has a AutoSpawnPrefab without an HVRGrabbable component");
             }
         }
 

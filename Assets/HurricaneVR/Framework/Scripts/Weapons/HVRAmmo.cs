@@ -20,8 +20,14 @@ namespace HurricaneVR.Framework.Weapons
         [Tooltip("How long to wait after ejecting the magazine to destroy it")]
         public float EmptyDestroyTimer = 3f;
 
+
+        public bool destroyIfReleased = false;
+
+
         [Header("Debug")]
         public int CurrentCount;
+
+
 
         public bool HasAmmo => CurrentCount > 0;
         public bool IsEmpty => CurrentCount <= 0;
