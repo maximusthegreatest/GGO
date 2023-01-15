@@ -12,8 +12,6 @@ namespace HurricaneVR.Framework.Weapons.Guns
     public class HVRPistol : HVRGunBase
     {
 
-        
-
         protected override void Awake()
         {
             base.Awake();

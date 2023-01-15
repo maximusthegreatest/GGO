@@ -8,16 +8,16 @@ using HurricaneVR.Framework.Core.Grabbers;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using HurricaneVR.Framework.Core.Sockets;
+using HurricaneVR.Framework.Core.MaxUtils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+//using ObjectPoolStuff;
 
 namespace HurricaneVR.Framework.Weapons.Guns
 {
     public class HVRGunBase : HVRDamageProvider
     {
-
-        
 
         public HVRGrabbable Grabbable { get; private set; }
 
@@ -37,6 +37,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         [Tooltip("Does this gun require ammo inserted to shoot")]
         public bool RequiresAmmo = true;
+
+        public bool usePhysicsBasedBullet;
 
         public bool autoLoad = false;
         public float autoLoadCooldownTime = 5f;
@@ -78,6 +80,10 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public List<HVRGrabbable> HapticGrabbables = new List<HVRGrabbable>();
 
         [Header("Objects")]
+
+        private ObjectPool _bulletPool;
+
+        public PhysicsBullet PhysicsBulletPrefab;
 
         [Tooltip("Muzzle flash object")]
         public GameObject MuzzleFlashObject;
@@ -244,6 +250,13 @@ namespace HurricaneVR.Framework.Weapons.Guns
             if (CasingEmitter)
             {
                 CasingEmitter.Gun = this;
+            }
+
+            if(usePhysicsBasedBullet)
+            {
+                _bulletPool = ObjectPool.CreateInstance(PhysicsBulletPrefab, 20);
+                
+
             }
         }
 
@@ -590,7 +603,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
                 return;
             }
 
-            Debug.Log("firing from trigger pulled!");
+            
 
             if (FireType == GunFireType.Single)
             {
@@ -909,8 +922,42 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         protected virtual void OnFire(Vector3 direction)
         {
-            FireBullet(direction);
+            if(usePhysicsBasedBullet)
+            {
+                FirePhysicsBullet(direction);
+            } else
+            {
+                FireBullet(direction);
+            }
+            
             FireHaptics();
+        }
+
+        protected virtual void FirePhysicsBullet(Vector3 direction)
+        {
+
+            PoolableObject instance = _bulletPool.GetObject();
+            
+            //instance.bulletDirection = direction;
+
+            if(instance != null)
+            {
+                instance.transform.SetParent(transform, false);
+                instance.transform.rotation = BulletOrigin.transform.rotation;
+                //instance.transform.localPosition = BulletOrigin.transform.localPosition;                
+                instance.transform.position = BulletOrigin.transform.position;                
+            }
+            
+            
+
+
+            //here we will fire an event that the pooled class is using
+
+
+            //GameObject bullet = Instantiate(PhysicsBulletPrefab, BulletOrigin.position, Quaternion.identity);          
+            //bullet.transform.rotation = Quaternion.LookRotation(direction);
+            //bullet.SetActive(true);
+            //Debug.Break();
         }
 
         protected virtual void FireHaptics()

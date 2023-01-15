@@ -9,6 +9,7 @@ TagManager:
   - LaserBullet
   - saberBurn
   - Small Item
+  - Fn_BulletOrigin
   layers:
   - Default
   - TransparentFX

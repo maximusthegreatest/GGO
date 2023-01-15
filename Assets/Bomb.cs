@@ -33,8 +33,6 @@ public class Bomb : MonoBehaviour
 
         bombDestroy.bomb = this;
 
-
-
         GameObject gunGame = GameObject.Find("GunGame");
         laserRound = gunGame.GetComponent<LaserRound>();
 
@@ -63,8 +61,7 @@ public class Bomb : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {        
         transform.Rotate(rotSpeed * Time.deltaTime);
     }
 
@@ -77,7 +74,6 @@ public class Bomb : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
         Debug.Log("Bomb Col" + collision.gameObject.name);
 
         if (collision.gameObject.name == "MadsonD9")
@@ -90,7 +86,7 @@ public class Bomb : MonoBehaviour
         }
 
 
-        if (collision.gameObject.name == "Bullet(Clone)")
+        if (collision.gameObject.name == "FN_bullet(Clone)")
         {
             bombDestroy.Destroy();
             return;

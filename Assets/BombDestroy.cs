@@ -33,7 +33,7 @@ public class BombDestroy : HVRDestructible
             Instantiate(bombShatterParticle, transform.position, Quaternion.identity);
             Instantiate(bombShatterTriangleParticle, transform.position, Quaternion.identity);
             SFXPlayer.Instance.PlaySFX(bombExplosionSound, transform.position, 1f, 10f);
-            Debug.Break();
+            //Debug.Break();
         }
 
 
