@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using HurricaneVR.Framework.Core.MaxUtils;
 using UnityEngine;
@@ -55,8 +55,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
         }
 
         public void SpawnBulletImpact(Vector3 position, Vector3 forward, Material hitMaterial)
-        {
-            if (bulletImpactDictionary.ContainsKey(hitMaterial))
+        {            
+            if (hitMaterial != null && bulletImpactDictionary.ContainsKey(hitMaterial))
             {
                 DoSpawnBulletImpact(position, forward, bulletImpactDictionary[hitMaterial].GetObject());
             } else

@@ -948,11 +948,8 @@ namespace HurricaneVR.Framework.Weapons.Guns
                 instance.transform.position = BulletOrigin.transform.position;                
             }
             
-            
-
 
             //here we will fire an event that the pooled class is using
-
 
             //GameObject bullet = Instantiate(PhysicsBulletPrefab, BulletOrigin.position, Quaternion.identity);          
             //bullet.transform.rotation = Quaternion.LookRotation(direction);

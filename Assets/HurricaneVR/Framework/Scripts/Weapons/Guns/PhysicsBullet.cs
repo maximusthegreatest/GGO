@@ -13,6 +13,10 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public float raycastLength;
         public float bulletVelocity;
         public Vector3 bulletDirection;
+        //public GameObject bulletCasing;
+
+
+        
         
 
         
@@ -32,14 +36,16 @@ namespace HurricaneVR.Framework.Weapons.Guns
         // Start is called before the first frame update
         void Start()
         {
-            
+            //Physics.IgnoreCollision(bulletCasing.GetComponent<Collider>(), GetComponent<Collider>());
+
             //_myCollider = GetComponent<Collider>();
         }
 
         public override void OnEnable()
         {
             base.OnEnable();             
-            _rb.AddForce(bulletOrigin.forward * bulletVelocity, ForceMode.Impulse);            
+            _rb.AddForce(bulletOrigin.forward * bulletVelocity, ForceMode.Impulse);
+            
         }
 
         // Update is called once per frame
@@ -61,7 +67,7 @@ namespace HurricaneVR.Framework.Weapons.Guns
 
         void OnCollisionEnter(Collision collision)
         {
-            //Debug.Log("bullet collision " + collision.gameObject.name);
+            Debug.Log("bullet collision " + collision.gameObject.name);
             ContactPoint contact = collision.GetContact(0);
 
             if(collision.gameObject.TryGetComponent<Renderer>(out Renderer renderer))
@@ -81,8 +87,12 @@ namespace HurricaneVR.Framework.Weapons.Guns
         public override void OnDisable()
         {
             _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+
             
             
+
+
             base.OnDisable();
             gameObject.SetActive(false);
         }

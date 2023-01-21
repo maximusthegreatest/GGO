@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3415222550871326275}
   - component: {fileID: -7111611769818698213}
   - component: {fileID: 6472271548262633180}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FN_bullet
   m_TagString: Fn_BulletOrigin
   m_Icon: {fileID: 0}
@@ -128,8 +128,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Parent: {fileID: 0}
+  parentObj: {fileID: 0}
+  autoDestroyTime: 5
   raycastLength: 0.2
-  bulletVelocity: 10
-  bulletAliveTime: 5
+  bulletVelocity: 20
   bulletDirection: {x: 0, y: 0, z: 0}
   bulletOrigin: {fileID: 0}

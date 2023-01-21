@@ -23,6 +23,8 @@ namespace HurricaneVR.Framework.Core.MaxUtils
             GameObject objectPoolParent = new GameObject(prefab.name + " pool");
             
             pool.CreateObjects(objectPoolParent, size, pool);
+            pool._objectPoolParent = objectPoolParent;
+
 
             return pool;
 
@@ -38,6 +40,12 @@ namespace HurricaneVR.Framework.Core.MaxUtils
 
         public PoolableObject GetObject()
         {
+
+            if (_availableObjects.Count == 0) // auto expand pool size if out of objects
+            {
+                CreateObject();
+            }
+
             if (_availableObjects.Count > 0)
             {
                 PoolableObject instance = _availableObjects[0];
@@ -49,6 +57,15 @@ namespace HurricaneVR.Framework.Core.MaxUtils
             {
                 return null;
             }
+        }
+
+
+        private void CreateObject()
+        {
+            PoolableObject poolableObject = Instantiate(_prefab, Vector3.zero, Quaternion.identity, this._objectPoolParent.transform);
+            poolableObject.parentObj = this._objectPoolParent;
+            poolableObject.Parent = this;
+            poolableObject.gameObject.SetActive(false);
         }
 
 
